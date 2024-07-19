@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Stats))]
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;

@@ -12,7 +12,7 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] private float baseMoveSpeed;
+    [SerializeField] private float baseMoveSpeed = 1;
     private float MoveSpeedMultiplier { get; set; }
     public float CurrentMoveSpeed { get; private set; }
 
