@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
+    [SerializeField] private float lightDemage = 5f;
 
     // Start is called before the first frame update
     private void OnEnable()
@@ -33,6 +34,14 @@ public class PlayerController : MonoBehaviour
 
     void RemoveHealth()
     {
-        Debug.Log($"Remove health because user in the light");
+        if (_stats.hp > 0)
+        {
+            _stats.LightRemoveHealth(lightDemage * Time.deltaTime);
+            Debug.Log(_stats.hp);
+        }
+        else
+        {
+            Debug.Log($"You are dead, Game Over!!");
+        }
     }
 }

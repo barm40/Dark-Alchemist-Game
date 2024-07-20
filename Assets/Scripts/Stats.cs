@@ -15,6 +15,7 @@ public class Stats : MonoBehaviour
     [SerializeField] private float baseMoveSpeed = 1;
     private float MoveSpeedMultiplier { get; set; }
     public float CurrentMoveSpeed { get; private set; }
+    public float hp { get; private set; } = 100f;
 
     private void Start()
     {
@@ -25,5 +26,10 @@ public class Stats : MonoBehaviour
     {
         CurrentMoveSpeed = 
             baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
+    }
+
+    public void LightRemoveHealth(float amount)
+    {
+        hp -= amount;
     }
 }

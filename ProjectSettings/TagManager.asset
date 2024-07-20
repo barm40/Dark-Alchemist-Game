@@ -38,9 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
   - name: BackGround
     uniqueID: 1627417267
     locked: 0
-  - name: Default
-    uniqueID: 0
+  - name: Floor
+    uniqueID: 1483868057
+    locked: 0
+  - name: Environments
+    uniqueID: 2987762927
+    locked: 0
+  - name: Player
+    uniqueID: 887988511
     locked: 0
