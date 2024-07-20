@@ -7,8 +7,13 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
-    
+
     // Start is called before the first frame update
+    private void OnEnable()
+    {
+        PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
+    }
+
     private void Start()
     {
         _stats = GetComponent<Stats>();
@@ -24,5 +29,10 @@ public class PlayerController : MonoBehaviour
     { 
         var moveAmount = Input.GetAxis("Horizontal") * _stats.CurrentMoveSpeed; 
         transform.Translate(moveAmount, 0, 0, Space.World);
+    }
+
+    void RemoveHealth()
+    {
+        Debug.Log($"Remove health because user in the light");
     }
 }
