@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -13,8 +10,9 @@ using UnityEngine;
 public class Stats : MonoBehaviour
 {
     [SerializeField] private float baseMoveSpeed = 1;
-    private float MoveSpeedMultiplier { get; set; }
+    public float MoveSpeedMultiplier { get; set; }
     public float CurrentMoveSpeed { get; private set; }
+    
     public float hp { get; private set; } = 100f;
 
     private void Start()

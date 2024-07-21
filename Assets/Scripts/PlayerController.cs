@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Stats))]
+
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
+    
     [SerializeField] private float lightDemage = 5f;
+    
 
     // Start is called before the first frame update
     private void OnEnable()
@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
         transform.Translate(moveAmount, 0, 0, Space.World);
     }
 
+
+
     void RemoveHealth()
     {
         if (_stats.hp > 0)
@@ -44,4 +46,6 @@ public class PlayerController : MonoBehaviour
             Debug.Log($"You are dead, Game Over!!");
         }
     }
+    
+    
 }
