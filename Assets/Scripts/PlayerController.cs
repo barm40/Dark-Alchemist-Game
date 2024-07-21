@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
+    
     [SerializeField] private float lightDemage = 5f;
+    
 
     Items _items;
 
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
         transform.Translate(moveAmount, 0, 0, Space.World);
     }
 
+
+
     void RemoveHealth()
     {
         if (_stats.hp > 0)
@@ -52,4 +55,6 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning($"You are dead, Game Over!!");
         }
     }
+    
+    
 }
