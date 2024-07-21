@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Stats))]
+[RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
     [SerializeField] private float lightDemage = 5f;
 
+    Items _items;
+
     // Start is called before the first frame update
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
+    }
+
+    private void OnDisable()
+    {
+        PlayerInLighDetect.UserInTheLighDelegate -= RemoveHealth;
     }
 
     private void Start()
@@ -37,11 +45,11 @@ public class PlayerController : MonoBehaviour
         if (_stats.hp > 0)
         {
             _stats.LightRemoveHealth(lightDemage * Time.deltaTime);
-            Debug.Log(_stats.hp);
+            Debug.LogWarning($"Remove health in PlayerController");
         }
         else
         {
-            Debug.Log($"You are dead, Game Over!!");
+            Debug.LogWarning($"You are dead, Game Over!!");
         }
     }
 }
