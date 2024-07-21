@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
@@ -14,6 +18,7 @@ public class Stats : MonoBehaviour
     public float CurrentMoveSpeed { get; private set; }
     
     public float hp { get; private set; } = 100f;
+    [SerializeField] TMP_Text hpText;
 
     private void Start()
     {
@@ -29,5 +34,6 @@ public class Stats : MonoBehaviour
     public void LightRemoveHealth(float amount)
     {
         hp -= amount;
+        hpText.text = $"HP: {(int)hp}";
     }
 }
