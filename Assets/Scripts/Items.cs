@@ -9,6 +9,7 @@ public abstract class Items : MonoBehaviour
     protected bool isUsed = false;
     protected bool isCanBeToken = false;
     protected bool isToken = false;
+    [SerializeField] public int itemInventoryNumber { get; private set;}
 
     public static event Action<Items> isCanBeTokenAction = null;
 
@@ -23,8 +24,6 @@ public abstract class Items : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
-    protected abstract void UseItem();
 
     protected  virtual void OnTriggerEnter2D(Collider2D other)
     {

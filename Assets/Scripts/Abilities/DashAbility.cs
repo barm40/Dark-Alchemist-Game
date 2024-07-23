@@ -11,6 +11,11 @@ public class DashAbility : Ability
 
     private float _previousMultiplier;
 
+    private void Start()
+    {
+        ability = AbilityTypes.DashAbility;
+    }
+
     public override void Activate(GameObject parent)
     {
         var stats = parent.GetComponent<Stats>();
