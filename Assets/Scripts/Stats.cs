@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 /// <summary>
@@ -13,13 +13,30 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
+    // player related fields
     [SerializeField] private float baseMoveSpeed = 1;
     public float MoveSpeedMultiplier { get; set; }
     public float CurrentMoveSpeed { get; private set; }
     
-    public float hp { get; private set; } = 100f;
-    [SerializeField] TMP_Text hpText;
-
+    public float hp { get; set; } = 100f;
+    
+    // light damage related
+    [SerializeField] public float lightDamage = 5f;
+    public float shieldLightDamage = 0f;
+    
+    // general ability related stats 
+    public float ActiveTime { get; private set; } = 15f;
+    public float CooldownTime { get; private set; } = 15f;
+    
+    // dash specific stats 
+    public float DashActive { get; private set; } = .3f;
+    public float DashCooldown { get; private set; } = 1.5f;
+    public float DashMultiplier { get; set; } = 5f;
+    public int DashUses { get; set; } = 5;
+    
+    // boost specific stats
+    public float BoostMultiplier { get; set; } = 2f;
+    
     private void Start()
     {
         MoveSpeedMultiplier = 1f;
@@ -29,11 +46,5 @@ public class Stats : MonoBehaviour
     {
         CurrentMoveSpeed = 
             baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
-    }
-
-    public void LightRemoveHealth(float amount)
-    {
-        hp -= amount;
-        hpText.text = $"HP: {(int)hp}";
     }
 }

@@ -11,12 +11,13 @@ public class AbilityController : MonoBehaviour
     
     private AbilityState _abilityState = AbilityState.Ready;
     
-    public Ability CurrentAbility { get; set; } = new DashAbility();
+    public Ability CurrentAbility { get; set; }
     [SerializeField] private KeyCode abilityKey;
     
     private void Start()
     {
         _stats = GetComponent<Stats>();
+        CurrentAbility = new BoostAbility(_stats);
     }
 
     private void Update()
@@ -67,6 +68,7 @@ public class AbilityController : MonoBehaviour
     {
         
     }
+    
     private enum AbilityState
     {
         Ready,
