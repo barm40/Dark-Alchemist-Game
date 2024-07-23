@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UIElements;
 
 public class PlayerInLighDetect : MonoBehaviour
 {
@@ -74,9 +70,11 @@ public class PlayerInLighDetect : MonoBehaviour
                     Debug.Log($"The angle of the player from the user: {angleOfPlayerFromLight}");
                 }
             }
-
-            
         }
-
+    }
+    
+    public static void LightRemoveHealth(Stats stats)
+    {
+        stats.hp -= (stats.lightDamage * Time.deltaTime);
     }
 }
