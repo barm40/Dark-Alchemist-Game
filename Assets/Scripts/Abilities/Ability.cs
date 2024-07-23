@@ -9,7 +9,6 @@ public abstract class Ability : Items
     
     public readonly float ActiveTime;
     public readonly float CooldownTime;
-    private Stats _stats;
 
     protected Ability(float activeTime, float cooldownTime)
     {
