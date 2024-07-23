@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class InvantoryManager : MonoBehaviour
 {
     bool[] isItemReached = new bool[5];
-    Image[] itemImageList = new Image[5];
+    [SerializeField] Image[] itemImageList = new Image[5];
 
 
     public void SetNewItemInTheInventory(GameObject item)

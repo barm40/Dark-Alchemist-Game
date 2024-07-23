@@ -7,7 +7,7 @@ public class DashAbility : Ability
         
     private readonly float _dashMultiplier;
     private readonly float _previousMultiplier;
-    
+
     // get stats object and extract values from it
     public DashAbility(Stats stats) : base(stats.DashActive, stats.DashCooldown)
     {
@@ -15,6 +15,10 @@ public class DashAbility : Ability
         _dashMultiplier = stats.DashMultiplier;
         _previousMultiplier = stats.MoveSpeedMultiplier;
         AbilityType = AbilityTypes.DashType;
+    }
+
+    private void Start()
+    {
         itemInventoryNumber = 1;
     }
 
