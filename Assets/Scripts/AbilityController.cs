@@ -11,24 +11,16 @@ public class AbilityController : MonoBehaviour
     private float _abilityCooldown;
     
     private AbilityState _abilityState = AbilityState.Ready;
-<<<<<<< Updated upstream
     
     public Ability CurrentAbility { get; set; }
-=======
-
-    public Ability CurrentAbility { get; set; } = new DashAbility();
->>>>>>> Stashed changes
     [SerializeField] private KeyCode abilityKey;
     bool isAbilityChoosed = false;
 
     private void Start()
     {
         _stats = GetComponent<Stats>();
-<<<<<<< Updated upstream
-        CurrentAbility = new BoostAbility(_stats);
-=======
         invantoryManager = FindObjectOfType<InvantoryManager>();
->>>>>>> Stashed changes
+        CurrentAbility = new BoostAbility(_stats);
     }
 
     private void Update()
