@@ -5,24 +5,38 @@ using UnityEngine;
 public class AbilityController : MonoBehaviour
 {
     private Stats _stats;
+    private InvantoryManager invantoryManager;
 
     private float _abilityTime;
     private float _abilityCooldown;
     
     private AbilityState _abilityState = AbilityState.Ready;
+<<<<<<< Updated upstream
     
     public Ability CurrentAbility { get; set; }
+=======
+
+    public Ability CurrentAbility { get; set; } = new DashAbility();
+>>>>>>> Stashed changes
     [SerializeField] private KeyCode abilityKey;
-    
+    bool isAbilityChoosed = false;
+
     private void Start()
     {
         _stats = GetComponent<Stats>();
+<<<<<<< Updated upstream
         CurrentAbility = new BoostAbility(_stats);
+=======
+        invantoryManager = FindObjectOfType<InvantoryManager>();
+>>>>>>> Stashed changes
     }
 
     private void Update()
     {
-        DoAbility();
+        if(Input.GetKeyDown(abilityKey) && isAbilityChoosed)
+        {
+            DoAbility();
+        }
     }
 
     private void DoAbility()
@@ -66,7 +80,18 @@ public class AbilityController : MonoBehaviour
     
     private void ChooseAbility()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (invantoryManager.isTheItemInInventory(1))
+            {
+                isAbilityChoosed = true;
+                CurrentAbility = new DashAbility();
+            }
+            else
+            {
+                isAbilityChoosed = false;
+            }
+        }
     }
     
     private enum AbilityState
