@@ -32,10 +32,11 @@ public class InvantoryManager : MonoBehaviour
         itemImageList[item.itemInventoryNumber - 1].color = new Color(84, 84, 84);
     }
 
-    public bool HaveTheItemInInventory(Items item)
+    public bool isTheItemInInventory(int abilityNumber)
     {
-        if (isItemReached[item.itemInventoryNumber - 1])
+        if (isItemReached[abilityNumber - 1])
         {
+            itemImageList[abilityNumber - 1].GetComponent<Animation>().Play();
             return true;
         }
         return false;

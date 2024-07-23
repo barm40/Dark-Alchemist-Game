@@ -77,7 +77,7 @@ public class AbilityController : MonoBehaviour
             if (invantoryManager.isTheItemInInventory(1))
             {
                 isAbilityChoosed = true;
-                CurrentAbility = new DashAbility();
+                //CurrentAbility = new DashAbility();
             }
             else
             {
