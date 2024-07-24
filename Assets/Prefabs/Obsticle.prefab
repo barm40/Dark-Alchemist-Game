@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 4644710036915765641}
   m_Layer: 0
   m_Name: Obsticle
-  m_TagString: Untagged
+  m_TagString: platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,7 +315,6 @@ MonoBehaviour:
   m_ShapePathHash: -511027059
   m_Mesh: {fileID: 0}
   m_InstanceId: -324294
-  m_ShadowCasterGroup: {fileID: 4589302465416977746}
   m_LocalBounds:
     m_Center: {x: -1.4807501, y: -0.22780776, z: 0}
     m_Extent: {x: 1.463006, y: 0.18935335, z: 0}
