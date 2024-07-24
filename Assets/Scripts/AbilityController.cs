@@ -13,22 +13,21 @@ public class AbilityController : MonoBehaviour
     private AbilityState _abilityState = AbilityState.Ready;
     
     public Ability CurrentAbility { get; set; }
-    [SerializeField] private KeyCode abilityKey;
-    bool isAbilityChoosed = false;
+    [SerializeField] private KeyCode abilityKey = KeyCode.LeftShift;
+    
+    public bool _isAbilityChoosed { private get; set; }
 
     private void Start()
     {
         _stats = GetComponent<Stats>();
         invantoryManager = FindObjectOfType<InvantoryManager>();
-        CurrentAbility = new BoostAbility(_stats);
+        CurrentAbility = new DashAbility(_stats);
+        _isAbilityChoosed = true;
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(abilityKey) && isAbilityChoosed)
-        {
-            DoAbility();
-        }
+        DoAbility();
     }
 
     private void DoAbility()
@@ -37,7 +36,7 @@ public class AbilityController : MonoBehaviour
         {
             case AbilityState.Ready:
             {
-                if (Input.GetKeyDown(abilityKey))
+                if (Input.GetKeyDown(abilityKey) && _isAbilityChoosed)
                 {
                     CurrentAbility.Activate(gameObject);
                     _abilityState = AbilityState.Active;
@@ -47,13 +46,22 @@ public class AbilityController : MonoBehaviour
                 break;
             case AbilityState.Active:
             {
-                if (_abilityTime > 0)
-                    _abilityTime -= Time.deltaTime;
-                else
+                if(_abilityTime <= 0)
                 {
                     CurrentAbility.Deactivate(gameObject);
                     _abilityState = AbilityState.Cooldown;
                     _abilityCooldown = CurrentAbility.CooldownTime;
+                }
+                else
+                {
+                    _abilityTime -= Time.deltaTime;
+                    // Dash only works while key pressed
+                    if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(abilityKey))
+                    {
+                        CurrentAbility.Deactivate(gameObject);
+                        _abilityState = AbilityState.Cooldown;
+                        _abilityCooldown = CurrentAbility.CooldownTime;
+                    }
                 }
             }
                 break;
@@ -76,12 +84,12 @@ public class AbilityController : MonoBehaviour
         {
             if (invantoryManager.isTheItemInInventory(1))
             {
-                isAbilityChoosed = true;
+                _isAbilityChoosed = true;
                 //CurrentAbility = new DashAbility();
             }
             else
             {
-                isAbilityChoosed = false;
+                _isAbilityChoosed = false;
             }
         }
     }

@@ -27,6 +27,7 @@ public class BoostAbility : Ability
         var stats = parent.GetComponent<Stats>();
         stats.MoveSpeedMultiplier = _previousMultiplier;
         
-        parent.GetComponent<AbilityController>().CurrentAbility = null;
+        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }

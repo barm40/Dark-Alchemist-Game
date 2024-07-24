@@ -45,6 +45,7 @@ public class DashAbility : Ability
 
     private static void ResetAbility(GameObject parent)
     {
-        parent.GetComponent<AbilityController>().CurrentAbility = null;
+        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }
