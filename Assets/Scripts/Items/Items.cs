@@ -9,7 +9,7 @@ public abstract class Items : MonoBehaviour
     protected bool isUsed = false;
     protected bool isCanBeToken = false;
     protected bool isToken = false;
-    [SerializeField] public int itemInventoryNumber { get; protected set;}
+    [SerializeField] public int itemInventoryNumber { get; set;}
 
     public static event Action<Items> isCanBeTokenAction = null;
 

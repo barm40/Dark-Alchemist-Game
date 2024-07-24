@@ -75,6 +75,6 @@ public class PlayerInLighDetect : MonoBehaviour
     
     public static void LightRemoveHealth(Stats stats)
     {
-        stats.hp -= (stats.lightDamage * Time.deltaTime);
+        stats.Hp -= (stats.lightDamage * Time.deltaTime);
     }
 }

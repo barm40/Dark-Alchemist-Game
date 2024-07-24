@@ -14,11 +14,18 @@ using UnityEngine.Serialization;
 public class Stats : MonoBehaviour
 {
     // player related fields
-    [SerializeField] private float baseMoveSpeed = 1;
-    public float MoveSpeedMultiplier { get; set; }
+    // move
+    [SerializeField] private float baseMoveSpeed = 500f;
+    public float MoveSpeedMultiplier { get; set; } = 1f;
     public float CurrentMoveSpeed { get; private set; }
     
-    public float hp { get; set; } = 100f;
+    // jump
+    [SerializeField] private float baseJumpForce = 600f;
+    public float JumpForceMultiplier { get; set; } = 1f;
+    public float CurrentJumpForce { get; private set; }
+    public float coyoteTime = .2f;
+    
+    public float Hp { get; set; } = 100f;
     
     // light damage related
     [SerializeField] public float lightDamage = 5f;
@@ -30,21 +37,18 @@ public class Stats : MonoBehaviour
     
     // dash specific stats 
     public float DashActive { get; private set; } = .3f;
-    public float DashCooldown { get; private set; } = 1.5f;
+    public float DashCooldown { get; private set; } = 3f;
     public float DashMultiplier { get; set; } = 5f;
     public int DashUses { get; set; } = 5;
     
     // boost specific stats
     public float BoostMultiplier { get; set; } = 2f;
-    
-    private void Start()
-    {
-        MoveSpeedMultiplier = 1f;
-    }
 
-    private void Update()
+    private void FixedUpdate()
     {
         CurrentMoveSpeed = 
-            baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
+            baseMoveSpeed * MoveSpeedMultiplier * Time.fixedDeltaTime;
+        CurrentJumpForce = 
+            baseJumpForce * JumpForceMultiplier * Time.fixedDeltaTime;
     }
 }
