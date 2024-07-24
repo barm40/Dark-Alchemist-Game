@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Serialization;
 
-public abstract class Ability : Items
+public abstract class Ability
 {
     public enum AbilityTypes { DashType, BoostType, ImmuneType, None }
     public AbilityTypes AbilityType { get; protected set; }
