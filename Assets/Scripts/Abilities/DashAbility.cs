@@ -17,11 +17,6 @@ public class DashAbility : Ability
         AbilityType = AbilityTypes.DashType;
     }
 
-    private void Start()
-    {
-        itemInventoryNumber = 1;
-    }
-
     public override void Activate(GameObject parent)
     {
         if (_dashUses > 0)
