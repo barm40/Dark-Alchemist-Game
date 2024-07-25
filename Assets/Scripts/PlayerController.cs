@@ -131,10 +131,11 @@ public class PlayerController : MonoBehaviour
         {
             PlayerInLighDetect.LightRemoveHealth(_stats);
             hpText.text = $"HP: {(int)_stats.Hp}";
-            Debug.LogWarning($"Remove health in PlayerController");
+            //Debug.LogWarning($"Remove health in PlayerController");
         }
         else
         {
+            //TO DO
             Debug.LogWarning($"You are dead, Game Over!!");
         }
     }

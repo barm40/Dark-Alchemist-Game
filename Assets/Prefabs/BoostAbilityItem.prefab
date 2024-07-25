@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5059027270158649438}
   - component: {fileID: 985809421701962802}
   - component: {fileID: 4624600245324452296}
-  - component: {fileID: 8983163336255216593}
+  - component: {fileID: 5246296515296790751}
   m_Layer: 0
-  m_Name: DashAbilityItem
+  m_Name: BoostAbilityItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: -359156443
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300028, guid: ddf8838d0a06d8d4c9dec9e3bed69260, type: 3}
+  m_Sprite: {fileID: 21300016, guid: ddf8838d0a06d8d4c9dec9e3bed69260, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1.5}
   m_EdgeRadius: 0
---- !u!114 &8983163336255216593
+--- !u!114 &5246296515296790751
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,6 +140,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6199536130665294140}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60704c3729431df47a94e4e84d8b0307, type: 3}
+  m_Script: {fileID: 11500000, guid: 43933bcaab21aaf489995caf62280441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -34,11 +34,21 @@ public class InvantoryManager : MonoBehaviour
 
     public bool isTheItemInInventory(int abilityNumber)
     {
-        if (isItemReached[abilityNumber - 1])
-        {
-            itemImageList[abilityNumber - 1].GetComponent<Animation>().Play();
+        int abilityNumberInInvantory = abilityNumber - 1;
+        if (isItemReached[abilityNumberInInvantory])
+        { 
+            ChooseAbility(abilityNumberInInvantory);
             return true;
         }
         return false;
+    }
+
+    private void ChooseAbility(int abilityNumberInInventory)
+    {
+        Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+        bool isPlay = itemAnimation.GetBool("isChoosed");
+        Debug.Log(isPlay);
+        itemAnimation.SetBool("isChoosed", !itemAnimation.GetBool("isChoosed"));
+        return;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
@@ -27,6 +28,7 @@ public class AbilityController : MonoBehaviour
 
     private void Update()
     {
+        ChooseAbility();
         DoAbility();
     }
 
@@ -81,19 +83,33 @@ public class AbilityController : MonoBehaviour
     private void ChooseAbility()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
+        {   
+            GetAbilityFromInventory(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (invantoryManager.isTheItemInInventory(1))
-            {
-                _isAbilityChoosed = true;
-                //CurrentAbility = new DashAbility();
-            }
-            else
-            {
-                _isAbilityChoosed = false;
-            }
+            GetAbilityFromInventory(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GetAbilityFromInventory(3);
         }
     }
-    
+
+    private void GetAbilityFromInventory(int abilityNumber)
+    {
+        if (invantoryManager.isTheItemInInventory(abilityNumber))
+        {
+            _isAbilityChoosed = true;
+        }
+        else
+        {
+            _isAbilityChoosed = false;
+        }
+    }
+
     private enum AbilityState
     {
         Ready,

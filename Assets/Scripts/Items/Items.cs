@@ -27,10 +27,8 @@ public abstract class Items : MonoBehaviour
 
     protected  virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"{other.name} is in the trigger");
         if (!isToken)
         {
-            Debug.Log($"{gameObject.name} can be token");
             isCanBeToken = true;
             isCanBeTokenAction?.Invoke(this);
         }
@@ -38,7 +36,6 @@ public abstract class Items : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log($"The player is too far");
         if (!isToken)
         {
             isCanBeToken = false;
