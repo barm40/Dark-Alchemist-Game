@@ -15,15 +15,17 @@ public class Stats : MonoBehaviour
 {
     // player related fields
     // move
-    [SerializeField] private float baseMoveSpeed = 500f;
+    [SerializeField] private float baseMoveSpeed = 100f;
     public float MoveSpeedMultiplier { get; set; } = 1f;
     public float CurrentMoveSpeed { get; private set; }
     
     // jump
-    [SerializeField] private float baseJumpForce = 600f;
+    [SerializeField] private float baseJumpForce = 150f;
     public float JumpForceMultiplier { get; set; } = 1f;
     public float CurrentJumpForce { get; private set; }
     public float coyoteTime = .2f;
+    public float jumpBufferTime = .2f;
+
     
     public float Hp { get; set; } = 100f;
     

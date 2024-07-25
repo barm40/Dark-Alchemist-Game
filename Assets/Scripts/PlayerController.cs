@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -12,10 +13,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] TMP_Text hpText;
 
     // for jump
+    public Vector2 boxSize;
+    public LayerMask groundLayer;
+    public float castDistance;
+    
+    private bool _isJumping;
+    private float _jumpBufferTimer;
     private float _coyoteTimer;
-    private bool _isGrounded;
     
-    
+    // for movement and animation
+    private float _horizontal;
+    private bool _isFacingRight = true;
+
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
@@ -39,18 +48,21 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _horizontal = Input.GetAxisRaw("Horizontal");
+        
         MoveHorizontal();
+        Flip();
     }
     
     private void MoveHorizontal()
     {
-        var moveSpeed = Input.GetAxisRaw("Horizontal") * _stats.CurrentMoveSpeed;
+        var moveSpeed = _horizontal * _stats.CurrentMoveSpeed;
         _rb2d.velocity = new Vector2(moveSpeed, _rb2d.velocity.y);
     } 
     
     private void JumpVertical()
     {
-        if (_isGrounded)
+        if (IsGrounded())
         {
             _coyoteTimer = _stats.coyoteTime;
         }
@@ -59,10 +71,22 @@ public class PlayerController : MonoBehaviour
             _coyoteTimer -= Time.deltaTime;
         }
         
-        if (_coyoteTimer > 0f && Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
+        {
+            _jumpBufferTimer = _stats.jumpBufferTime;
+        }
+        else
+        {
+            _jumpBufferTimer -= Time.deltaTime;
+        }
+        
+        if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
         {
             _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
             Debug.Log("Jumping");
+
+            _jumpBufferTimer = 0f;
+            StartCoroutine(JumpCooldown());
         }
         
         if (Input.GetButtonUp("Jump") && _rb2d.velocity.y > 0f)
@@ -72,23 +96,33 @@ public class PlayerController : MonoBehaviour
             _coyoteTimer = 0f;
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D other)
+    
+    private IEnumerator JumpCooldown()
     {
-        if (other.gameObject.CompareTag("platform"))
+        _isJumping = true;
+        yield return new WaitForSeconds(0.4f);
+        _isJumping = false;
+    }
+    
+    public bool IsGrounded()
+    {
+        return Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer);
+    }
+    
+    private void Flip()
+    {
+        if (_isFacingRight && _horizontal < 0f || !_isFacingRight && _horizontal > 0f)
         {
-            _isGrounded = true;
-            Debug.Log("Grounded");
+            Vector3 localScale = transform.localScale;
+            _isFacingRight = !_isFacingRight;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
         }
     }
-
-    private void OnCollisionExit2D(Collision2D other)
+    
+    private void OnDrawGizmos()
     {
-        if (other.collider.CompareTag("platform"))
-        {
-            _isGrounded = false;
-            Debug.Log("Jumping");
-        }
+        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
     }
 
     void RemoveHealth()
