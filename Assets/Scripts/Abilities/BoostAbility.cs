@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoostAbility : Ability
+public class BoostAbility : Ability, IAbilities
 {
     private float _boostMultiplier;
     
@@ -10,6 +10,7 @@ public class BoostAbility : Ability
     public BoostAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
     {
         AbilityType = AbilityTypes.BoostType;
+        Debug.Log($"This {AbilityType} is number: {amountOfAbilities}");
     }
     
     private float _previousMultiplier;

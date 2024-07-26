@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LightImmuneAbility : Ability
+public class LightImmuneAbility : Ability, IAbilities
 {
     private readonly float _prevLightDamage;
     private readonly float _shieldLightDamage;

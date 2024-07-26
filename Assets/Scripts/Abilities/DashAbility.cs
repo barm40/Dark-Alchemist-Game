@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class DashAbility : Ability
+public class DashAbility : Ability, IAbilities
 {
     private int _dashUses;
         
@@ -15,6 +15,7 @@ public class DashAbility : Ability
         _dashMultiplier = stats.DashMultiplier;
         _previousMultiplier = stats.MoveSpeedMultiplier;
         AbilityType = AbilityTypes.DashType;
+        Debug.Log($"This {AbilityType} is number: {amountOfAbilities}");
     }
 
     public override void Activate(GameObject parent)
