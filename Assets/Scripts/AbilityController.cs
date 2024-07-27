@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
-
 public class AbilityController : MonoBehaviour
 {
     private Stats _stats;
@@ -13,7 +12,6 @@ public class AbilityController : MonoBehaviour
     private AbilityState _abilityState = AbilityState.Ready;
     
     public Ability CurrentAbility { get; set; }
-    [SerializeField] private KeyCode abilityKey = KeyCode.LeftShift;
     
     public bool _isAbilityChoosed { private get; set; }
 
@@ -36,7 +34,7 @@ public class AbilityController : MonoBehaviour
         {
             case AbilityState.Ready:
             {
-                if (Input.GetKeyDown(abilityKey) && _isAbilityChoosed)
+                if (Input.GetKeyDown(ControlsManager.Controls["ability"]) && _isAbilityChoosed)
                 {
                     CurrentAbility.Activate(gameObject);
                     _abilityState = AbilityState.Active;
@@ -56,7 +54,7 @@ public class AbilityController : MonoBehaviour
                 {
                     _abilityTime -= Time.deltaTime;
                     // Dash only works while key pressed
-                    if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(abilityKey))
+                    if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(ControlsManager.Controls["ability"]))
                     {
                         CurrentAbility.Deactivate(gameObject);
                         _abilityState = AbilityState.Cooldown;

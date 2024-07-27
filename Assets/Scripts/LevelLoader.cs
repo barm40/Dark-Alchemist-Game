@@ -8,7 +8,7 @@ public class LevelLoader : MonoBehaviour
     public Animator transition;
     public float transitionTime = 1f; // transition time in seconds (animation is 1 second)
     private static readonly int Start = Animator.StringToHash("Start");
-
+    
     public void LoadNextLevel(int sceneIndex)
     {
         // perform each line of code in the enumerator in paralle
