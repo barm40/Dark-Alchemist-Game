@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
-
+    
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
