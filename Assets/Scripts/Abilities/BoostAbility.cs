@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoostAbility : Ability, IAbilities
+public class BoostAbility : Ability
 {
     private float _boostMultiplier;
     
@@ -10,6 +10,7 @@ public class BoostAbility : Ability, IAbilities
     public BoostAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
     {
         AbilityType = AbilityTypes.BoostType;
+        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
     }
     
     private float _previousMultiplier;
@@ -27,7 +28,7 @@ public class BoostAbility : Ability, IAbilities
         var stats = parent.GetComponent<Stats>();
         stats.MoveSpeedMultiplier = _previousMultiplier;
         
-        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }

@@ -33,10 +33,10 @@ public class InvantoryManager : MonoBehaviour
 
     public bool isTheItemInInventory(int abilityNumber)
     {
-        int abilityNumberInInvantory = abilityNumber - 1;
-        if (isItemReached[abilityNumberInInvantory])
+        int abilityNumberInInventory = abilityNumber - 1;
+        if (isItemReached[abilityNumberInInventory])
         { 
-            ChooseAbility(abilityNumberInInvantory);
+            ChooseAbility(abilityNumberInInventory);
             return true;
         }
         return false;
@@ -44,19 +44,19 @@ public class InvantoryManager : MonoBehaviour
 
     public void useAbilityItem(int abilityNumber)
     {
-        int abilityNumberInInvantory = abilityNumber - 1;
-        isItemReached[abilityNumberInInvantory] = false;
-        itemImageList[abilityNumberInInvantory].color = defaultColor;
+        int abilityNumberInInventory = abilityNumber - 1;
+        isItemReached[abilityNumberInInventory] = false;
+        itemImageList[abilityNumberInInventory].color = defaultColor;
         //itemImageList[abilityNumberInInvantory].enabled = false;
-        ChooseAbility(abilityNumberInInvantory);
+        ChooseAbility(abilityNumberInInventory);
     }
 
     public void useAbilityItem(int abilityNumber, int abilityNumber2)
     {
-        int abilityNumberInInvantory = abilityNumber - 1;
-        useAbilityItem(abilityNumberInInvantory);
-        abilityNumberInInvantory = abilityNumber2 - 1;
-        useAbilityItem(abilityNumberInInvantory);
+        int abilityNumberInInventory = abilityNumber - 1;
+        useAbilityItem(abilityNumberInInventory);
+        abilityNumberInInventory = abilityNumber2 - 1;
+        useAbilityItem(abilityNumberInInventory);
     }
 
     private void ChooseAbility(int abilityNumberInInventory)

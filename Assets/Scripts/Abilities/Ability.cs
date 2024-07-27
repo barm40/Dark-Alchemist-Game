@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public abstract class Ability
 {
-    public enum AbilityTypes { DashType, BoostType, ImmuneType, None }
+    public enum AbilityTypes { None, DashType, BoostType, ImmuneType }
     public AbilityTypes AbilityType { get; protected set; }
     
     public readonly float ActiveTime;

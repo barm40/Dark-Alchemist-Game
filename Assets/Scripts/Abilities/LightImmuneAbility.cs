@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LightImmuneAbility : Ability, IAbilities
+public class LightImmuneAbility : Ability
 {
     private readonly float _prevLightDamage;
     private readonly float _shieldLightDamage;
@@ -25,7 +25,7 @@ public class LightImmuneAbility : Ability, IAbilities
         
         stats.lightDamage = _prevLightDamage;
         
-        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }

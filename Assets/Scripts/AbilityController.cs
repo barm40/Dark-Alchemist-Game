@@ -12,7 +12,7 @@ public class AbilityController : MonoBehaviour
 
     private float _abilityTime;
     private float _abilityCooldown;
-    
+    private AbilityNone defaultAbility;
     private AbilityState _abilityState = AbilityState.Ready;
     
     [SerializeField] public Ability CurrentAbility { get; set; }
@@ -26,12 +26,14 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.ImmuneType, false }
     };
     public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
+    private bool isCombo = false;
 
     private void Awake()
     {
         _stats = GetComponent<Stats>();
         invantoryManager = FindObjectOfType<InvantoryManager>();
-        //CurrentAbility = new DashAbility(_stats);
+        defaultAbility = new AbilityNone();
+        CurrentAbility = defaultAbility;
         //_isAbilityChoosed = true;
         abilitiesList.Add(new DashAbility(_stats));
         abilitiesList.Add(new BoostAbility(_stats));
@@ -70,7 +72,7 @@ public class AbilityController : MonoBehaviour
                         _abilityState = AbilityState.Ready;
                         //_abilityState = AbilityState.Cooldown;
                         //_abilityCooldown = CurrentAbility.CooldownTime;
-                        ClearAbilityAfterUsed();
+                        ClearAbility();
                     }
                     else
                     {
@@ -102,17 +104,17 @@ public class AbilityController : MonoBehaviour
 
     private void ChooseAbility()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.isTheItemInInventory(1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.isTheItemInInventory(abilitiesList[0].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.DashType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.isTheItemInInventory(2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.isTheItemInInventory(abilitiesList[1].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.BoostType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && invantoryManager.isTheItemInInventory(3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && invantoryManager.isTheItemInInventory(abilitiesList[2].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
         }
@@ -122,7 +124,9 @@ public class AbilityController : MonoBehaviour
 
     private void SetCurrentAbility(Ability.AbilityTypes abilityType)
     {
-        if (!_isAbilityChoosed || (_isAbilityChoosed && abilityChoosenList[abilityType]))
+        // if in combo mode and user diselect ability
+        // if the user
+        if (!_isAbilityChoosed)
         {
             abilityChoosenList[abilityType] = !abilityChoosenList[abilityType];
 
@@ -130,37 +134,63 @@ public class AbilityController : MonoBehaviour
             {
                 if (abilityType == abilitiesList[i].AbilityType)
                 {
-                    CurrentAbility = CurrentAbility is null? abilitiesList[i] : null;
-                    _isAbilityChoosed = !_isAbilityChoosed;
+                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone? abilitiesList[i] : defaultAbility;
+                    _isAbilityChoosed = true;
                     break;
                 }
             }
+        } 
+        else if (_isAbilityChoosed && abilityChoosenList[abilityType] && !isCombo)
+        {
+            ClearAbility();
         }
-        else         {
-            abilityChoosenList[abilityType] = !abilityChoosenList[abilityType];
-            Debug.Log($"This is combo of: ");
-
-            // Here need to choose on the combination of the ability and set the current ability to this combination
-            foreach (var ability in abilitiesList)
+        else if (isCombo)
+        {
+            abilityChoosenList[abilityType] = false;
+            for (int i = 0; abilitiesList.Count > i; i++)
             {
-                //Debug.Log($"The ability {ability.AbilityType} is {abilityChoosenList[ability.AbilityType]} in the abilityChoosenList"); // this check all the abilities condition 
-                if (abilityChoosenList[ability.AbilityType]) // if its dash and boost -> CurrentAbility = .... || if its dash and light -> CurrentAbility = ....
+                if (abilityChoosenList[abilitiesList[i].AbilityType])
                 {
-                    Debug.Log(ability + " is choosed");
-                    invantoryManager.useAbilityItem(ability.abilityNumber);  // To Do - remove it after have a new combo abilities
-                    continue;
+                    CurrentAbility = abilitiesList[i];
                 }
             }
-            // To Do - remove it after have the combo abilities
-            ClearAbilityAfterUsed(); 
+            Debug.Log(CurrentAbility);
+            isCombo = false;
         }
+        else
+        {
+            isCombo = true;
+            abilityChoosenList[abilityType] = true;
+            Debug.Log($"This is combo of: ");
 
+            if (Input.GetKeyDown(abilityKey))
+            {
+                // Here need to choose on the combination of the ability and set the current ability to this combination
+                foreach (var ability in abilitiesList)
+                {
+                    //Debug.Log($"The ability {ability.AbilityType} is {abilityChoosenList[ability.AbilityType]} in the abilityChoosenList"); // this check all the abilities condition 
+                    if (abilityChoosenList[ability.AbilityType]) // if its dash and boost -> CurrentAbility = .... || if its dash and light -> CurrentAbility = ....
+                    {
+                        Debug.Log(ability + " is choosed");
+                        invantoryManager.useAbilityItem(ability.abilityNumber);  // To Do - remove it after have a new combo abilities
+                        continue;
+                    }
+                }
+                ClearAbility();
+                // To Do - remove it after have the combo abilities
+            }
+        }
     }
 
-    private void ClearAbilityAfterUsed()
+    private void ClearAbility()
     {
-        CurrentAbility = null;
+        CurrentAbility = defaultAbility;
         _isAbilityChoosed = false;
+
+        for (int i = 0; abilitiesList.Count > i; i++)
+        {
+            abilityChoosenList[abilitiesList[i].AbilityType] = false;
+        }
     }
 
     private enum AbilityState
