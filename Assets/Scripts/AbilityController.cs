@@ -25,9 +25,9 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.BoostType, false },
         {Ability.AbilityTypes.ImmuneType, false }
     };
-    List<Ability> abilitiesList = new List<Ability>();
+    public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
 
-    private void Start()
+    private void Awake()
     {
         _stats = GetComponent<Stats>();
         invantoryManager = FindObjectOfType<InvantoryManager>();

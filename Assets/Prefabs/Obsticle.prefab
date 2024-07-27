@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6433454019653613809}
   - component: {fileID: 1504364295962707479}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilesheet - WOODS_39
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1195198737544011024}
   - component: {fileID: 1966865620843128434}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilesheet - WOODS_40
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3838418109514336195}
   - component: {fileID: 1684742271114559487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilesheet - WOODS_41
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 8608815328968047206}
   - component: {fileID: 4589302465416977746}
   - component: {fileID: 4644710036915765641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Obsticle
   m_TagString: platform
   m_Icon: {fileID: 0}
@@ -310,14 +310,15 @@ MonoBehaviour:
   m_ShapePath:
   - {x: -2.9437542, y: -0.4068066, z: 0}
   - {x: -2.943756, y: -0.038454413, z: 0}
-  - {x: -0.069517136, y: -0.06951928, z: 0}
+  - {x: -0.011671066, y: -0.06061995, z: 0}
   - {x: -0.017744064, y: -0.4171611, z: 0}
-  m_ShapePathHash: -511027059
+  m_ShapePathHash: -1715494515
   m_Mesh: {fileID: 0}
-  m_InstanceId: -324294
+  m_InstanceId: 29194
+  m_ShadowCasterGroup: {fileID: 4589302465416977746}
   m_LocalBounds:
-    m_Center: {x: -1.4807501, y: -0.22780776, z: 0}
-    m_Extent: {x: 1.463006, y: 0.18935335, z: 0}
+    m_Center: {x: -1.4777136, y: -0.22780776, z: 0}
+    m_Extent: {x: 1.4660425, y: 0.18935335, z: 0}
 --- !u!61 &4644710036915765641
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -350,7 +351,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.4496851, y: -0.5229223}
+  m_Offset: {x: -1.4904385, y: -0.5414466}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -361,5 +362,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.070982, y: 1.031064}
+  m_Size: {x: 2.9153786, y: 0.99401534}
   m_EdgeRadius: 0
