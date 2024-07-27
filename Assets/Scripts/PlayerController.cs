@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
+        hpText.text = "HP: " + (int)_stats.Hp;
     }
 
     private void Update()
