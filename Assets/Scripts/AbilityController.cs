@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Playables;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
@@ -117,7 +118,10 @@ public class AbilityController : MonoBehaviour
             SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
         }
 
-        
+        if (isCombo)
+        {
+            UseComboAbility();
+        }
     }
 
     private void SetCurrentAbility(Ability.AbilityTypes abilityType)
@@ -132,17 +136,17 @@ public class AbilityController : MonoBehaviour
             {
                 if (abilityType == abilitiesList[i].AbilityType)
                 {
-                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone? abilitiesList[i] : defaultAbility;
+                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone ? abilitiesList[i] : defaultAbility;
                     _isAbilityChoosed = true;
                     break;
                 }
             }
-        } 
+        }
         else if (_isAbilityChoosed && abilityChoosenList[abilityType] && !isCombo)
         {
             ClearAbility();
         }
-        else if (isCombo)
+        else if (isCombo && abilityChoosenList[abilityType])
         {
             abilityChoosenList[abilityType] = false;
             for (int i = 0; abilitiesList.Count > i; i++)
@@ -159,24 +163,29 @@ public class AbilityController : MonoBehaviour
         {
             isCombo = true;
             abilityChoosenList[abilityType] = true;
-            Debug.Log($"This is combo of: ");
+        }
+    }
 
-            if (Input.GetKeyDown(abilityKey))
+    /// <summary>
+    /// This function for use when have combo mode element,
+    /// actually when we will have more abilities we need to use it to set the combo ability and from here call to 'Do ability' 
+    /// </summary>
+    private void UseComboAbility()
+    {
+        if (Input.GetKeyDown(ControlsManager.Controls["ability"]))
+        {
+            foreach (var ability in abilitiesList)
             {
-                // Here need to choose on the combination of the ability and set the current ability to this combination
-                foreach (var ability in abilitiesList)
+                if (abilityChoosenList[ability.AbilityType])
                 {
-                    //Debug.Log($"The ability {ability.AbilityType} is {abilityChoosenList[ability.AbilityType]} in the abilityChoosenList"); // this check all the abilities condition 
-                    if (abilityChoosenList[ability.AbilityType]) // if its dash and boost -> CurrentAbility = .... || if its dash and light -> CurrentAbility = ....
-                    {
-                        Debug.Log(ability + " is choosed");
-                        invantoryManager.useAbilityItem(ability.abilityNumber);  // To Do - remove it after have a new combo abilities
-                        continue;
-                    }
+                    Debug.Log($"the ability {ability.AbilityType} is choosed");
+                    invantoryManager.useAbilityItem(ability.abilityNumber);
+                    abilityChoosenList[ability.AbilityType] = false;
                 }
-                ClearAbility();
-                // To Do - remove it after have the combo abilities
             }
+            isCombo = false;
+            ClearAbility();
+            // To Do - remove it after have the combo abilities
         }
     }
 
