@@ -24,7 +24,7 @@ public class PlayerItemInteractableManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && itemToTake != null)
+        if (Input.GetKeyDown(ControlsManager.Controls["collect"]) && itemToTake != null)
         {
             itemToTake.TakeItem(invantoryManager);
         }
@@ -34,6 +34,4 @@ public class PlayerItemInteractableManager : MonoBehaviour
     {
         this.itemToTake = itemToTake;
     }
-
-    
 }

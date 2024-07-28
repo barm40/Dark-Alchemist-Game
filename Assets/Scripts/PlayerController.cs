@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
-
+    
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
             _coyoteTimer -= Time.deltaTime;
         }
         
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetKeyDown(ControlsManager.Controls["jump"]))
         {
             _jumpBufferTimer = _stats.jumpBufferTime;
         }
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpCooldown());
         }
         
-        if (Input.GetButtonUp("Jump") && _rb2d.velocity.y > 0f)
+        if (Input.GetKeyUp(ControlsManager.Controls["jump"]) && _rb2d.velocity.y > 0f)
         {
             _rb2d.velocity = new Vector2(_rb2d.velocity.x, _rb2d.velocity.y * 0.5f);
 
@@ -139,5 +140,11 @@ public class PlayerController : MonoBehaviour
             //TO DO
             Debug.LogWarning($"You are dead, Game Over!!");
         }
+    }
+
+    // keep the player between levels
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
     }
 }

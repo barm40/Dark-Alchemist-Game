@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class InvantoryManager : MonoBehaviour
 {
@@ -31,7 +27,7 @@ public class InvantoryManager : MonoBehaviour
         }
     }
 
-    public bool isTheItemInInventory(int abilityNumber)
+    public bool IsTheItemInInventory(int abilityNumber)
     {
         int abilityNumberInInventory = abilityNumber - 1;
         if (isItemReached[abilityNumberInInventory])

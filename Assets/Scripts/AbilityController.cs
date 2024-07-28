@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
@@ -55,7 +53,7 @@ public class AbilityController : MonoBehaviour
         {
             case AbilityState.Ready:
                 {
-                    if (Input.GetKeyDown(abilityKey) && _isAbilityChoosed)
+                    if (Input.GetKeyDown(ControlsManager.Controls["ability"]) && _isAbilityChoosed)
                     {
                         CurrentAbility.Activate(gameObject);
                         _abilityState = AbilityState.Active;
@@ -78,7 +76,7 @@ public class AbilityController : MonoBehaviour
                     {
                         _abilityTime -= Time.deltaTime;
                         // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(abilityKey))
+                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(ControlsManager.Controls["ability"]))
                         {
                             CurrentAbility.Deactivate(gameObject);
                             _abilityState = AbilityState.Ready;
@@ -104,17 +102,17 @@ public class AbilityController : MonoBehaviour
 
     private void ChooseAbility()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.isTheItemInInventory(abilitiesList[0].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.IsTheItemInInventory(abilitiesList[0].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.DashType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.isTheItemInInventory(abilitiesList[1].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.IsTheItemInInventory(abilitiesList[1].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.BoostType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && invantoryManager.isTheItemInInventory(abilitiesList[2].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && invantoryManager.IsTheItemInInventory(abilitiesList[2].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
         }
