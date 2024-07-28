@@ -11,6 +11,7 @@ public class AbilityNone : Ability
     public AbilityNone() : base(1f, 1f)
     {
         AbilityType = AbilityTypes.None;
+        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
     }
 
     public override void Activate(GameObject parent) {}

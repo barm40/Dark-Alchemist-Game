@@ -34,6 +34,4 @@ public class PlayerItemInteractableManager : MonoBehaviour
     {
         this.itemToTake = itemToTake;
     }
-
-    
 }

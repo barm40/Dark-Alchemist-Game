@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +5,11 @@ public class InvantoryManager : MonoBehaviour
 {
     bool[] isItemReached = new bool[5];
     [SerializeField] Image[] itemImageList = new Image[5];
+    Color defaultColor = new Color();
+    private void Start()
+    {
+        defaultColor = itemImageList[0].color;
+    }
 
 
     public void SetNewItemInTheInventory(GameObject item)
@@ -25,20 +27,39 @@ public class InvantoryManager : MonoBehaviour
         }
     }
 
-    public void RemoveItemBecauseItsUsed(Items item)
+    public bool IsTheItemInInventory(int abilityNumber)
     {
-        int itemNumber = item.GetComponent<Items>().itemInventoryNumber;
-        isItemReached[itemNumber - 1] = false;
-        itemImageList[item.itemInventoryNumber - 1].color = new Color(84, 84, 84);
-    }
-
-    public bool isTheItemInInventory(int abilityNumber)
-    {
-        if (isItemReached[abilityNumber - 1])
-        {
-            itemImageList[abilityNumber - 1].GetComponent<Animation>().Play();
+        int abilityNumberInInventory = abilityNumber - 1;
+        if (isItemReached[abilityNumberInInventory])
+        { 
+            ChooseAbility(abilityNumberInInventory);
             return true;
         }
         return false;
+    }
+
+    public void useAbilityItem(int abilityNumber)
+    {
+        int abilityNumberInInventory = abilityNumber - 1;
+        isItemReached[abilityNumberInInventory] = false;
+        itemImageList[abilityNumberInInventory].color = defaultColor;
+        //itemImageList[abilityNumberInInvantory].enabled = false;
+        ChooseAbility(abilityNumberInInventory);
+    }
+
+    public void useAbilityItem(int abilityNumber, int abilityNumber2)
+    {
+        int abilityNumberInInventory = abilityNumber - 1;
+        useAbilityItem(abilityNumberInInventory);
+        abilityNumberInInventory = abilityNumber2 - 1;
+        useAbilityItem(abilityNumberInInventory);
+    }
+
+    private void ChooseAbility(int abilityNumberInInventory)
+    {
+        Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+        bool isPlay = itemAnimation.GetBool("isChoosed");
+        itemAnimation.SetBool("isChoosed", !isPlay);
+        return;
     }
 }

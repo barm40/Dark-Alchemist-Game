@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
+        hpText.text = "HP: " + (int)_stats.Hp;
     }
 
     private void Update()
@@ -132,10 +133,11 @@ public class PlayerController : MonoBehaviour
         {
             PlayerInLighDetect.LightRemoveHealth(_stats);
             hpText.text = $"HP: {(int)_stats.Hp}";
-            Debug.LogWarning($"Remove health in PlayerController");
+            //Debug.LogWarning($"Remove health in PlayerController");
         }
         else
         {
+            //TO DO
             Debug.LogWarning($"You are dead, Game Over!!");
         }
     }

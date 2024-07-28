@@ -5,14 +5,17 @@ using UnityEngine;
 
 public abstract class Items : MonoBehaviour
 {
-
+    protected AbilityController abilityController;
     protected bool isUsed = false;
     protected bool isCanBeToken = false;
     protected bool isToken = false;
     [SerializeField] public int itemInventoryNumber { get; protected set;}
 
     public static event Action<Items> isCanBeTokenAction = null;
-
+    private void Awake()
+    {
+        abilityController = FindObjectOfType<AbilityController>();
+    }
     public void TakeItem(InvantoryManager inventory)
     {
         if (!isToken)
@@ -27,10 +30,8 @@ public abstract class Items : MonoBehaviour
 
     protected  virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"{other.name} is in the trigger");
         if (!isToken)
         {
-            Debug.Log($"{gameObject.name} can be token");
             isCanBeToken = true;
             isCanBeTokenAction?.Invoke(this);
         }
@@ -38,7 +39,6 @@ public abstract class Items : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log($"The player is too far");
         if (!isToken)
         {
             isCanBeToken = false;

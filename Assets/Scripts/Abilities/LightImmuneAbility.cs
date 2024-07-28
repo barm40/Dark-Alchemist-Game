@@ -25,7 +25,7 @@ public class LightImmuneAbility : Ability
         
         stats.lightDamage = _prevLightDamage;
         
-        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }

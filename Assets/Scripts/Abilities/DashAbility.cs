@@ -15,6 +15,7 @@ public class DashAbility : Ability
         _dashMultiplier = stats.DashMultiplier;
         _previousMultiplier = stats.MoveSpeedMultiplier;
         AbilityType = AbilityTypes.DashType;
+        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
     }
 
     public override void Activate(GameObject parent)
@@ -40,7 +41,7 @@ public class DashAbility : Ability
 
     private static void ResetAbility(GameObject parent)
     {
-        parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
+        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
     }
 }
