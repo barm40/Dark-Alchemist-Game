@@ -43,16 +43,14 @@ public class InvantoryManager : MonoBehaviour
         int abilityNumberInInventory = abilityNumber;
         isItemReached[abilityNumberInInventory] = false;
         itemImageList[abilityNumberInInventory].color = defaultColor;
-        //itemImageList[abilityNumberInInvantory].enabled = false;
-        ChooseAbility(abilityNumberInInventory);
+        DisableAbilityItemAnimation(abilityNumberInInventory);
     }
 
-    public void useAbilityItem(int abilityNumber, int abilityNumber2)
+    private void DisableAbilityItemAnimation(int abilityNumberInInventory)
     {
-        int abilityNumberInInventory = abilityNumber;
-        useAbilityItem(abilityNumberInInventory);
-        abilityNumberInInventory = abilityNumber2;
-        useAbilityItem(abilityNumberInInventory);
+        Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+        itemAnimation.SetBool("isChoosed", false);
+        return;
     }
 
     private void ChooseAbility(int abilityNumberInInventory)

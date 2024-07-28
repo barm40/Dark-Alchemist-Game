@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Playables;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.ImmuneType, false }
     };
     public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
+    [SerializeField] private ParticleSystem[] abilitiesVFX;
+    private ParticleSystem CurrentAbilityVFX = null;
     private bool isCombo = false;
 
     private void Awake()
@@ -33,7 +36,7 @@ public class AbilityController : MonoBehaviour
         invantoryManager = FindObjectOfType<InvantoryManager>();
         defaultAbility = new AbilityNone();
         CurrentAbility = defaultAbility;
-        //_isAbilityChoosed = true;
+        CurrentAbilityVFX = null;
         abilitiesList.Add(new DashAbility(_stats));
         abilitiesList.Add(new BoostAbility(_stats));
         abilitiesList.Add(new LightImmuneAbility(_stats));
@@ -60,6 +63,7 @@ public class AbilityController : MonoBehaviour
                         _abilityState = AbilityState.Active;
                         _abilityTime = CurrentAbility.ActiveTime;
                         invantoryManager.useAbilityItem(CurrentAbility.abilityNumber);
+                        GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
                 break;
@@ -69,6 +73,7 @@ public class AbilityController : MonoBehaviour
                     {
                         CurrentAbility.Deactivate(gameObject);
                         _abilityState = AbilityState.Ready;
+                        GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
                         //_abilityState = AbilityState.Cooldown;
                         //_abilityCooldown = CurrentAbility.CooldownTime;
                         ClearAbility();
@@ -130,7 +135,7 @@ public class AbilityController : MonoBehaviour
         // if the user
         if (!_isAbilityChoosed)
         {
-            abilityChoosenList[abilityType] = !abilityChoosenList[abilityType];
+            abilityChoosenList[abilityType] = true;
 
             for (int i = 0; abilitiesList.Count > i; i++)
             {
@@ -156,7 +161,6 @@ public class AbilityController : MonoBehaviour
                     CurrentAbility = abilitiesList[i];
                 }
             }
-            Debug.Log(CurrentAbility);
             isCombo = false;
         }
         else
@@ -189,9 +193,22 @@ public class AbilityController : MonoBehaviour
         }
     }
 
+    private ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
+    {
+        for (int i = 0; i < abilitiesVFX.Length; i++)
+        {
+            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0,4)))
+            {
+                return abilitiesVFX[i];
+            }
+        }
+        return null;
+    }
+
     private void ClearAbility()
     {
         CurrentAbility = defaultAbility;
+        CurrentAbilityVFX =  null;
         _isAbilityChoosed = false;
 
         for (int i = 0; abilitiesList.Count > i; i++)
