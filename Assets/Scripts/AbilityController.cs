@@ -194,7 +194,6 @@ public class AbilityController : MonoBehaviour
     private enum AbilityState
     {
         Ready,
-        Active,
-        Cooldown
+        Active
     }
 }
