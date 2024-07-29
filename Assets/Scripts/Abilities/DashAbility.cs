@@ -15,7 +15,7 @@ public class DashAbility : Ability
         _dashMultiplier = stats.DashMultiplier;
         _previousMultiplier = stats.MoveSpeedMultiplier;
         AbilityType = AbilityTypes.DashType;
-        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
+        SetAbilityNumber();
     }
 
     public override void Activate(GameObject parent)

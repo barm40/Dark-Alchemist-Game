@@ -17,10 +17,16 @@ public abstract class Ability
     {
         ActiveTime = activeTime;
         CooldownTime = cooldownTime;
-        amountOfAbilities++;
-        abilityNumber = amountOfAbilities;
     }
-    
+    protected virtual void SetAbilityNumber()
+    {
+        if (AbilityType != AbilityTypes.None)
+        {
+            abilityNumber = amountOfAbilities;
+            amountOfAbilities++;
+        }
+        Debug.Log($"This {AbilityType} is number: {abilityNumber}");
+    }
     public abstract void Activate(GameObject parent);
     public abstract void Deactivate(GameObject parent);
 }

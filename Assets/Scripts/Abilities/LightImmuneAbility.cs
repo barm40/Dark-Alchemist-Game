@@ -10,6 +10,7 @@ public class LightImmuneAbility : Ability
         AbilityType = AbilityTypes.ImmuneType;
         _prevLightDamage = stats.lightDamage;
         _shieldLightDamage = stats.shieldLightDamage;
+        SetAbilityNumber();
     }
 
     public override void Activate(GameObject parent)
