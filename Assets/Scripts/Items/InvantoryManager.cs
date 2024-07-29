@@ -16,20 +16,20 @@ public class InvantoryManager : MonoBehaviour
     {
 
         int itemNumber = item.GetComponent<Items>().itemInventoryNumber;
-        if (isItemReached[itemNumber - 1])
+        if (isItemReached[itemNumber])
         {
             Debug.Log($"Not enough place in the inventory for item: {item.name}");
         }
         else
         {
-            isItemReached[itemNumber - 1] = true;
-            itemImageList[itemNumber - 1].color = new Color(255, 255, 255);
+            isItemReached[itemNumber] = true;
+            itemImageList[itemNumber].color = new Color(255, 255, 255);
         }
     }
 
     public bool IsTheItemInInventory(int abilityNumber)
     {
-        int abilityNumberInInventory = abilityNumber - 1;
+        int abilityNumberInInventory = abilityNumber;
         if (isItemReached[abilityNumberInInventory])
         { 
             ChooseAbility(abilityNumberInInventory);
@@ -40,19 +40,17 @@ public class InvantoryManager : MonoBehaviour
 
     public void useAbilityItem(int abilityNumber)
     {
-        int abilityNumberInInventory = abilityNumber - 1;
+        int abilityNumberInInventory = abilityNumber;
         isItemReached[abilityNumberInInventory] = false;
         itemImageList[abilityNumberInInventory].color = defaultColor;
-        //itemImageList[abilityNumberInInvantory].enabled = false;
-        ChooseAbility(abilityNumberInInventory);
+        DisableAbilityItemAnimation(abilityNumberInInventory);
     }
 
-    public void useAbilityItem(int abilityNumber, int abilityNumber2)
+    private void DisableAbilityItemAnimation(int abilityNumberInInventory)
     {
-        int abilityNumberInInventory = abilityNumber - 1;
-        useAbilityItem(abilityNumberInInventory);
-        abilityNumberInInventory = abilityNumber2 - 1;
-        useAbilityItem(abilityNumberInInventory);
+        Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+        itemAnimation.SetBool("isChoosed", false);
+        return;
     }
 
     private void ChooseAbility(int abilityNumberInInventory)

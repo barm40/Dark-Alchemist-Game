@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Playables;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
@@ -24,6 +26,8 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.ImmuneType, false }
     };
     public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
+    [SerializeField] private ParticleSystem[] abilitiesVFX;
+    private ParticleSystem CurrentAbilityVFX = null;
     private bool isCombo = false;
 
     private void Awake()
@@ -32,7 +36,7 @@ public class AbilityController : MonoBehaviour
         invantoryManager = FindObjectOfType<InvantoryManager>();
         defaultAbility = new AbilityNone();
         CurrentAbility = defaultAbility;
-        //_isAbilityChoosed = true;
+        CurrentAbilityVFX = null;
         abilitiesList.Add(new DashAbility(_stats));
         abilitiesList.Add(new BoostAbility(_stats));
         abilitiesList.Add(new LightImmuneAbility(_stats));
@@ -59,6 +63,7 @@ public class AbilityController : MonoBehaviour
                         _abilityState = AbilityState.Active;
                         _abilityTime = CurrentAbility.ActiveTime;
                         invantoryManager.useAbilityItem(CurrentAbility.abilityNumber);
+                        GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
                 break;
@@ -68,6 +73,7 @@ public class AbilityController : MonoBehaviour
                     {
                         CurrentAbility.Deactivate(gameObject);
                         _abilityState = AbilityState.Ready;
+                        GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
                         //_abilityState = AbilityState.Cooldown;
                         //_abilityCooldown = CurrentAbility.CooldownTime;
                         ClearAbility();
@@ -117,7 +123,10 @@ public class AbilityController : MonoBehaviour
             SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
         }
 
-        
+        if (isCombo)
+        {
+            UseComboAbility();
+        }
     }
 
     private void SetCurrentAbility(Ability.AbilityTypes abilityType)
@@ -126,23 +135,23 @@ public class AbilityController : MonoBehaviour
         // if the user
         if (!_isAbilityChoosed)
         {
-            abilityChoosenList[abilityType] = !abilityChoosenList[abilityType];
+            abilityChoosenList[abilityType] = true;
 
             for (int i = 0; abilitiesList.Count > i; i++)
             {
                 if (abilityType == abilitiesList[i].AbilityType)
                 {
-                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone? abilitiesList[i] : defaultAbility;
+                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone ? abilitiesList[i] : defaultAbility;
                     _isAbilityChoosed = true;
                     break;
                 }
             }
-        } 
+        }
         else if (_isAbilityChoosed && abilityChoosenList[abilityType] && !isCombo)
         {
             ClearAbility();
         }
-        else if (isCombo)
+        else if (isCombo && abilityChoosenList[abilityType])
         {
             abilityChoosenList[abilityType] = false;
             for (int i = 0; abilitiesList.Count > i; i++)
@@ -152,37 +161,54 @@ public class AbilityController : MonoBehaviour
                     CurrentAbility = abilitiesList[i];
                 }
             }
-            Debug.Log(CurrentAbility);
             isCombo = false;
         }
         else
         {
             isCombo = true;
             abilityChoosenList[abilityType] = true;
-            Debug.Log($"This is combo of: ");
+        }
+    }
 
-            if (Input.GetKeyDown(abilityKey))
+    /// <summary>
+    /// This function for use when have combo mode element,
+    /// actually when we will have more abilities we need to use it to set the combo ability and from here call to 'Do ability' 
+    /// </summary>
+    private void UseComboAbility()
+    {
+        if (Input.GetKeyDown(ControlsManager.Controls["ability"]))
+        {
+            foreach (var ability in abilitiesList)
             {
-                // Here need to choose on the combination of the ability and set the current ability to this combination
-                foreach (var ability in abilitiesList)
+                if (abilityChoosenList[ability.AbilityType])
                 {
-                    //Debug.Log($"The ability {ability.AbilityType} is {abilityChoosenList[ability.AbilityType]} in the abilityChoosenList"); // this check all the abilities condition 
-                    if (abilityChoosenList[ability.AbilityType]) // if its dash and boost -> CurrentAbility = .... || if its dash and light -> CurrentAbility = ....
-                    {
-                        Debug.Log(ability + " is choosed");
-                        invantoryManager.useAbilityItem(ability.abilityNumber);  // To Do - remove it after have a new combo abilities
-                        continue;
-                    }
+                    Debug.Log($"the ability {ability.AbilityType} is choosed");
+                    invantoryManager.useAbilityItem(ability.abilityNumber);
+                    abilityChoosenList[ability.AbilityType] = false;
                 }
-                ClearAbility();
-                // To Do - remove it after have the combo abilities
+            }
+            isCombo = false;
+            ClearAbility();
+            // To Do - remove it after have the combo abilities
+        }
+    }
+
+    private ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
+    {
+        for (int i = 0; i < abilitiesVFX.Length; i++)
+        {
+            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0,4)))
+            {
+                return abilitiesVFX[i];
             }
         }
+        return null;
     }
 
     private void ClearAbility()
     {
         CurrentAbility = defaultAbility;
+        CurrentAbilityVFX =  null;
         _isAbilityChoosed = false;
 
         for (int i = 0; abilitiesList.Count > i; i++)

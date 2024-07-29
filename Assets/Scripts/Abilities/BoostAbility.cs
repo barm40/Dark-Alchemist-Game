@@ -10,7 +10,7 @@ public class BoostAbility : Ability
     public BoostAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
     {
         AbilityType = AbilityTypes.BoostType;
-        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
+        SetAbilityNumber();
     }
     
     private float _previousMultiplier;
