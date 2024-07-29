@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public abstract class Ability
 {
-    public enum AbilityTypes { None, DashType, BoostType, ImmuneType }
+    public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
     public AbilityTypes AbilityType { get; protected set; }
     
     public readonly float ActiveTime;
@@ -18,7 +18,7 @@ public abstract class Ability
         ActiveTime = activeTime;
         CooldownTime = cooldownTime;
     }
-    protected virtual void SetAbilityNumber()
+    protected void SetAbilityNumber()
     {
         if (AbilityType != AbilityTypes.None)
         {

@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
+/// <summary>
+/// This script manages a few things:
+/// It allows to load the next level when calling the LoadNextLevel function
+/// It has a game debug mode that allows moving to next scene by pressing a key
+/// It triggers a fade animation when exiting and loading screens
+/// </summary>
+
 public class LevelLoader : MonoBehaviour
 {
     // animation is set to crossfade, but can be changed
