@@ -259,3 +259,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transition: {fileID: 2969743383350110327}
   transitionTime: 1
+  debug: 1

@@ -12,9 +12,9 @@ public class ControlsManager : MonoBehaviour
 
     private void Start()
     {
-        Controls.Add("jump", KeyCode.Space);
-        Controls.Add("dash", KeyCode.LeftShift);
-        Controls.Add("collect", KeyCode.F);
-        Controls.Add("ability", KeyCode.R);
+        Controls.TryAdd("jump", KeyCode.Space);
+        Controls.TryAdd("dash", KeyCode.LeftShift);
+        Controls.TryAdd("collect", KeyCode.F);
+        Controls.TryAdd("ability", KeyCode.R);
     }
 }

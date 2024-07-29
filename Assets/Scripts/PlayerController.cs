@@ -8,10 +8,11 @@ public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
     private Rigidbody2D _rb2d;
+    private PlayerDash _dash;
     
     Items _items;
     
-    [SerializeField] TMP_Text hpText;
+    [SerializeField] private TMP_Text hpText;
 
     // for jump
     public Vector2 boxSize;
@@ -40,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
+        _dash = gameObject.AddComponent<PlayerDash>();
         hpText.text = "HP: " + (int)_stats.Hp;
     }
 
@@ -93,7 +95,7 @@ public class PlayerController : MonoBehaviour
         
         if (Input.GetKeyUp(ControlsManager.Controls["jump"]) && _rb2d.velocity.y > 0f)
         {
-            _rb2d.velocity = new Vector2(_rb2d.velocity.x, _rb2d.velocity.y * 0.5f);
+            _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
 
             _coyoteTimer = 0f;
         }

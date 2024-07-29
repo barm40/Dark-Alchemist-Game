@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Playables;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats))]
@@ -220,7 +218,6 @@ public class AbilityController : MonoBehaviour
     private enum AbilityState
     {
         Ready,
-        Active,
-        Cooldown
+        Active
     }
 }
