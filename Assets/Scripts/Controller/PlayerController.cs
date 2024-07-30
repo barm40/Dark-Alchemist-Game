@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour, ISaveData
@@ -25,9 +27,12 @@ public class PlayerController : MonoBehaviour, ISaveData
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
-    
-    // keep the player between levels
-    
+
+    // Hit light effect
+    private Volume volume;
+    private Bloom bloom;
+    private bool isBloomActive;
+
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
@@ -43,6 +48,17 @@ public class PlayerController : MonoBehaviour, ISaveData
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
         hpText.text = "HP: " + (int)_stats.Hp;
+        Volume[] volumes = FindObjectsByType<Volume>(FindObjectsSortMode.None);
+        foreach (Volume volume in volumes)
+        {
+            if (volume.name == "Global Volume hit")
+            {
+                this.volume = volume;
+                volume.profile.TryGet<Bloom>(out bloom);
+                Debug.Log(volume);
+                break;
+            }
+        }
     }
 
     private void Update()
@@ -135,7 +151,12 @@ public class PlayerController : MonoBehaviour, ISaveData
         {
             PlayerInLighDetect.LightRemoveHealth(_stats);
             hpText.text = $"HP: {(int)_stats.Hp}";
-            //Debug.LogWarning($"Remove health in PlayerController");
+            Debug.LogWarning($"Remove health in PlayerController");
+            if (!isBloomActive)
+            {
+                isBloomActive = true;   
+                StartCoroutine(DamageEffect());
+            }
         }
         else
         {
@@ -149,6 +170,17 @@ public class PlayerController : MonoBehaviour, ISaveData
         transform.position = data.playerPosition;
     }
 
+    private IEnumerator DamageEffect()
+    {
+        bloom.active = true;
+        Debug.Log(bloom.active);
+        yield return new WaitForSeconds(1f);
+        bloom.active = false;
+        Debug.Log(bloom.active);
+        yield return new WaitForSeconds(0.75f);
+        isBloomActive = false;
+    }
+    // keep the player between levels
     public void SaveData(GameData data)
     {
         data.playerPosition = transform.position;

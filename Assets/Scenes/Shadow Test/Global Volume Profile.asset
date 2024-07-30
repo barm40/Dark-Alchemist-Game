@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   skipIterations:
     m_OverrideState: 0
     m_Value: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 0.8805031, g: 0.7879468, b: 0.5565443, a: 1}
+    m_Value: {r: 0.8553459, g: 0.15181598, b: 0.1210394, a: 1}
   highQualityFiltering:
     m_OverrideState: 0
     m_Value: 0
@@ -138,13 +138,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   lift:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: -0.00911584}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0.36159238}
+    m_Value: {x: 1, y: 0.7091897, z: 0.67357576, w: 0.36159238}
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: -0.09723506}
