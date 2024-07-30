@@ -14,18 +14,16 @@ public class AbilityController : MonoBehaviour
     private AbilityState _abilityState = AbilityState.Ready;
     
     [SerializeField] public Ability CurrentAbility { get; set; }
-    [SerializeField] private KeyCode abilityKey = KeyCode.LeftShift;
     
     public bool _isAbilityChoosed { private get; set; }
     private Dictionary<Ability.AbilityTypes, bool> abilityChoosenList = new Dictionary<Ability.AbilityTypes, bool>()
     {
-        {Ability.AbilityTypes.DashType, false },
+        {Ability.AbilityTypes.BounceType, false },
         {Ability.AbilityTypes.BoostType, false },
         {Ability.AbilityTypes.ImmuneType, false }
     };
     public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
     [SerializeField] private ParticleSystem[] abilitiesVFX;
-    private ParticleSystem CurrentAbilityVFX = null;
     private bool isCombo = false;
 
     private void Awake()
@@ -34,8 +32,7 @@ public class AbilityController : MonoBehaviour
         invantoryManager = FindObjectOfType<InvantoryManager>();
         defaultAbility = new AbilityNone();
         CurrentAbility = defaultAbility;
-        CurrentAbilityVFX = null;
-        abilitiesList.Add(new DashAbility(_stats));
+        abilitiesList.Add(new BounceAbility(_stats));
         abilitiesList.Add(new BoostAbility(_stats));
         abilitiesList.Add(new LightImmuneAbility(_stats));
     }
@@ -80,7 +77,7 @@ public class AbilityController : MonoBehaviour
                     {
                         _abilityTime -= Time.deltaTime;
                         // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.DashType && Input.GetKeyUp(ControlsManager.Controls["ability"]))
+                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType && Input.GetKeyUp(ControlsManager.Controls["ability"]))
                         {
                             CurrentAbility.Deactivate(gameObject);
                             _abilityState = AbilityState.Ready;
@@ -108,7 +105,7 @@ public class AbilityController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.IsTheItemInInventory(abilitiesList[0].abilityNumber))
         {
-            SetCurrentAbility(Ability.AbilityTypes.DashType);
+            SetCurrentAbility(Ability.AbilityTypes.BounceType);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.IsTheItemInInventory(abilitiesList[1].abilityNumber))
@@ -206,7 +203,6 @@ public class AbilityController : MonoBehaviour
     private void ClearAbility()
     {
         CurrentAbility = defaultAbility;
-        CurrentAbilityVFX =  null;
         _isAbilityChoosed = false;
 
         for (int i = 0; abilitiesList.Count > i; i++)

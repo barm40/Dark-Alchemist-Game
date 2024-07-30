@@ -1,20 +1,19 @@
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class DashAbility : Ability
+public class BounceAbility : Ability
 {
     private int _dashUses;
         
-    private readonly float _dashMultiplier;
+    private readonly float _bounceMultiplier;
     private readonly float _previousMultiplier;
 
     // get stats object and extract values from it
-    public DashAbility(Stats stats) : base(stats.DashActive, stats.DashCooldown)
+    public BounceAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
     {
-        _dashUses = stats.DashUses;
-        _dashMultiplier = stats.DashMultiplier;
-        _previousMultiplier = stats.MoveSpeedMultiplier;
-        AbilityType = AbilityTypes.DashType;
+        _bounceMultiplier = stats.BounceMultiplier;
+        _previousMultiplier = stats.JumpForceMultiplier;
+        AbilityType = AbilityTypes.BounceType;
         SetAbilityNumber();
     }
 
@@ -23,7 +22,7 @@ public class DashAbility : Ability
         if (_dashUses > 0)
         {
             var stats = parent.GetComponent<Stats>();
-            stats.MoveSpeedMultiplier = _dashMultiplier;
+            stats.JumpForceMultiplier *= _bounceMultiplier;
         }
         else
         {
@@ -35,8 +34,7 @@ public class DashAbility : Ability
     {
         var stats = parent.GetComponent<Stats>();
 
-        stats.MoveSpeedMultiplier = _previousMultiplier;
-        _dashUses--;
+        stats.JumpForceMultiplier = _previousMultiplier;
     }
 
     private static void ResetAbility(GameObject parent)
