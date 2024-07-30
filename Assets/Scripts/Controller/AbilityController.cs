@@ -6,7 +6,7 @@ using UnityEngine;
 public class AbilityController : MonoBehaviour
 {
     private Stats _stats;
-    private InvantoryManager invantoryManager;
+    private InventoryManager _inventoryManager;
 
     private float _abilityTime;
     private float _abilityCooldown;
@@ -29,7 +29,7 @@ public class AbilityController : MonoBehaviour
     private void Awake()
     {
         _stats = GetComponent<Stats>();
-        invantoryManager = FindObjectOfType<InvantoryManager>();
+        _inventoryManager = FindObjectOfType<InventoryManager>();
         defaultAbility = new AbilityNone();
         CurrentAbility = defaultAbility;
         abilitiesList.Add(new BounceAbility(_stats));
@@ -52,12 +52,12 @@ public class AbilityController : MonoBehaviour
         {
             case AbilityState.Ready:
                 {
-                    if (Input.GetKeyDown(ControlsManager.Controls["ability"]) && _isAbilityChoosed)
+                    if (Input.GetKeyDown(ControlsManager.Instance.Controls["ability"]) && _isAbilityChoosed)
                     {
                         CurrentAbility.Activate(gameObject);
                         _abilityState = AbilityState.Active;
                         _abilityTime = CurrentAbility.ActiveTime;
-                        invantoryManager.useAbilityItem(CurrentAbility.abilityNumber);
+                        _inventoryManager.UseAbilityItem(CurrentAbility.abilityNumber);
                         GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
@@ -77,7 +77,8 @@ public class AbilityController : MonoBehaviour
                     {
                         _abilityTime -= Time.deltaTime;
                         // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType && Input.GetKeyUp(ControlsManager.Controls["ability"]))
+                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType 
+                            && Input.GetKeyUp(ControlsManager.Instance.Controls["ability"]))
                         {
                             CurrentAbility.Deactivate(gameObject);
                             _abilityState = AbilityState.Ready;
@@ -103,17 +104,17 @@ public class AbilityController : MonoBehaviour
 
     private void ChooseAbility()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && invantoryManager.IsTheItemInInventory(abilitiesList[0].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && _inventoryManager.IsTheItemInInventory(abilitiesList[0].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.BounceType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && invantoryManager.IsTheItemInInventory(abilitiesList[1].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && _inventoryManager.IsTheItemInInventory(abilitiesList[1].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.BoostType);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && invantoryManager.IsTheItemInInventory(abilitiesList[2].abilityNumber))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && _inventoryManager.IsTheItemInInventory(abilitiesList[2].abilityNumber))
         {
             SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
         }
@@ -171,14 +172,14 @@ public class AbilityController : MonoBehaviour
     /// </summary>
     private void UseComboAbility()
     {
-        if (Input.GetKeyDown(ControlsManager.Controls["ability"]))
+        if (Input.GetKeyDown(ControlsManager.Instance.Controls["ability"]))
         {
             foreach (var ability in abilitiesList)
             {
                 if (abilityChoosenList[ability.AbilityType])
                 {
                     Debug.Log($"the ability {ability.AbilityType} is choosed");
-                    invantoryManager.useAbilityItem(ability.abilityNumber);
+                    _inventoryManager.UseAbilityItem(ability.abilityNumber);
                     abilityChoosenList[ability.AbilityType] = false;
                 }
             }

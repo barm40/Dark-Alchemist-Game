@@ -1,26 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Items : MonoBehaviour
+public abstract class Items : MonoBehaviour, ISaveData
 {
-    protected AbilityController abilityController;
-    protected bool isUsed = false;
-    protected bool isCanBeToken = false;
-    protected bool isToken = false;
-    [SerializeField] public int itemInventoryNumber { get; protected set;}
+    // create unique ids for items to store which items were collected already
+    [SerializeField] private string id;
+    [ContextMenu("Generate guid")]
+    private void GenerateGuid()
+    {
+        id = Guid.NewGuid().ToString();
+    }
+    
+    protected AbilityController AbilityController;
+    
+    protected bool IsUsed;
+    protected bool CanBeTaken;
+    protected bool IsTaken;
+    [SerializeField] public int ItemInventoryNumber { get; protected set;}
 
-    public static event Action<Items> isCanBeTokenAction = null;
+    public static event Action<Items> CanBeTakenAction;
     private void Awake()
     {
-        abilityController = FindObjectOfType<AbilityController>();
+        AbilityController = FindObjectOfType<AbilityController>();
     }
-    public void TakeItem(InvantoryManager inventory)
+    public void TakeItem(InventoryManager inventory)
     {
-        if (!isToken)
+        if (!IsTaken)
         {
-            isCanBeToken = true;
+            CanBeTaken = true;
             inventory.SetNewItemInTheInventory(gameObject);
             transform.parent = inventory.transform;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -30,19 +37,39 @@ public abstract class Items : MonoBehaviour
 
     protected  virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isToken)
+        if (!IsTaken)
         {
-            isCanBeToken = true;
-            isCanBeTokenAction?.Invoke(this);
+            CanBeTaken = true;
+            CanBeTakenAction?.Invoke(this);
         }
     }
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
-        if (!isToken)
+        if (!IsTaken)
         {
-            isCanBeToken = false;
-            isCanBeTokenAction?.Invoke(null);
+            CanBeTaken = false;
+            CanBeTakenAction?.Invoke(null);
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        data.itemsCollected.TryGetValue(id, out IsTaken);
+        
+        if (IsTaken)
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void SaveData(GameData data)
+    {
+        if (data.itemsCollected.ContainsKey(id))
+        {
+            data.itemsCollected.Remove(id);
+        }
+
+        data.itemsCollected.Add(id, IsTaken);
     }
 }

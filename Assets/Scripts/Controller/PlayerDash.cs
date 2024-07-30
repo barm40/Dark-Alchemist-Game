@@ -38,7 +38,7 @@ public class PlayerDash : MonoBehaviour
         {
             case DashState.Ready:
             {
-                if (Input.GetKeyDown(ControlsManager.Controls["dash"]))
+                if (Input.GetKeyDown(ControlsManager.Instance.Controls["dash"]))
                 {
                     Activate();
                     _dashState = DashState.Active;
@@ -58,7 +58,7 @@ public class PlayerDash : MonoBehaviour
                 else
                 {
                     _dashTime -= Time.deltaTime;
-                    if (Input.GetKeyUp(ControlsManager.Controls["dash"]))
+                    if (Input.GetKeyUp(ControlsManager.Instance.Controls["dash"]))
                     {
                         Deactivate();
                         _dashState = DashState.Cooldown;

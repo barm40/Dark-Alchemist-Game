@@ -11,7 +11,7 @@ using UnityEngine.Serialization;
 /// The current speed will be updated according to multiplier every tick.
 /// </summary>
 
-public class Stats : MonoBehaviour
+public class Stats : MonoBehaviour, ISaveData
 {
     // player related fields
     // move
@@ -56,5 +56,15 @@ public class Stats : MonoBehaviour
             baseMoveSpeed * MoveSpeedMultiplier * Time.fixedDeltaTime;
         CurrentJumpForce = 
             baseJumpForce * JumpForceMultiplier * Time.fixedDeltaTime;
+    }
+
+    public void LoadData(GameData data)
+    {
+        Hp = data.healthPoints;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.healthPoints = Hp;
     }
 }

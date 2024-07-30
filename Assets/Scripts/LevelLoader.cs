@@ -11,14 +11,22 @@ using UnityEngine.Serialization;
 /// It triggers a fade animation when exiting and loading screens
 /// </summary>
 
-public class LevelLoader : MonoBehaviour
+public class LevelLoader : MonoBehaviour, ISaveData
 {
     // animation is set to crossfade, but can be changed
     public Animator transition;
     public float transitionTime = 1f; // transition time in seconds (animation is 1 second)
     private static readonly int Start = Animator.StringToHash("Start");
+    private static readonly int End = Animator.StringToHash("End");
+
+    public int CurrSceneIndex { get; private set; }
 
     [SerializeField] private bool debug;
+    
+    private void Awake()
+    {
+        CurrSceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
 
     private void Update()
     {
@@ -27,14 +35,14 @@ public class LevelLoader : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.P))
             {
                 var sceneCount = SceneManager.sceneCountInBuildSettings;
-                var nextScene = SceneManager.GetActiveScene().buildIndex;
+                var nextScene = CurrSceneIndex + 1;
                 if (nextScene == sceneCount)
                 {
                     LoadNextLevel(0);
                 }
                 else
                 {
-                    LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
+                    LoadNextLevel(nextScene);
                 }
                 
             }
@@ -43,18 +51,39 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadNextLevel(int sceneIndex)
     {
-        // perform each line of code in the enumerator in paralle
+        SaveDataManager.Instance.SaveGame();
+        
+        // perform each line of code in the enumerator in parallel
         StartCoroutine(LoadLevel(sceneIndex));
+
+        StartCoroutine(WaitLoaded());
     }
 
     // definition of coroutine
-    IEnumerator LoadLevel(int sceneIndex)
+    private IEnumerator LoadLevel(int sceneIndex)
     {
         transition.SetTrigger(Start);
 
         yield return new WaitForSeconds(transitionTime);
         
         // load given scene
-        SceneManager.LoadScene(sceneIndex);
+        SceneManager.LoadSceneAsync(sceneIndex);
+    }
+    
+    private IEnumerator WaitLoaded()
+    {
+        transition.SetTrigger(End);
+
+        yield return new WaitForSeconds(transitionTime);
+    }
+
+    public void LoadData(GameData data)
+    {
+        CurrSceneIndex = data.sceneIndex;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.sceneIndex = CurrSceneIndex;
     }
 }

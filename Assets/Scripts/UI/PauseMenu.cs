@@ -1,17 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     private LevelLoader _levelLoader;
 
-    private void Start()
+    private void Awake()
     {
-        // initialize level loader from the sceneloader object
-        _levelLoader = GameObject.FindWithTag("sceneLoader").GetComponent<LevelLoader>();
+        _levelLoader = FindObjectOfType<LevelLoader>();
     }
 
     private void Update()
@@ -24,31 +20,33 @@ public class PauseMenu : MonoBehaviour
     // Pauses game and opens menu
     public void Pause()
     {
-        gameObject.SetActive(gameObject);
+        gameObject.SetActive(true);
         Time.timeScale = 0;
     }
 
     // Unpauses the game
     public void Resume()
     {
+        gameObject.SetActive(false);
         Time.timeScale = 1;
     }
 
     // placeholder for save game
     public void SaveGame()
     {
-        _levelLoader.LoadNextLevel(0);
+        SaveDataManager.Instance.SaveGame();
     }
     
     // placeholder for load game
     public void LoadGame()
     {
-        _levelLoader.LoadNextLevel(0);
+        SaveDataManager.Instance.LoadGame();
     }
     
     // exit to main menu
     public void QuitLevel()
     {
+        Resume();
         _levelLoader.LoadNextLevel(0);
     }
 }
