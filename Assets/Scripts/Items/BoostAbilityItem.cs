@@ -6,11 +6,11 @@ public class BoostAbilityItem: Items
 {
     private void Start()
     {
-        for (int i = 0; i < AbilityController.abilitiesList.Count; i++)
+        for (int i = 0; i < abilityController.abilitiesList.Count; i++)
         {
-            if (AbilityController.abilitiesList[i].AbilityType == Ability.AbilityTypes.BoostType)
+            if (abilityController.abilitiesList[i].AbilityType == Ability.AbilityTypes.BoostType)
             {
-                ItemInventoryNumber = AbilityController.abilitiesList[i].abilityNumber;
+                ItemInventoryNumber = abilityController.abilitiesList[i].abilityNumber;
             }
         }
     }

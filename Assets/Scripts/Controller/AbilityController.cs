@@ -12,9 +12,9 @@ public class AbilityController : MonoBehaviour
     private float _abilityCooldown;
     private AbilityNone defaultAbility;
     private AbilityState _abilityState = AbilityState.Ready;
-    
+
     [SerializeField] public Ability CurrentAbility { get; set; }
-    
+
     public bool _isAbilityChoosed { private get; set; }
     private Dictionary<Ability.AbilityTypes, bool> abilityChoosenList = new Dictionary<Ability.AbilityTypes, bool>()
     {
@@ -22,7 +22,7 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.BoostType, false },
         {Ability.AbilityTypes.ImmuneType, false }
     };
-    public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
+    public List<Ability> abilitiesList { get; private set; } = new List<Ability>();
     [SerializeField] private ParticleSystem[] abilitiesVFX;
     private bool isCombo = false;
 
@@ -77,7 +77,7 @@ public class AbilityController : MonoBehaviour
                     {
                         _abilityTime -= Time.deltaTime;
                         // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType 
+                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType
                             && Input.GetKeyUp(ControlsManager.Instance.Controls["ability"]))
                         {
                             CurrentAbility.Deactivate(gameObject);
@@ -88,17 +88,17 @@ public class AbilityController : MonoBehaviour
                     }
                 }
                 break;
-            //case AbilityState.Cooldown:
-            //    {
-            //        if (_abilityCooldown > 0)
-            //            _abilityCooldown -= Time.deltaTime;
-            //        else
-            //        {
-            //            _abilityState = AbilityState.Ready;
-            //            ClearAbilityAfterUsed();
-            //        }
-            //    }
-            //    break;
+                //case AbilityState.Cooldown:
+                //    {
+                //        if (_abilityCooldown > 0)
+                //            _abilityCooldown -= Time.deltaTime;
+                //        else
+                //        {
+                //            _abilityState = AbilityState.Ready;
+                //            ClearAbilityAfterUsed();
+                //        }
+                //    }
+                //    break;
         }
     }
 
@@ -193,7 +193,7 @@ public class AbilityController : MonoBehaviour
     {
         for (int i = 0; i < abilitiesVFX.Length; i++)
         {
-            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0,4)))
+            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0, 4)))
             {
                 return abilitiesVFX[i];
             }
