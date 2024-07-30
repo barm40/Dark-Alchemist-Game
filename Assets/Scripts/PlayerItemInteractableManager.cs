@@ -1,37 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerItemInteractableManager : MonoBehaviour
 {
-    [SerializeField] InvantoryManager invantoryManager;
-    [SerializeField] private Items itemToTake;
+    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private Items _itemToTake;
 
     private void OnEnable()
     {
-        Items.isCanBeTokenAction += SetItemToTake;
+        Items.CanBeTakenAction += SetItemToTake;
     }
 
     private void OnDisable()
     {
-        Items.isCanBeTokenAction -= SetItemToTake;
+        Items.CanBeTakenAction -= SetItemToTake;
     }
 
     private void Start()
     {
-        invantoryManager = FindObjectOfType<InvantoryManager>();    
+        inventoryManager = FindObjectOfType<InventoryManager>();    
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(ControlsManager.Controls["collect"]) && itemToTake != null)
+        if (Input.GetKeyDown(ControlsManager.Instance.Controls["collect"]) && _itemToTake != null)
         {
-            itemToTake.TakeItem(invantoryManager);
+            _itemToTake.TakeItem(inventoryManager);
         }
     }
 
     public void SetItemToTake(Items itemToTake)
     {
-        this.itemToTake = itemToTake;
+        _itemToTake = itemToTake;
     }
 }

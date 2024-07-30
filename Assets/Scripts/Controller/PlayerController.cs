@@ -4,11 +4,10 @@ using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, ISaveData
 {
     private Stats _stats;
     private Rigidbody2D _rb2d;
-    private PlayerDash _dash;
     
     Items _items;
     
@@ -27,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private float _horizontal;
     private bool _isFacingRight = true;
     
+    // keep the player between levels
+    
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
@@ -41,7 +42,6 @@ public class PlayerController : MonoBehaviour
     {
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
-        _dash = gameObject.AddComponent<PlayerDash>();
         hpText.text = "HP: " + (int)_stats.Hp;
     }
 
@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
             _coyoteTimer -= Time.deltaTime;
         }
         
-        if (Input.GetKeyDown(ControlsManager.Controls["jump"]))
+        if (Input.GetKeyDown(ControlsManager.Instance.Controls["jump"]))
         {
             _jumpBufferTimer = _stats.jumpBufferTime;
         }
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpCooldown());
         }
         
-        if (Input.GetKeyUp(ControlsManager.Controls["jump"]) && _rb2d.velocity.y > 0f)
+        if (Input.GetKeyUp(ControlsManager.Instance.Controls["jump"]) && _rb2d.velocity.y > 0f)
         {
             _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
 
@@ -144,9 +144,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // keep the player between levels
-    private void Awake()
+    public void LoadData(GameData data)
     {
-        DontDestroyOnLoad(gameObject);
+        transform.position = data.playerPosition;
+    }
+
+    public void SaveData(GameData data)
+    {
+        data.playerPosition = transform.position;
     }
 }

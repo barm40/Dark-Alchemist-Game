@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,16 +11,24 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     private LevelLoader _levelLoader;
-
-    private void Start()
+    
+    private void Awake()
     {
-        // initialize level loader from the sceneloader object
-        _levelLoader = GameObject.FindWithTag("sceneLoader").GetComponent<LevelLoader>();
+        _levelLoader = FindObjectOfType<LevelLoader>();
+    }
+
+    public void ContinueGame()
+    {
+        // load game with existing data
+        SaveDataManager.Instance.LoadGame();
     }
     
     // loads the first level
     public void NewGame()
     {
+        // Create a new game, initialize all data
+        SaveDataManager.Instance.NewGame();
+        // Load gameplay, which will save the game 
         _levelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

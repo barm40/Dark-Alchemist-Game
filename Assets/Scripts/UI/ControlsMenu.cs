@@ -19,7 +19,7 @@ public class ControlsMenu : MonoBehaviour
 
     public void Awake()
     {
-        foreach (var control in ControlsManager.Controls)
+        foreach (var control in ControlsManager.Instance.Controls)
         {
             foreach (var button in buttons)
             {
@@ -38,7 +38,7 @@ public class ControlsMenu : MonoBehaviour
         foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
         {
             if (!Input.GetKeyDown(key)) continue;
-            ControlsManager.Controls[control] = key;
+            ControlsManager.Instance.Controls[control] = key;
             _listening = false;
             foreach (var button in buttons)
             {
