@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 public class PauseMenuManager : MonoBehaviour
 {
     [SerializeField] private PauseMenu pauseMenu;
-    
-    
     public static PauseMenuManager MenuManager { get; private set; }
 
     private void Awake()
@@ -20,7 +18,6 @@ public class PauseMenuManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         MenuManager = this;
         
         if (SceneManager.GetActiveScene().buildIndex != 0)

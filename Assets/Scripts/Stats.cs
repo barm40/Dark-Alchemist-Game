@@ -39,15 +39,15 @@ public class Stats : MonoBehaviour, ISaveData
     
     // dash specific stats 
     public float DashActive { get; private set; } = .3f;
-    public float DashCooldown { get; private set; } = 3f;
-    public float DashMultiplier { get; set; } = 5f;
+    public float DashCooldown { get; private set; } = 1f;
+    public float DashMultiplier { get; set; } = 4f;
     
     // boost specific stats
-    public float BoostMultiplier { get; set; } = 1.5f;
+    public float BoostMultiplier { get; set; } = 1.2f;
     public float BoostNegativeMultiplier { get; set; } = 0.5f;
     
     // bounce specific stats
-    public float BounceMultiplier { get; set; } = 2f;
+    public float BounceMultiplier { get; set; } = 1.5f;
 
 
     private void FixedUpdate()

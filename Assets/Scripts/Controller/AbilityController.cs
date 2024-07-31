@@ -12,9 +12,9 @@ public class AbilityController : MonoBehaviour
     private float _abilityCooldown;
     private AbilityNone defaultAbility;
     private AbilityState _abilityState = AbilityState.Ready;
-
+    
     [SerializeField] public Ability CurrentAbility { get; set; }
-
+    
     public bool _isAbilityChoosed { private get; set; }
     private Dictionary<Ability.AbilityTypes, bool> abilityChoosenList = new Dictionary<Ability.AbilityTypes, bool>()
     {
@@ -22,7 +22,7 @@ public class AbilityController : MonoBehaviour
         {Ability.AbilityTypes.BoostType, false },
         {Ability.AbilityTypes.ImmuneType, false }
     };
-    public List<Ability> abilitiesList { get; private set; } = new List<Ability>();
+    public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
     [SerializeField] private ParticleSystem[] abilitiesVFX;
     private bool isCombo = false;
 
@@ -58,6 +58,8 @@ public class AbilityController : MonoBehaviour
                         _abilityState = AbilityState.Active;
                         _abilityTime = CurrentAbility.ActiveTime;
                         _inventoryManager.UseAbilityItem(CurrentAbility.abilityNumber);
+                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                            PlayerController.IsBounce = true;
                         GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
@@ -68,6 +70,8 @@ public class AbilityController : MonoBehaviour
                     {
                         CurrentAbility.Deactivate(gameObject);
                         _abilityState = AbilityState.Ready;
+                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                            PlayerController.IsBounce = false;
                         GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
                         //_abilityState = AbilityState.Cooldown;
                         //_abilityCooldown = CurrentAbility.CooldownTime;
@@ -76,29 +80,20 @@ public class AbilityController : MonoBehaviour
                     else
                     {
                         _abilityTime -= Time.deltaTime;
-                        // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType
-                            && Input.GetKeyUp(ControlsManager.Instance.Controls["ability"]))
-                        {
-                            CurrentAbility.Deactivate(gameObject);
-                            _abilityState = AbilityState.Ready;
-                            //_abilityState = AbilityState.Cooldown;
-                            //_abilityCooldown = CurrentAbility.CooldownTime;
-                        }
                     }
                 }
                 break;
-                //case AbilityState.Cooldown:
-                //    {
-                //        if (_abilityCooldown > 0)
-                //            _abilityCooldown -= Time.deltaTime;
-                //        else
-                //        {
-                //            _abilityState = AbilityState.Ready;
-                //            ClearAbilityAfterUsed();
-                //        }
-                //    }
-                //    break;
+            //case AbilityState.Cooldown:
+            //    {
+            //        if (_abilityCooldown > 0)
+            //            _abilityCooldown -= Time.deltaTime;
+            //        else
+            //        {
+            //            _abilityState = AbilityState.Ready;
+            //            ClearAbilityAfterUsed();
+            //        }
+            //    }
+            //    break;
         }
     }
 
@@ -189,11 +184,11 @@ public class AbilityController : MonoBehaviour
         }
     }
 
-    private ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
+    public ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
     {
         for (int i = 0; i < abilitiesVFX.Length; i++)
         {
-            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0, 4)))
+            if (abilitiesVFX[i].name.Contains(abilityTypes.ToString().Substring(0,4)))
             {
                 return abilitiesVFX[i];
             }
