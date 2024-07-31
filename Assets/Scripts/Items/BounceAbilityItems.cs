@@ -6,11 +6,11 @@ public class BounceAbilityItems : Items
 {
     private void Start()
     {
-        for (int i = 0; i < AbilityController.abilitiesList.Count; i++)
+        for (int i = 0; i < abilityController.abilitiesList.Count; i++)
         {
-            if (AbilityController.abilitiesList[i].AbilityType == Ability.AbilityTypes.BounceType)
+            if (abilityController.abilitiesList[i].AbilityType == Ability.AbilityTypes.BounceType)
             {
-                ItemInventoryNumber = AbilityController.abilitiesList[i].abilityNumber;
+                ItemInventoryNumber = abilityController.abilitiesList[i].abilityNumber;
             }
         }
     }
