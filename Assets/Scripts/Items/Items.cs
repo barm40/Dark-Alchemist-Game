@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class Items : MonoBehaviour, ISaveData
+public abstract class Items : MonoBehaviour
 {
     // create unique ids for items to store which items were collected already
     [SerializeField] private string id;
@@ -11,7 +11,7 @@ public abstract class Items : MonoBehaviour, ISaveData
         id = Guid.NewGuid().ToString();
     }
     
-    protected AbilityController AbilityController;
+    protected AbilityController abilityController;
     
     protected bool IsUsed;
     protected bool CanBeTaken;
@@ -21,7 +21,8 @@ public abstract class Items : MonoBehaviour, ISaveData
     public static event Action<Items> CanBeTakenAction;
     private void Awake()
     {
-        AbilityController = FindObjectOfType<AbilityController>();
+        abilityController = FindObjectOfType<AbilityController>();
+        Debug.Log("ability controller is: " + abilityController);
     }
     public void TakeItem(InventoryManager inventory)
     {
@@ -53,23 +54,23 @@ public abstract class Items : MonoBehaviour, ISaveData
         }
     }
 
-    public void LoadData(GameData data)
-    {
-        data.itemsCollected.TryGetValue(id, out IsTaken);
+    //public void LoadData(GameData data)
+    //{
+    //    data.itemsCollected.TryGetValue(id, out IsTaken);
         
-        if (IsTaken)
-        {
-            gameObject.SetActive(false);
-        }
-    }
+    //    if (IsTaken)
+    //    {
+    //        gameObject.SetActive(false);
+    //    }
+    //}
 
-    public void SaveData(GameData data)
-    {
-        if (data.itemsCollected.ContainsKey(id))
-        {
-            data.itemsCollected.Remove(id);
-        }
+    //public void SaveData(GameData data)
+    //{
+    //    if (data.itemsCollected.ContainsKey(id))
+    //    {
+    //        data.itemsCollected.Remove(id);
+    //    }
 
-        data.itemsCollected.Add(id, IsTaken);
-    }
+    //    data.itemsCollected.Add(id, IsTaken);
+    //}
 }

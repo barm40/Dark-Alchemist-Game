@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour, ISaveData
@@ -35,7 +37,12 @@ public class PlayerController : MonoBehaviour, ISaveData
     private Animator _animator;
 
     // keep the player between levels
-    
+
+    // Hit Effect
+    private Volume hitVolume;
+    private Bloom hitBloom;
+    private bool isHitEffectActive;
+
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
@@ -53,6 +60,8 @@ public class PlayerController : MonoBehaviour, ISaveData
         _abilityController = GetComponent<AbilityController>();
         _animator = GetComponent<Animator>();
         hpText.text = "HP: " + (int)_stats.Hp;
+        hitVolume = transform.GetComponentInChildren<Volume>();
+        hitVolume.profile.TryGet<Bloom>(out hitBloom);
     }
 
     private void Update()
@@ -98,6 +107,7 @@ public class PlayerController : MonoBehaviour, ISaveData
     private void FixedUpdate()
     {
         _horizontal = Input.GetAxisRaw("Horizontal");
+        
         MoveHorizontal();
         Flip();
     }
@@ -157,7 +167,6 @@ public class PlayerController : MonoBehaviour, ISaveData
         _isJumping = true;
         yield return new WaitForSeconds(0.4f);
         _isJumping = false;
-        _rb2d.velocity = new Vector2(_rb2d.velocity.x,  _rb2d.velocity.y * 0.5f);
     }
     
     public bool IsGrounded()
@@ -187,13 +196,28 @@ public class PlayerController : MonoBehaviour, ISaveData
         {
             PlayerInLighDetect.LightRemoveHealth(_stats);
             hpText.text = $"HP: {(int)_stats.Hp}";
-            //Debug.LogWarning($"Remove health in PlayerController");
+            if (!isHitEffectActive)
+            {
+                StartCoroutine(GetHitLightEffect());
+            }
         }
         else
         {
             //TO DO
             Debug.LogWarning($"You are dead, Game Over!!");
         }
+    }
+
+    IEnumerator GetHitLightEffect()
+    {
+        isHitEffectActive = true;
+        hitVolume.enabled = true;
+        hitBloom.scatter.value = 0.400f;
+        yield return new WaitForSeconds(0.5f);
+        hitBloom.scatter.value = 0.125f;
+        yield return new WaitForSeconds(0.5f);
+        isHitEffectActive = false;
+        hitVolume.enabled = false;
     }
 
     public void LoadData(GameData data)
