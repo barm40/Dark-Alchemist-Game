@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour, ISaveData
 {
     private Stats _stats;
     private Rigidbody2D _rb2d;
+    private AbilityController _abilityController;
     
     Items _items;
     
@@ -21,11 +22,18 @@ public class PlayerController : MonoBehaviour, ISaveData
     private bool _isJumping;
     private float _jumpBufferTimer;
     private float _coyoteTimer;
+
+    private float _idleTimer = 3f;
+    
+    public static bool IsBounce { set; get; }
+
     
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
     
+    private Animator _animator;
+
     // keep the player between levels
     
     private void OnEnable()
@@ -42,6 +50,8 @@ public class PlayerController : MonoBehaviour, ISaveData
     {
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
+        _abilityController = GetComponent<AbilityController>();
+        _animator = GetComponent<Animator>();
         hpText.text = "HP: " + (int)_stats.Hp;
     }
 
@@ -50,10 +60,44 @@ public class PlayerController : MonoBehaviour, ISaveData
         JumpVertical();
     }
 
+    private void LateUpdate()
+    {
+        
+        // Various checks for animations
+        if (_rb2d.velocity.x != 0)
+        {
+            _animator.SetBool("IsIdle", false);
+            _animator.SetBool("IsMoving", true);
+            _idleTimer = 3f;
+        }
+        else
+        {
+            _animator.SetBool("IsMoving", false);
+        }
+        if (_rb2d.velocity.y > 0)
+        {
+            _animator.SetBool("IsIdle", false);
+            _animator.SetBool("InAir", true);
+            _idleTimer = 3f;
+        }
+        else
+        {
+            _animator.SetBool("InAir", false);
+            _animator.SetBool("IsJumping", false);
+        }
+
+        if (_rb2d.velocity.x == 0 && _rb2d.velocity.y == 0)
+        {
+            if (_idleTimer > 0)
+                _idleTimer -= Time.deltaTime;
+            else
+                _animator.SetBool("IsIdle", true);
+        }
+    }
+
     private void FixedUpdate()
     {
         _horizontal = Input.GetAxisRaw("Horizontal");
-        
         MoveHorizontal();
         Flip();
     }
@@ -87,6 +131,13 @@ public class PlayerController : MonoBehaviour, ISaveData
         if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
         {
             _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
+            if (IsBounce)
+            {
+                _abilityController.GetAbilityVFX(Ability.AbilityTypes.BounceType).Play();
+            }
+            _animator.SetTrigger("Jump");
+            _animator.SetBool("IsJumping", true);
+            
             Debug.Log("Jumping");
 
             _jumpBufferTimer = 0f;
@@ -106,6 +157,7 @@ public class PlayerController : MonoBehaviour, ISaveData
         _isJumping = true;
         yield return new WaitForSeconds(0.4f);
         _isJumping = false;
+        _rb2d.velocity = new Vector2(_rb2d.velocity.x,  _rb2d.velocity.y * 0.5f);
     }
     
     public bool IsGrounded()
