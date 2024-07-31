@@ -11,7 +11,7 @@ using UnityEngine.Serialization;
 /// The current speed will be updated according to multiplier every tick.
 /// </summary>
 
-public class Stats : MonoBehaviour, ISaveData
+public class Stats : MonoBehaviour
 {
     // player related fields
     // move
@@ -30,7 +30,7 @@ public class Stats : MonoBehaviour, ISaveData
     public float Hp { get; set; } = 100f;
     
     // light damage related
-    [SerializeField] public float lightDamage = 5f;
+    public float lightDamage = 20;
     public float shieldLightDamage = 0f;
     
     // general ability related stats 
@@ -39,7 +39,7 @@ public class Stats : MonoBehaviour, ISaveData
     
     // dash specific stats 
     public float DashActive { get; private set; } = .3f;
-    public float DashCooldown { get; private set; } = 1f;
+    public float DashCooldown { get; private set; } = .8f;
     public float DashMultiplier { get; set; } = 4f;
     
     // boost specific stats
@@ -58,13 +58,13 @@ public class Stats : MonoBehaviour, ISaveData
             baseJumpForce * JumpForceMultiplier * Time.fixedDeltaTime;
     }
 
-    public void LoadData(GameData data)
-    {
-        Hp = data.healthPoints;
-    }
-
-    public void SaveData(GameData data)
-    {
-        data.healthPoints = Hp;
-    }
+    // public void LoadData(GameData data)
+    // {
+    //     Hp = data.healthPoints;
+    // }
+    //
+    // public void SaveData(GameData data)
+    // {
+    //     data.healthPoints = Hp;
+    // }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,7 @@ using UnityEngine.SceneManagement;
 /// It triggers a fade animation when exiting and loading screens
 /// </summary>
 
-public class LevelLoader : MonoBehaviour, ISaveData
+public class LevelLoader : MonoBehaviour
 {
     // animation is set to crossfade, but can be changed
     public Animator transition;
@@ -36,6 +37,7 @@ public class LevelLoader : MonoBehaviour, ISaveData
         DontDestroyOnLoad(gameObject);
         
         CurrSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        
     }
 
     private void Update()
@@ -62,7 +64,7 @@ public class LevelLoader : MonoBehaviour, ISaveData
     
     public void LoadNextLevel(int sceneIndex)
     {
-        SaveDataManager.Instance.SaveGame();
+        // SaveDataManager.Instance.SaveGame();
         
         // perform each line of code in the enumerator in parallel
         StartCoroutine(LoadLevel(sceneIndex));
@@ -80,14 +82,14 @@ public class LevelLoader : MonoBehaviour, ISaveData
         
         transition.SetTrigger(Start);
     }
-    
-    public void LoadData(GameData data)
-    {
-        CurrSceneIndex = data.sceneIndex;
-    }
 
-    public void SaveData(GameData data)
-    {
-        data.sceneIndex = CurrSceneIndex;
-    }
+    // public void LoadData(GameData data)
+    // {
+    //     CurrSceneIndex = data.sceneIndex;
+    // }
+    //
+    // public void SaveData(GameData data)
+    // {
+    //     data.sceneIndex = CurrSceneIndex;
+    // }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryManager : MonoBehaviour, ISaveData
+public class InventoryManager : MonoBehaviour
 {
     bool[] _isItemReached = new bool[5];
     [SerializeField] Image[] itemImageList = new Image[5];
@@ -64,18 +64,18 @@ public class InventoryManager : MonoBehaviour, ISaveData
         itemAnimation.SetBool("isChoosed", !isPlay);
     }
 
-    public void LoadData(GameData data)
-    {
-        _isItemReached = data.isItemReached;
-        
-        // In case of load, change image to correct color
-        CorrectItemStatus();
-    }
-
-    public void SaveData(GameData data)
-    {
-        data.isItemReached = _isItemReached;
-    }
+    // public void LoadData(GameData data)
+    // {
+    //     _isItemReached = data.isItemReached;
+    //     
+    //     // In case of load, change image to correct color
+    //     CorrectItemStatus();
+    // }
+    //
+    // public void SaveData(GameData data)
+    // {
+    //     data.isItemReached = _isItemReached;
+    // }
 
     // used to correct the inventory to match the loaded data
     private void CorrectItemStatus()

@@ -27,6 +27,7 @@ public class PlayerItemInteractableManager : MonoBehaviour
     {
         if (Input.GetKeyDown(ControlsManager.Instance.Controls["collect"]) && _itemToTake != null)
         {
+            inventoryManager.transform.position = new Vector3(0, 0, 0);
             _itemToTake.TakeItem(inventoryManager);
         }
     }

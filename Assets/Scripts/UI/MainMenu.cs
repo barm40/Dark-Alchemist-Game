@@ -17,17 +17,17 @@ public class MainMenu : MonoBehaviour
         _levelLoader = FindObjectOfType<LevelLoader>();
     }
 
-    public void ContinueGame()
-    {
-        // load game with existing data
-        SaveDataManager.Instance.LoadGame();
-    }
+    // public void ContinueGame()
+    // {
+    //     // load game with existing data
+    //     SaveDataManager.Instance.LoadGame();
+    // }
     
     // loads the first level
     public void NewGame()
     {
         // Create a new game, initialize all data
-        SaveDataManager.Instance.NewGame();
+        // SaveDataManager.Instance.NewGame();
         // Load gameplay, which will save the game 
         _levelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }

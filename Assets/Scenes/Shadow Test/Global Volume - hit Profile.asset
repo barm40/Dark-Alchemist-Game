@@ -21,10 +21,10 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 8
+    m_Value: 8.02
   scatter:
     m_OverrideState: 1
-    m_Value: 0.125
+    m_Value: 0.64
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -76,8 +76,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   temperature:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: -18.5
   tint:
     m_OverrideState: 0
     m_Value: 0

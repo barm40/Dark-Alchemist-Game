@@ -1,20 +1,28 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
-public class PlayerController : MonoBehaviour, ISaveData
+public class PlayerController : MonoBehaviour
 {
     private Stats _stats;
     private Rigidbody2D _rb2d;
     private AbilityController _abilityController;
+    private DeathMenu _deathMenu;
+    private CameraController _cameraController;
     
     Items _items;
     
-    [SerializeField] private TMP_Text hpText;
+    private TMP_Text _hpText;
+    private TMP_Text _timerText;
+
+    private float _time;
+
 
     // for jump
     public Vector2 boxSize;
@@ -39,6 +47,8 @@ public class PlayerController : MonoBehaviour, ISaveData
     // keep the player between levels
 
     // Hit Effect
+    private Volume colorShader;
+    private Bloom shaderBloom;
     private Volume hitVolume;
     private Bloom hitBloom;
     private bool isHitEffectActive;
@@ -59,14 +69,22 @@ public class PlayerController : MonoBehaviour, ISaveData
         _rb2d = GetComponent<Rigidbody2D>();
         _abilityController = GetComponent<AbilityController>();
         _animator = GetComponent<Animator>();
-        hpText.text = "HP: " + (int)_stats.Hp;
+        _hpText = GameObject.FindGameObjectWithTag("hpText").GetComponent<TMP_Text>();
+        _timerText = GameObject.FindGameObjectWithTag("timerText").GetComponent<TMP_Text>();
+        _cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
+        colorShader = GameObject.FindGameObjectWithTag("levelShader").GetComponent<Volume>();
+        colorShader.profile.TryGet(out shaderBloom);
         hitVolume = transform.GetComponentInChildren<Volume>();
         hitVolume.profile.TryGet<Bloom>(out hitBloom);
+        _hpText.text = "HP: " + (int)_stats.Hp;
+        ApplyRandomShader();
     }
 
     private void Update()
     {
         JumpVertical();
+        _time += Time.deltaTime;
+        _timerText.text = TimeSpan.FromSeconds(_time).ToString(@"m\:ss\:ff");
     }
 
     private void LateUpdate()
@@ -110,6 +128,7 @@ public class PlayerController : MonoBehaviour, ISaveData
         
         MoveHorizontal();
         Flip();
+        ViewUp();
     }
     
     private void MoveHorizontal()
@@ -173,6 +192,12 @@ public class PlayerController : MonoBehaviour, ISaveData
     {
         return Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer);
     }
+
+    private void ViewUp()
+    {
+        var up = Input.GetAxisRaw("Vertical");
+        _cameraController.AddYAxis(up);
+    }
     
     private void Flip()
     {
@@ -195,7 +220,7 @@ public class PlayerController : MonoBehaviour, ISaveData
         if (_stats.Hp > 0)
         {
             PlayerInLighDetect.LightRemoveHealth(_stats);
-            hpText.text = $"HP: {(int)_stats.Hp}";
+            _hpText.text = $"HP: {(int)_stats.Hp}";
             if (!isHitEffectActive)
             {
                 StartCoroutine(GetHitLightEffect());
@@ -203,7 +228,7 @@ public class PlayerController : MonoBehaviour, ISaveData
         }
         else
         {
-            //TO DO
+            DeathMenuManager.MenuManager.Death();
             Debug.LogWarning($"You are dead, Game Over!!");
         }
     }
@@ -212,21 +237,21 @@ public class PlayerController : MonoBehaviour, ISaveData
     {
         isHitEffectActive = true;
         hitVolume.enabled = true;
+        hitBloom.intensity.value = 8f;
         hitBloom.scatter.value = 0.400f;
         yield return new WaitForSeconds(0.5f);
         hitBloom.scatter.value = 0.125f;
+        hitBloom.intensity.value = 0.05f;
         yield return new WaitForSeconds(0.5f);
         isHitEffectActive = false;
         hitVolume.enabled = false;
     }
-
-    public void LoadData(GameData data)
+    
+    private void ApplyRandomShader()
     {
-        transform.position = data.playerPosition;
-    }
-
-    public void SaveData(GameData data)
-    {
-        data.playerPosition = transform.position;
+        colorShader.enabled = true;
+        colorShader.weight = 0.5f;
+        hitBloom.intensity.value = 0.05f;
+        shaderBloom.tint.value = Random.ColorHSV();
     }
 }
