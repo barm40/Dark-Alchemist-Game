@@ -24,6 +24,7 @@ public abstract class Items : MonoBehaviour
         abilityController = FindObjectOfType<AbilityController>();
         Debug.Log("ability controller is: " + abilityController);
     }
+    
     public void TakeItem(InventoryManager inventory)
     {
         if (!IsTaken)
@@ -32,7 +33,6 @@ public abstract class Items : MonoBehaviour
             inventory.SetNewItemInTheInventory(gameObject);
             transform.parent = inventory.transform;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
-            gameObject.SetActive(false);
         }
     }
 
