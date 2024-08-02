@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// A script to control the functionality of the main menu
@@ -29,7 +25,7 @@ public class MainMenu : MonoBehaviour
         // Create a new game, initialize all data
         // SaveDataManager.Instance.NewGame();
         // Load gameplay, which will save the game 
-        _levelLoader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1);
+        _levelLoader.LoadNextLevel(++LevelLoader.Loader.CurrSceneIndex);
     }
 
     // closes the game

@@ -18,7 +18,8 @@ public class LevelLoader : MonoBehaviour
     private static readonly int Start = Animator.StringToHash("Start");
     private static readonly int End = Animator.StringToHash("End");
     
-    public int CurrSceneIndex { get; private set; }
+    public int CurrSceneIndex { get; set; }
+    
     
     [SerializeField] private bool debug;
     public static LevelLoader Loader { get; private set; }
@@ -82,14 +83,4 @@ public class LevelLoader : MonoBehaviour
         
         transition.SetTrigger(Start);
     }
-
-    // public void LoadData(GameData data)
-    // {
-    //     CurrSceneIndex = data.sceneIndex;
-    // }
-    //
-    // public void SaveData(GameData data)
-    // {
-    //     data.sceneIndex = CurrSceneIndex;
-    // }
 }

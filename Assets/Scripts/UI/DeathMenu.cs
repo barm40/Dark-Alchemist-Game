@@ -8,7 +8,6 @@ public class DeathMenu : MonoBehaviour
     // Die when HP reaches 0
     public void DeathSequence()
     {
-        gameObject.SetActive(true);
         Time.timeScale = 0;
     }
 
@@ -16,9 +15,7 @@ public class DeathMenu : MonoBehaviour
     public void Retry()
     {
         Time.timeScale = 1;
-        LevelLoader.Loader.LoadNextLevel(SceneManager.GetActiveScene().buildIndex);
-
-        gameObject.SetActive(false);
+        LevelLoader.Loader.LoadNextLevel(LevelLoader.Loader.CurrSceneIndex);
     }
     
     // exit to main menu
@@ -26,6 +23,5 @@ public class DeathMenu : MonoBehaviour
     {
         Time.timeScale = 1;
         LevelLoader.Loader.LoadNextLevel(0);
-        gameObject.SetActive(false);
     }
 }

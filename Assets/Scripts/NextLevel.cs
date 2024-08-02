@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NextLevel : MonoBehaviour
@@ -9,7 +7,7 @@ public class NextLevel : MonoBehaviour
         if (Input.GetKeyDown(ControlsManager.Instance.Controls["collect"]))
         {
             Destroy(gameObject);
-            LevelLoader.Loader.LoadNextLevel(LevelLoader.Loader.CurrSceneIndex + 1);
+            LevelLoader.Loader.LoadNextLevel(++LevelLoader.Loader.CurrSceneIndex);
         }
     }
 }

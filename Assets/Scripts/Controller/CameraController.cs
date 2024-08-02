@@ -29,6 +29,9 @@ public class CameraController : MonoBehaviour
 
     public void AddYAxis(float amount)
     {
+        if (amount < 0) return;
+        
+        // move camera up and increase size by the square root of amount
         offset = new Vector3(0, amount * viewMultiplier * Time.deltaTime, -10);
         _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _cameraSize * (Mathf.Sqrt(1 + amount)), 0.1f);
     }
