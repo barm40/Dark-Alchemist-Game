@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 /// <summary>
 /// This script manages a few things:
@@ -11,21 +10,34 @@ using UnityEngine.Serialization;
 /// It triggers a fade animation when exiting and loading screens
 /// </summary>
 
-public class LevelLoader : MonoBehaviour, ISaveData
+public class LevelLoader : MonoBehaviour
 {
     // animation is set to crossfade, but can be changed
     public Animator transition;
     public float transitionTime = 1f; // transition time in seconds (animation is 1 second)
     private static readonly int Start = Animator.StringToHash("Start");
     private static readonly int End = Animator.StringToHash("End");
-
+    
     public int CurrSceneIndex { get; private set; }
-
+    
     [SerializeField] private bool debug;
+    public static LevelLoader Loader { get; private set; }
     
     private void Awake()
     {
+        if (Loader != null)
+        {
+            Debug.Log("An instance of the level loader already exists, destroying the newest one");
+            Destroy(gameObject);
+            return;
+        }
+
+        Loader = this;
+        
+        DontDestroyOnLoad(gameObject);
+        
         CurrSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        
     }
 
     private void Update()
@@ -36,6 +48,7 @@ public class LevelLoader : MonoBehaviour, ISaveData
             {
                 var sceneCount = SceneManager.sceneCountInBuildSettings;
                 var nextScene = CurrSceneIndex + 1;
+                
                 if (nextScene == sceneCount)
                 {
                     LoadNextLevel(0);
@@ -48,42 +61,35 @@ public class LevelLoader : MonoBehaviour, ISaveData
             }
         }
     }
-
+    
     public void LoadNextLevel(int sceneIndex)
     {
-        SaveDataManager.Instance.SaveGame();
+        // SaveDataManager.Instance.SaveGame();
         
         // perform each line of code in the enumerator in parallel
         StartCoroutine(LoadLevel(sceneIndex));
-
-        StartCoroutine(WaitLoaded());
     }
 
     // definition of coroutine
     private IEnumerator LoadLevel(int sceneIndex)
     {
-        transition.SetTrigger(Start);
+        transition.SetTrigger(End);
 
         yield return new WaitForSeconds(transitionTime);
         
         // load given scene
-        SceneManager.LoadSceneAsync(sceneIndex);
-    }
-    
-    private IEnumerator WaitLoaded()
-    {
-        transition.SetTrigger(End);
-
-        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene(sceneIndex);
+        
+        transition.SetTrigger(Start);
     }
 
-    public void LoadData(GameData data)
-    {
-        CurrSceneIndex = data.sceneIndex;
-    }
-
-    public void SaveData(GameData data)
-    {
-        data.sceneIndex = CurrSceneIndex;
-    }
+    // public void LoadData(GameData data)
+    // {
+    //     CurrSceneIndex = data.sceneIndex;
+    // }
+    //
+    // public void SaveData(GameData data)
+    // {
+    //     data.sceneIndex = CurrSceneIndex;
+    // }
 }

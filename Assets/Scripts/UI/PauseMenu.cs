@@ -3,13 +3,6 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    private LevelLoader _levelLoader;
-
-    private void Awake()
-    {
-        _levelLoader = FindObjectOfType<LevelLoader>();
-    }
-
     private void Update()
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
@@ -31,22 +24,22 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    // placeholder for save game
-    public void SaveGame()
-    {
-        SaveDataManager.Instance.SaveGame();
-    }
-    
-    // placeholder for load game
-    public void LoadGame()
-    {
-        SaveDataManager.Instance.LoadGame();
-    }
-    
+    // // placeholder for save game
+    // public void SaveGame()
+    // {
+    //     SaveDataManager.Instance.SaveGame();
+    // }
+    //
+    // // placeholder for load game
+    // public void LoadGame()
+    // {
+    //     SaveDataManager.Instance.LoadGame();
+    // }
+    //
     // exit to main menu
     public void QuitLevel()
     {
         Resume();
-        _levelLoader.LoadNextLevel(0);
+        LevelLoader.Loader.LoadNextLevel(0);
     }
 }

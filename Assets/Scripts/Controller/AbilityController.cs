@@ -58,6 +58,8 @@ public class AbilityController : MonoBehaviour
                         _abilityState = AbilityState.Active;
                         _abilityTime = CurrentAbility.ActiveTime;
                         _inventoryManager.UseAbilityItem(CurrentAbility.abilityNumber);
+                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                            PlayerController.IsBounce = true;
                         GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
@@ -68,6 +70,8 @@ public class AbilityController : MonoBehaviour
                     {
                         CurrentAbility.Deactivate(gameObject);
                         _abilityState = AbilityState.Ready;
+                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                            PlayerController.IsBounce = false;
                         GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
                         //_abilityState = AbilityState.Cooldown;
                         //_abilityCooldown = CurrentAbility.CooldownTime;
@@ -76,15 +80,6 @@ public class AbilityController : MonoBehaviour
                     else
                     {
                         _abilityTime -= Time.deltaTime;
-                        // Dash only works while key pressed
-                        if (CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType 
-                            && Input.GetKeyUp(ControlsManager.Instance.Controls["ability"]))
-                        {
-                            CurrentAbility.Deactivate(gameObject);
-                            _abilityState = AbilityState.Ready;
-                            //_abilityState = AbilityState.Cooldown;
-                            //_abilityCooldown = CurrentAbility.CooldownTime;
-                        }
                     }
                 }
                 break;
@@ -189,7 +184,7 @@ public class AbilityController : MonoBehaviour
         }
     }
 
-    private ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
+    public ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
     {
         for (int i = 0; i < abilitiesVFX.Length; i++)
         {
