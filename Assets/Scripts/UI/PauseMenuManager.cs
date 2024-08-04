@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenuManager : MonoBehaviour
 {
     [SerializeField] private PauseMenu pauseMenu;
+    
     public static PauseMenuManager MenuManager { get; private set; }
 
     private void Awake()
@@ -28,7 +29,7 @@ public class PauseMenuManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        if (!Input.GetKeyDown(KeyCode.Escape) || pauseMenu.IsActive) return;
         
         gameObject.SetActive(gameObject.transform.GetChild(0));
         

@@ -33,13 +33,10 @@ public class InventoryManager : MonoBehaviour
 
     public bool IsTheItemInInventory(int abilityNumber)
     {
-        int abilityNumberInInventory = abilityNumber;
-        if (_isItemReached[abilityNumberInInventory])
-        { 
-            ChooseAbility(abilityNumberInInventory);
-            return true;
-        }
-        return false;
+        if (!_isItemReached[abilityNumber]) return false;
+        
+        ChooseAbility(abilityNumber);
+        return true;
     }
 
     public void UseAbilityItem(int abilityNumber)
@@ -54,13 +51,12 @@ public class InventoryManager : MonoBehaviour
     {
         Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
         itemAnimation.SetBool("isChoosed", false);
-        return;
     }
 
     private void ChooseAbility(int abilityNumberInInventory)
     {
         Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
-        bool isPlay = itemAnimation.GetBool(IsChosen);
+        bool isPlay = itemAnimation.GetBool("isChoosed");
         itemAnimation.SetBool("isChoosed", !isPlay);
     }
 
@@ -78,6 +74,7 @@ public class InventoryManager : MonoBehaviour
     // }
 
     // used to correct the inventory to match the loaded data
+    
     private void CorrectItemStatus()
     {
         var rIndex = 0;

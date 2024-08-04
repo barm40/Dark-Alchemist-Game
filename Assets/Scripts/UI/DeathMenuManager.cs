@@ -7,10 +7,15 @@ using UnityEngine.Serialization;
 public class DeathMenuManager : MonoBehaviour
 {
     [SerializeField] private DeathMenu deathMenu;
+
+    private static bool IsDead { get; set; }
+    
     public static DeathMenuManager MenuManager { get; private set; }
 
     private void Awake()
     {
+        IsDead = false;
+        
         if (MenuManager != null)
         {
             Debug.Log("An instance of the save manager already exists, destroying the newest one");
@@ -27,7 +32,14 @@ public class DeathMenuManager : MonoBehaviour
     // Update is called once per frame
     public void Death()
     {
-        gameObject.SetActive(gameObject.transform.GetChild(0));
+        if (IsDead) return;
+
+        IsDead = true;
+        
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(transform.GetChild(i).gameObject);
+        }
         
         deathMenu.DeathSequence();
     }

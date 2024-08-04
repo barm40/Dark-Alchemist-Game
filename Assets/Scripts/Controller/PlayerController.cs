@@ -20,9 +20,8 @@ public class PlayerController : MonoBehaviour
     
     private TMP_Text _hpText;
     private TMP_Text _timerText;
-
+    
     private float _time;
-
 
     // for jump
     public Vector2 boxSize;
@@ -36,16 +35,13 @@ public class PlayerController : MonoBehaviour
     private float _idleTimer = 3f;
     
     public static bool IsBounce { set; get; }
-
     
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
     
     private Animator _animator;
-
-    // keep the player between levels
-
+    
     // Hit Effect
     private Volume colorShader;
     private Bloom shaderBloom;
@@ -239,10 +235,10 @@ public class PlayerController : MonoBehaviour
         hitVolume.enabled = true;
         hitBloom.intensity.value = 8f;
         hitBloom.scatter.value = 0.400f;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         hitBloom.scatter.value = 0.125f;
         hitBloom.intensity.value = 0.05f;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         isHitEffectActive = false;
         hitVolume.enabled = false;
     }
@@ -251,7 +247,7 @@ public class PlayerController : MonoBehaviour
     {
         colorShader.enabled = true;
         colorShader.weight = 0.5f;
-        hitBloom.intensity.value = 0.05f;
+        hitBloom.intensity.value = 2f;
         shaderBloom.tint.value = Random.ColorHSV();
     }
 }
