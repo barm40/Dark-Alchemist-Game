@@ -4,28 +4,27 @@ using UnityEngine.Serialization;
 
 public abstract class Ability
 {
+    public Stats ThisStats;
+    
     public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
     public AbilityTypes AbilityType { get; protected set; }
     
     public readonly float ActiveTime;
-    public readonly float CooldownTime;
-    public static int amountOfAbilities = 0;
-    public int abilityNumber;
+    private static int _amountOfAbilities;
+    public int AbilityNumber;
 
-
-    protected Ability(float activeTime, float cooldownTime)
+    protected Ability(float activeTime)
     {
         ActiveTime = activeTime;
-        CooldownTime = cooldownTime;
     }
     protected void SetAbilityNumber()
     {
         if (AbilityType != AbilityTypes.None)
         {
-            abilityNumber = amountOfAbilities;
-            amountOfAbilities++;
+            AbilityNumber = _amountOfAbilities;
+            _amountOfAbilities++;
         }
-        Debug.Log($"This {AbilityType} is number: {abilityNumber}");
+        Debug.Log($"This {AbilityType} is number: {AbilityNumber}");
     }
     public abstract void Activate(GameObject parent);
     public abstract void Deactivate(GameObject parent);

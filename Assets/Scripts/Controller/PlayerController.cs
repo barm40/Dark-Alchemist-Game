@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
-using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
     public Vector2 boxSize;
     public LayerMask groundLayer;
     public float castDistance;
-    
+
+    private bool _jumpIntent;
     private bool _isJumping;
     private float _jumpBufferTimer;
     private float _coyoteTimer;
@@ -78,7 +79,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        JumpVertical();
+        JumpTimers();
+        
         _time += Time.deltaTime;
         _timerText.text = TimeSpan.FromSeconds(_time).ToString(@"m\:ss\:ff");
     }
@@ -120,8 +122,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _horizontal = Input.GetAxisRaw("Horizontal");
-        
+        IsGrounded();
+        PerformJump();
         MoveHorizontal();
         Flip();
         ViewUp();
@@ -130,50 +132,72 @@ public class PlayerController : MonoBehaviour
     private void MoveHorizontal()
     {
         var moveSpeed = _horizontal * _stats.CurrentMoveSpeed;
+
         _rb2d.velocity = new Vector2(moveSpeed, _rb2d.velocity.y);
-    } 
+    }
     
-    private void JumpVertical()
+    public void MoveInput(InputAction.CallbackContext context)
     {
-        if (IsGrounded())
+        if (context.started || context.performed)
         {
-            _coyoteTimer = _stats.coyoteTime;
+            _horizontal = context.ReadValue<float>(); 
         }
-        else
+        else if (context.canceled)
         {
-            _coyoteTimer -= Time.deltaTime;
+            _horizontal = 0;
         }
-        
-        if (Input.GetKeyDown(ControlsManager.Instance.Controls["jump"]))
-        {
-            _jumpBufferTimer = _stats.jumpBufferTime;
-        }
-        else
-        {
-            _jumpBufferTimer -= Time.deltaTime;
-        }
-        
+    }
+    
+    private void PerformJump()
+    {
         if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
         {
-            _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
+            // _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
+            _rb2d.AddForce(new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce), ForceMode2D.Impulse);
+            
             if (IsBounce)
             {
                 _abilityController.GetAbilityVFX(Ability.AbilityTypes.BounceType).Play();
             }
+            
             _animator.SetTrigger("Jump");
             _animator.SetBool("IsJumping", true);
-            
-            Debug.Log("Jumping");
 
             _jumpBufferTimer = 0f;
             StartCoroutine(JumpCooldown());
         }
-        
-        if (Input.GetKeyUp(ControlsManager.Instance.Controls["jump"]) && _rb2d.velocity.y > 0f)
-        {
-            _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
 
-            _coyoteTimer = 0f;
+        if (_jumpIntent || !(_rb2d.velocity.y > 0f)) return;
+        
+        // _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
+        _rb2d.AddForce(new Vector2(_rb2d.velocity.x, -_rb2d.velocity.y), ForceMode2D.Impulse);
+
+        _coyoteTimer = 0f;
+    }
+
+    public void JumpInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            _jumpIntent = true;
+            _jumpBufferTimer = _stats.jumpBufferTime;
+        }
+        else if (context.canceled)
+        {
+            _jumpIntent = false;
+        }
+    }
+
+    private void JumpTimers()
+    {
+        if (_coyoteTimer > 0)
+        {
+            _coyoteTimer -= Time.deltaTime;
+        }
+        
+        if (_jumpBufferTimer > 0)
+        {
+            _jumpBufferTimer -= Time.deltaTime;
         }
     }
     
@@ -186,7 +210,13 @@ public class PlayerController : MonoBehaviour
     
     public bool IsGrounded()
     {
-        return Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer);
+        if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer))
+        {
+            _coyoteTimer = _stats.coyoteTime;
+            return true;
+        }
+
+        return false;
     }
 
     private void ViewUp()

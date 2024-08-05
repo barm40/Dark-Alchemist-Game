@@ -7,23 +7,23 @@ public class BounceAbility : Ability
     private readonly float _previousMultiplier;
 
     // get stats object and extract values from it
-    public BounceAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
+    public BounceAbility(Stats stats) : base(stats.ActiveTime)
     {
-        _bounceMultiplier = stats.BounceMultiplier;
-        _previousMultiplier = stats.JumpForceMultiplier;
+        ThisStats = stats;
+        _bounceMultiplier = ThisStats.BounceMultiplier;
+        _previousMultiplier = ThisStats.JumpForceMultiplier;
         AbilityType = AbilityTypes.BounceType;
+        
         SetAbilityNumber();
     }
 
     public override void Activate(GameObject parent)
     {
-            var stats = parent.GetComponent<Stats>();
-            stats.JumpForceMultiplier *= _bounceMultiplier;
+        ThisStats.JumpForceMultiplier *= _bounceMultiplier;
     }
 
     public override void Deactivate(GameObject parent)
     {
-        var stats = parent.GetComponent<Stats>();
-        stats.JumpForceMultiplier = _previousMultiplier;
+        ThisStats.JumpForceMultiplier = _previousMultiplier;
     }
 }

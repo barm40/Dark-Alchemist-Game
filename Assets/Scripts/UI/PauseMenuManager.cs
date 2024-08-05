@@ -15,7 +15,7 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (MenuManager != null)
         {
-            Debug.Log("An instance of the save manager already exists, destroying the newest one");
+            Debug.Log("An instance of the Pause Menu manager already exists, destroying the newest one");
             Destroy(gameObject);
             return;
         }

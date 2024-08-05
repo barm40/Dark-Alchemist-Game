@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Stats))]
 
@@ -10,38 +13,47 @@ public class AbilityController : MonoBehaviour
 
     private float _abilityTime;
     private float _abilityCooldown;
-    private AbilityNone defaultAbility;
+    
+    private bool _abilityIntent;
+
+    private bool _chosenIntent;
+    private short _chosenAbility;
+    
+    private AbilityNone _defaultAbility;
     private AbilityState _abilityState = AbilityState.Ready;
     
-    [SerializeField] public Ability CurrentAbility { get; set; }
-    
-    public bool _isAbilityChoosed { private get; set; }
-    private Dictionary<Ability.AbilityTypes, bool> abilityChoosenList = new Dictionary<Ability.AbilityTypes, bool>()
+    // [SerializeField] public Ability CurrentAbility { get; set; }
+
+    private short AbilityChosenCount { get; set; }
+    private readonly Dictionary<Ability.AbilityTypes, bool> _chosenAbilityList = new()
     {
         {Ability.AbilityTypes.BounceType, false },
         {Ability.AbilityTypes.BoostType, false },
         {Ability.AbilityTypes.ImmuneType, false }
     };
-    public List<Ability> abilitiesList {  get; private set; } = new List<Ability>();
+    
+    public List<Ability> AbilitiesList {  get; private set; } = new();
+    
     [SerializeField] private ParticleSystem[] abilitiesVFX;
-    private bool isCombo = false;
+    private bool _isCombo;
 
     private void Awake()
     {
         _stats = GetComponent<Stats>();
-        _inventoryManager = FindObjectOfType<InventoryManager>();
-        defaultAbility = new AbilityNone();
-        CurrentAbility = defaultAbility;
-        abilitiesList.Add(new BounceAbility(_stats));
-        abilitiesList.Add(new BoostAbility(_stats));
-        abilitiesList.Add(new LightImmuneAbility(_stats));
+        _inventoryManager = GameObject.FindGameObjectWithTag("inventory").GetComponent<InventoryManager>();
+        _defaultAbility = new AbilityNone();
+        // CurrentAbility = _defaultAbility;
+
+        AbilitiesList.Add(new BounceAbility(_stats));
+        AbilitiesList.Add(new BoostAbility(_stats));
+        AbilitiesList.Add(new LightImmuneAbility(_stats));
     }
 
     private void Update()
     {
         if (_abilityState != AbilityState.Active)
         {
-            ChooseAbility();
+            ChooseAbility(_chosenAbility);
         }
         DoAbility();
     }
@@ -52,15 +64,28 @@ public class AbilityController : MonoBehaviour
         {
             case AbilityState.Ready:
                 {
-                    if (Input.GetKeyDown(ControlsManager.Instance.Controls["ability"]) && _isAbilityChoosed)
+                    if (_abilityIntent && AbilityChosenCount > 0)
                     {
-                        CurrentAbility.Activate(gameObject);
-                        _abilityState = AbilityState.Active;
-                        _abilityTime = CurrentAbility.ActiveTime;
-                        _inventoryManager.UseAbilityItem(CurrentAbility.abilityNumber);
-                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
-                            PlayerController.IsBounce = true;
-                        GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
+                        foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+                        {
+                            ability.Activate(gameObject);
+                            _abilityState = AbilityState.Active;
+                            _abilityTime =  ability.ActiveTime;
+                            Debug.Log($"the ability {ability.AbilityType} is choosed");
+                            _inventoryManager.UseAbilityItem(ability.AbilityNumber);
+                            if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+                                PlayerController.IsBounce = true;
+                            GetAbilityVFX(ability.AbilityType)?.Play();
+                        }
+                        _isCombo = false;
+                        
+                        // CurrentAbility.Activate(gameObject);
+                        // _abilityState = AbilityState.Active;
+                        // _abilityTime = CurrentAbility.ActiveTime;
+                        // _inventoryManager.UseAbilityItem(CurrentAbility.AbilityNumber);
+                        // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                        //     PlayerController.IsBounce = true;
+                        // GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
                     }
                 }
                 break;
@@ -68,13 +93,21 @@ public class AbilityController : MonoBehaviour
                 {
                     if (_abilityTime <= 0)
                     {
-                        CurrentAbility.Deactivate(gameObject);
-                        _abilityState = AbilityState.Ready;
-                        if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
-                            PlayerController.IsBounce = false;
-                        GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
-                        //_abilityState = AbilityState.Cooldown;
-                        //_abilityCooldown = CurrentAbility.CooldownTime;
+                        foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+                        {
+                            ability.Deactivate(gameObject);
+                            _abilityState = AbilityState.Ready;
+                            if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+                                PlayerController.IsBounce = false;
+                            GetAbilityVFX(ability.AbilityType)?.Stop();
+                        }
+                        
+                        // CurrentAbility.Deactivate(gameObject);
+                        // _abilityState = AbilityState.Ready;
+                        // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+                        //     PlayerController.IsBounce = false;
+                        // GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
+                        
                         ClearAbility();
                     }
                     else
@@ -83,40 +116,40 @@ public class AbilityController : MonoBehaviour
                     }
                 }
                 break;
-            //case AbilityState.Cooldown:
-            //    {
-            //        if (_abilityCooldown > 0)
-            //            _abilityCooldown -= Time.deltaTime;
-            //        else
-            //        {
-            //            _abilityState = AbilityState.Ready;
-            //            ClearAbilityAfterUsed();
-            //        }
-            //    }
-            //    break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+    
+    public void AbilityInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            _abilityIntent = true;
+        }
+        else if (context.canceled)
+        {
+            _abilityIntent = false;
         }
     }
 
-    private void ChooseAbility()
+    public void SelectAbility(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && _inventoryManager.IsTheItemInInventory(abilitiesList[0].abilityNumber))
+        if (context.started || context.performed)
         {
-            SetCurrentAbility(Ability.AbilityTypes.BounceType);
+            _chosenAbility = (short)context.ReadValue<float>();
+            _chosenIntent = true;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Alpha2) && _inventoryManager.IsTheItemInInventory(abilitiesList[1].abilityNumber))
-        {
-            SetCurrentAbility(Ability.AbilityTypes.BoostType);
-        }
+    private void ChooseAbility(short chosenAbility)
+    {
+        if (chosenAbility == 0) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && _inventoryManager.IsTheItemInInventory(abilitiesList[2].abilityNumber))
+        if (_chosenIntent && _inventoryManager.IsTheItemInInventory(AbilitiesList[chosenAbility - 1].AbilityNumber))
         {
-            SetCurrentAbility(Ability.AbilityTypes.ImmuneType);
-        }
-
-        if (isCombo)
-        {
-            UseComboAbility();
+            SetCurrentAbility((Ability.AbilityTypes)chosenAbility);
+            _chosenIntent = false;
         }
     }
 
@@ -124,40 +157,30 @@ public class AbilityController : MonoBehaviour
     {
         // if in combo mode and user diselect ability
         // if the user
-        if (!_isAbilityChoosed)
+        if (AbilityChosenCount == 0)
         {
-            abilityChoosenList[abilityType] = true;
+            _chosenAbilityList[abilityType] = true;
 
-            for (int i = 0; abilitiesList.Count > i; i++)
+            foreach (var ability in AbilitiesList.Where(ability => abilityType == ability.AbilityType))
             {
-                if (abilityType == abilitiesList[i].AbilityType)
-                {
-                    CurrentAbility = CurrentAbility is null || CurrentAbility is AbilityNone ? abilitiesList[i] : defaultAbility;
-                    _isAbilityChoosed = true;
-                    break;
-                }
+                // CurrentAbility = CurrentAbility is null or AbilityNone ? ability : _defaultAbility;
+                AbilityChosenCount++;
+                break;
             }
         }
-        else if (_isAbilityChoosed && abilityChoosenList[abilityType] && !isCombo)
+        else if (_chosenAbilityList[abilityType])
         {
-            ClearAbility();
+            _chosenAbilityList[abilityType] = false;
+            AbilityChosenCount--;
+            // foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+            // {
+            //     CurrentAbility = ability;
+            // }
         }
-        else if (isCombo && abilityChoosenList[abilityType])
+        else if (AbilityChosenCount is > 0 and < 2)
         {
-            abilityChoosenList[abilityType] = false;
-            for (int i = 0; abilitiesList.Count > i; i++)
-            {
-                if (abilityChoosenList[abilitiesList[i].AbilityType])
-                {
-                    CurrentAbility = abilitiesList[i];
-                }
-            }
-            isCombo = false;
-        }
-        else
-        {
-            isCombo = true;
-            abilityChoosenList[abilityType] = true;
+            _chosenAbilityList[abilityType] = true;
+            AbilityChosenCount++;
         }
     }
 
@@ -165,23 +188,22 @@ public class AbilityController : MonoBehaviour
     /// This function for use when have combo mode element,
     /// actually when we will have more abilities we need to use it to set the combo ability and from here call to 'Do ability' 
     /// </summary>
-    private void UseComboAbility()
+    private void UseAbility()
     {
-        if (Input.GetKeyDown(ControlsManager.Instance.Controls["ability"]))
+        foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
         {
-            foreach (var ability in abilitiesList)
-            {
-                if (abilityChoosenList[ability.AbilityType])
-                {
-                    Debug.Log($"the ability {ability.AbilityType} is choosed");
-                    _inventoryManager.UseAbilityItem(ability.abilityNumber);
-                    abilityChoosenList[ability.AbilityType] = false;
-                }
-            }
-            isCombo = false;
-            ClearAbility();
-            // To Do - remove it after have the combo abilities
+            ability.Activate(gameObject);
+            _abilityState = AbilityState.Active;
+            _abilityTime = ability.ActiveTime > _abilityTime? ability.ActiveTime : _abilityTime;
+            Debug.Log($"the ability {ability.AbilityType} is choosed");
+            _inventoryManager.UseAbilityItem(ability.AbilityNumber);
+            if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+                PlayerController.IsBounce = true;
+            GetAbilityVFX(ability.AbilityType)?.Play();
         }
+        _isCombo = false;
+        ClearAbility();
+        // To Do - remove it after have the combo abilities
     }
 
     public ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
@@ -198,12 +220,11 @@ public class AbilityController : MonoBehaviour
 
     private void ClearAbility()
     {
-        CurrentAbility = defaultAbility;
-        _isAbilityChoosed = false;
+        AbilityChosenCount = 0;
 
-        for (int i = 0; abilitiesList.Count > i; i++)
+        foreach (var ability in AbilitiesList)
         {
-            abilityChoosenList[abilitiesList[i].AbilityType] = false;
+            _chosenAbilityList[ability.AbilityType] = false;
         }
     }
 

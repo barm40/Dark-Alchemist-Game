@@ -39,8 +39,8 @@ public class Stats : MonoBehaviour
     
     // dash specific stats 
     public float DashActive { get; private set; } = .3f;
-    [SerializeField] public float DashCooldown { get; private set; } = .8f;
-    [SerializeField] public float DashMultiplier { get; set; } = 4f;
+    [SerializeField] public float DashCooldown { get; private set; } = .7f;
+    [SerializeField] public float DashMultiplier { get; set; } = 3f;
     
     // boost specific stats
     public float BoostMultiplier { get; set; } = 1.2f;

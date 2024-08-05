@@ -4,37 +4,35 @@ using UnityEngine;
 
 public class BoostAbility : Ability
 {
+    private readonly float _previousSpeedMultiplier;
+    private readonly float _previousJumpMultiplier;
+    private readonly float _previousLightMultiplier;
+    
     // times from stats
-    public BoostAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
+    public BoostAbility(Stats stats) : base(stats.ActiveTime)
     {
+        ThisStats = stats;
         AbilityType = AbilityTypes.BoostType;
+        
+        _previousSpeedMultiplier = ThisStats.MoveSpeedMultiplier;
+        _previousJumpMultiplier = ThisStats.JumpForceMultiplier;
+        _previousLightMultiplier = ThisStats.lightDamage;
+        
         SetAbilityNumber();
     }
-    
-    private float _previousSpeedMultiplier;
-    private float _previousJumpMultiplier;
-    private float _previousLightMultiplier;
+
 
     public override void Activate(GameObject parent)
     {
-        var stats = parent.GetComponent<Stats>();
-        _previousSpeedMultiplier = stats.MoveSpeedMultiplier;
-        _previousJumpMultiplier = stats.JumpForceMultiplier;
-        _previousLightMultiplier = stats.lightDamage;
-        
-        stats.MoveSpeedMultiplier *= stats.BoostMultiplier;
-        stats.JumpForceMultiplier *= stats.BoostMultiplier;
-        stats.lightDamage *= stats.BoostNegativeMultiplier;
+        ThisStats.MoveSpeedMultiplier *= ThisStats.BoostMultiplier;
+        ThisStats.JumpForceMultiplier *= ThisStats.BoostMultiplier;
+        ThisStats.lightDamage *= ThisStats.BoostNegativeMultiplier;
     }
 
     public override void Deactivate(GameObject parent)
     {
-        var stats = parent.GetComponent<Stats>();
-        stats.MoveSpeedMultiplier = _previousSpeedMultiplier;
-        stats.JumpForceMultiplier = _previousJumpMultiplier;
-        stats.lightDamage = _previousLightMultiplier;
-
-        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        ThisStats.MoveSpeedMultiplier = _previousSpeedMultiplier;
+        ThisStats.JumpForceMultiplier = _previousJumpMultiplier;
+        ThisStats.lightDamage = _previousLightMultiplier;
     }
 }

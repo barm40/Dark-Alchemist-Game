@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class AbilityNone : Ability
 {
-    public AbilityNone() : base(1f, 1f)
+    public AbilityNone() : base(0f)
     {
         AbilityType = AbilityTypes.None;
         //Debug.Log($"This {AbilityType} is number: {abilityNumber}");

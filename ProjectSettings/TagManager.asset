@@ -10,6 +10,7 @@ TagManager:
   - camTarget
   - levelShader
   - timerText
+  - inventory
   layers:
   - Default
   - TransparentFX

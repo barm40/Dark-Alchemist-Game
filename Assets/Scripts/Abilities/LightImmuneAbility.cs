@@ -5,28 +5,23 @@ public class LightImmuneAbility : Ability
     private readonly float _prevLightDamage;
     private readonly float _shieldLightDamage;
     
-    public LightImmuneAbility(Stats stats) : base(stats.ActiveTime, stats.CooldownTime)
+    public LightImmuneAbility(Stats stats) : base(stats.ActiveTime)
     {
+        ThisStats = stats;
+        _prevLightDamage = ThisStats.lightDamage;
+        _shieldLightDamage = ThisStats.shieldLightDamage;
         AbilityType = AbilityTypes.ImmuneType;
-        _prevLightDamage = stats.lightDamage;
-        _shieldLightDamage = stats.shieldLightDamage;
+
         SetAbilityNumber();
     }
 
     public override void Activate(GameObject parent)
     {
-        var stats = parent.GetComponent<Stats>();
-        
-        stats.lightDamage = _shieldLightDamage;
+        ThisStats.lightDamage = _shieldLightDamage;
     }
 
     public override void Deactivate(GameObject parent)
     {
-        var stats = parent.GetComponent<Stats>();
-        
-        stats.lightDamage = _prevLightDamage;
-        
-        //parent.GetComponent<AbilityController>().CurrentAbility = new AbilityNone();
-        //parent.GetComponent<AbilityController>()._isAbilityChoosed = false;
+        ThisStats.lightDamage = _prevLightDamage;
     }
 }

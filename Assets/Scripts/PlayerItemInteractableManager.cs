@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
 public class PlayerItemInteractableManager : MonoBehaviour
 {
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private Items _itemToTake;
+
+    private InventoryState _inventoryState = InventoryState.Init;
 
     private void OnEnable()
     {
@@ -20,21 +20,36 @@ public class PlayerItemInteractableManager : MonoBehaviour
 
     private void Start()
     {
-        inventoryManager = FindObjectOfType<InventoryManager>();    
+        if (inventoryManager == null)
+            inventoryManager = GameObject.FindGameObjectWithTag("inventory").GetComponent<InventoryManager>();    
     }
 
-    private void Update()
+    public void TakeItem(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(ControlsManager.Instance.Controls["collect"]) && _itemToTake != null)
-        {
-            if (inventoryManager.transform.position.x != 0)
-                inventoryManager.transform.position = new Vector3(0, 0, 0);
-            _itemToTake.TakeItem(inventoryManager);
-        }
+        if (context is { started: false, performed: false } || _itemToTake is null) return;
+        
+        if (_inventoryState == InventoryState.Init)
+            ActivateInventory();
+        _itemToTake.TakeItem(inventoryManager);
     }
 
-    public void SetItemToTake(Items itemToTake)
+    private void ActivateInventory()
+    {
+        if (!inventoryManager.gameObject.activeSelf)
+            inventoryManager.gameObject.SetActive(true);
+        if (inventoryManager.transform.position.x != 0)
+            inventoryManager.transform.position = new Vector3(0, 0, 0);
+        _inventoryState = InventoryState.Active;
+    }
+
+    private void SetItemToTake(Items itemToTake)
     {
         _itemToTake = itemToTake;
+    }
+
+    private enum InventoryState
+    {
+        Init,
+        Active,
     }
 }

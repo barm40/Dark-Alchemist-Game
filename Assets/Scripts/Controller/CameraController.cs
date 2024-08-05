@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
     // Follow behind
     public Vector3 offset = new Vector3(0, 0, -10);
     [SerializeField] private float viewMultiplier = 200f;
-    public float speed = 3f;
+    public float speed = 2f;
 
     private Camera _camera;
     private float _cameraSize;
@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
         
         // move camera up and increase size by the square root of amount
         offset = new Vector3(0, amount * viewMultiplier * Time.deltaTime, -10);
-        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _cameraSize * (Mathf.Sqrt(1 + amount)), 0.1f);
+        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _cameraSize * (Mathf.Sqrt(1 + amount)), 0.9f * Time.deltaTime);
     }
 
     void Update()

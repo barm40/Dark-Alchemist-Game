@@ -1,5 +1,7 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -9,19 +11,25 @@ public class PlayerDash : MonoBehaviour
         Active,
         Cooldown
     }
+    
     private DashState _dashState;
     
     private Stats _stats;
+    private PlayerController _controller;
     
     private float _dashMultiplier;
     private float _previousMultiplier;
 
     private float _dashTime;
     private float _dashCooldown;
+
+    private bool _dashIntent;
+    private bool _hasLanded;
     
     private void Awake()
     {
         _stats = GetComponent<Stats>();
+        _controller = GetComponent<PlayerController>();
         _dashMultiplier = _stats.DashMultiplier;
         _previousMultiplier = _stats.MoveSpeedMultiplier;
         _dashState = DashState.Ready;
@@ -29,7 +37,9 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
+        DashTimer();
         DoDash();
+        CalcDash();
     }
 
     private void DoDash()
@@ -38,11 +48,11 @@ public class PlayerDash : MonoBehaviour
         {
             case DashState.Ready:
             {
-                if (Input.GetKeyDown(ControlsManager.Instance.Controls["dash"]))
+                if (_dashIntent)
                 {
-                    Activate();
                     _dashState = DashState.Active;
                     _dashTime = _stats.DashActive;
+                    _hasLanded = false;
                 }
             }
                 break;
@@ -51,16 +61,13 @@ public class PlayerDash : MonoBehaviour
                 // Dash only works while key pressed
                 if (_dashTime <= 0)
                 {
-                    Deactivate();
                     _dashState = DashState.Cooldown;
                     _dashCooldown = _stats.DashCooldown;
                 }
                 else
                 {
-                    _dashTime -= Time.deltaTime;
-                    if (Input.GetKeyUp(ControlsManager.Instance.Controls["dash"]))
+                    if (!_dashIntent)
                     {
-                        Deactivate();
                         _dashState = DashState.Cooldown;
                         _dashCooldown = _stats.DashCooldown;
                     }
@@ -69,26 +76,46 @@ public class PlayerDash : MonoBehaviour
                 break;
             case DashState.Cooldown:
             {
-                if (_dashCooldown > 0)
-                    _dashCooldown -= Time.deltaTime;
-                else
-                {
+                if (_dashCooldown <= 0 && _hasLanded)
                     _dashState = DashState.Ready;
-                }
             }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
-    
-    private void Activate()
+
+    private void DashTimer()
     {
-        _stats.MoveSpeedMultiplier = _dashMultiplier;
+        if (_dashTime > 0)
+            _dashTime -= Time.deltaTime;
+        if (_dashCooldown > 0)
+            _dashCooldown -= Time.deltaTime;
+        if (_controller.IsGrounded())
+            _hasLanded = true;
     }
 
-    private void Deactivate()
+    public void DashInput(InputAction.CallbackContext context)
     {
-        _stats.MoveSpeedMultiplier = _previousMultiplier;
+        if (context.started || context.performed)
+        {
+            _dashIntent = true;
+        }
+        else if (context.canceled)
+        {
+            _dashIntent = false;
+        }
+    }
+    
+    private void CalcDash()
+    {
+        if (_dashState == DashState.Active)
+        {
+            _stats.MoveSpeedMultiplier = Mathf.Lerp(_stats.MoveSpeedMultiplier, _dashMultiplier, 1f);
+        }
+        else
+        {
+            _stats.MoveSpeedMultiplier = Mathf.Lerp(_stats.MoveSpeedMultiplier, _previousMultiplier, 5f * Time.deltaTime);
+        }
     }
 }

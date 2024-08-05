@@ -8,6 +8,8 @@ public class InventoryManager : MonoBehaviour
     Color _defaultColor;
     private static readonly int IsChosen = Animator.StringToHash("isChoosed");
 
+    private short _chosenItems;
+
     private void Awake()
     {
         _defaultColor = itemImageList[0].color;
@@ -34,30 +36,30 @@ public class InventoryManager : MonoBehaviour
     public bool IsTheItemInInventory(int abilityNumber)
     {
         if (!_isItemReached[abilityNumber]) return false;
-        
-        ChooseAbility(abilityNumber);
+        if (_chosenItems < 2)
+            ChooseAbility(abilityNumber);
         return true;
     }
 
     public void UseAbilityItem(int abilityNumber)
     {
-        int abilityNumberInInventory = abilityNumber;
-        _isItemReached[abilityNumberInInventory] = false;
-        itemImageList[abilityNumberInInventory].color = _defaultColor;
-        DisableAbilityItemAnimation(abilityNumberInInventory);
+        _isItemReached[abilityNumber] = false;
+        itemImageList[abilityNumber].color = _defaultColor;
+        DisableAbilityItemAnimation(abilityNumber);
     }
 
     private void DisableAbilityItemAnimation(int abilityNumberInInventory)
     {
         Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
         itemAnimation.SetBool("isChoosed", false);
+        _chosenItems--;
     }
 
     private void ChooseAbility(int abilityNumberInInventory)
     {
         Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
-        bool isPlay = itemAnimation.GetBool("isChoosed");
-        itemAnimation.SetBool("isChoosed", !isPlay);
+        itemAnimation.SetBool("isChoosed", !itemAnimation.GetBool("isChoosed"));
+        _chosenItems++;
     }
 
     // public void LoadData(GameData data)
