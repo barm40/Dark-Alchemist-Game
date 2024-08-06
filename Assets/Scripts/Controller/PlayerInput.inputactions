@@ -204,6 +204,17 @@
                 },
                 {
                     "name": "",
+                    "id": "4ff748eb-1822-40cb-9f0a-af05df7b70bf",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pan Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "02752469-cbfd-4899-b329-f9d7c6d29f4b",
                     "path": "<Keyboard>/1",
                     "interactions": "",

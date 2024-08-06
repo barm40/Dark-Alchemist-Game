@@ -35,7 +35,7 @@ public class AbilityController : MonoBehaviour
     public List<Ability> AbilitiesList {  get; private set; } = new();
     
     [SerializeField] private ParticleSystem[] abilitiesVFX;
-    private bool _isCombo;
+    // private bool _isCombo;
 
     private void Awake()
     {
@@ -71,13 +71,13 @@ public class AbilityController : MonoBehaviour
                             ability.Activate(gameObject);
                             _abilityState = AbilityState.Active;
                             _abilityTime =  ability.ActiveTime;
-                            Debug.Log($"the ability {ability.AbilityType} is choosed");
+                            Debug.Log($"the ability {ability.AbilityType} is chosen");
                             _inventoryManager.UseAbilityItem(ability.AbilityNumber);
                             if (ability.AbilityType is Ability.AbilityTypes.BoostType)
                                 PlayerController.IsBounce = true;
                             GetAbilityVFX(ability.AbilityType)?.Play();
                         }
-                        _isCombo = false;
+                        // _isCombo = false;
                         
                         // CurrentAbility.Activate(gameObject);
                         // _abilityState = AbilityState.Active;
@@ -201,7 +201,7 @@ public class AbilityController : MonoBehaviour
                 PlayerController.IsBounce = true;
             GetAbilityVFX(ability.AbilityType)?.Play();
         }
-        _isCombo = false;
+        // _isCombo = false;
         ClearAbility();
         // To Do - remove it after have the combo abilities
     }

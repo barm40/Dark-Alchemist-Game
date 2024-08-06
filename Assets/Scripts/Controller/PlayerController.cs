@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb2d;
     private AbilityController _abilityController;
     private DeathMenu _deathMenu;
-    private CameraController _cameraController;
     
     Items _items;
     
@@ -33,13 +32,13 @@ public class PlayerController : MonoBehaviour
     private float _jumpBufferTimer;
     private float _coyoteTimer;
 
-    private float _idleTimer = 3f;
-    
     public static bool IsBounce { set; get; }
     
     // for movement and animation
     private float _horizontal;
     private bool _isFacingRight = true;
+    
+    private float _idleTimer = 3f;
     
     private Animator _animator;
     
@@ -68,7 +67,6 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _hpText = GameObject.FindGameObjectWithTag("hpText").GetComponent<TMP_Text>();
         _timerText = GameObject.FindGameObjectWithTag("timerText").GetComponent<TMP_Text>();
-        _cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         colorShader = GameObject.FindGameObjectWithTag("levelShader").GetComponent<Volume>();
         colorShader.profile.TryGet(out shaderBloom);
         hitVolume = transform.GetComponentInChildren<Volume>();
@@ -126,7 +124,6 @@ public class PlayerController : MonoBehaviour
         PerformJump();
         MoveHorizontal();
         Flip();
-        ViewUp();
     }
     
     private void MoveHorizontal()
@@ -217,12 +214,6 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
-    }
-
-    private void ViewUp()
-    {
-        var up = Input.GetAxisRaw("Vertical");
-        _cameraController.AddYAxis(up);
     }
     
     private void Flip()

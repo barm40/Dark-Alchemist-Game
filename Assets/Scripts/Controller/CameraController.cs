@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Follow player (camera target) with a slight buffer and a slight lerp
@@ -20,6 +20,10 @@ public class CameraController : MonoBehaviour
     private Camera _camera;
     private float _cameraSize;
     
+    // Pan up controls
+    private bool _panIntent;
+    private float _panAmount;
+    
     private void Awake()
     {
         _target = GameObject.FindGameObjectWithTag("camTarget").transform;
@@ -27,20 +31,37 @@ public class CameraController : MonoBehaviour
         _cameraSize = _camera.orthographicSize;
     }
 
-    public void AddYAxis(float amount)
+    private void FixedUpdate()
     {
-        if (amount < 0) return;
-        
-        // move camera up and increase size by the square root of amount
-        offset = new Vector3(0, amount * viewMultiplier * Time.deltaTime, -10);
-        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _cameraSize * (Mathf.Sqrt(1 + amount)), 0.9f * Time.deltaTime);
+        PanCamera();
     }
 
-    void Update()
+    public void PanInput(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            _panAmount = context.ReadValue<float>(); 
+        }
+        else if (context.canceled)
+        {
+            _panAmount = 0;
+        }
+    }
+    
+    private void Update()
     {
         // Define target for camera
         var targetPosition = _target.position + offset;
         // Gradually move towards the target
         transform.position = Vector3.Lerp(transform.position, targetPosition, speed * Time.deltaTime);
+    }
+    
+    private void PanCamera()
+    {
+        if (_panAmount < 0) return;
+        
+        // move camera up and increase size by the square root of amount
+        offset = new Vector3(0, _panAmount * viewMultiplier * Time.deltaTime, -10);
+        _camera.orthographicSize = Mathf.Lerp(_camera.orthographicSize, _cameraSize * (Mathf.Sqrt(1 + _panAmount)), 0.9f * Time.deltaTime);
     }
 }
