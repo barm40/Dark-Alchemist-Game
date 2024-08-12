@@ -19561,6 +19561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb758a8fb9be3641b57bb23f0e4c352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
   boxSize: {x: 0.41, y: 0.09}
   groundLayer:
     serializedVersion: 2

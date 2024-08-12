@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,13 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "Events/Void Event Channel")]
-public class EventChannelSO : ScriptableObject
+public class AEventChannel : AEventChannel<GenericEvent>
 {
-    public UnityAction OnEventRaised;
 
-    public void RaiseEvent()
-    {
-        OnEventRaised?.Invoke();
-    }
+}
+
+[Serializable]
+public struct GenericEvent : IGenericEvent
+{
+    
 }

@@ -6,10 +6,12 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PlayerInputChannel inputChannel;
     private Stats _stats;
     private Rigidbody2D _rb2d;
     private AbilityController _abilityController;
@@ -27,7 +29,6 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public float castDistance;
 
-    private bool _jumpIntent;
     private bool _isJumping;
     private float _jumpBufferTimer;
     private float _coyoteTimer;
@@ -52,11 +53,17 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
+        inputChannel.moveEvent += MoveHorizontal;
+        inputChannel.jumpEvent += JumpInputBuffer;
+        inputChannel.jumpEvent += PerformJump;
     }
 
     private void OnDisable()
     {
         PlayerInLighDetect.UserInTheLighDelegate -= RemoveHealth;
+        inputChannel.moveEvent -= MoveHorizontal;
+        inputChannel.jumpEvent -= JumpInputBuffer;
+        inputChannel.jumpEvent -= PerformJump;
     }
 
     private void Start()
@@ -121,31 +128,27 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         IsGrounded();
-        PerformJump();
-        MoveHorizontal();
         Flip();
     }
-    
-    private void MoveHorizontal()
+
+    private void MoveHorizontal(float amount)
     {
+        _horizontal = amount;
+        
         var moveSpeed = _horizontal * _stats.CurrentMoveSpeed;
 
         _rb2d.velocity = new Vector2(moveSpeed, _rb2d.velocity.y);
     }
-    
-    public void MoveInput(InputAction.CallbackContext context)
+
+    private void JumpInputBuffer(bool jumpIntent)
     {
-        if (context.started || context.performed)
+        if (jumpIntent)
         {
-            _horizontal = context.ReadValue<float>(); 
-        }
-        else if (context.canceled)
-        {
-            _horizontal = 0;
+            _jumpBufferTimer = _stats.jumpBufferTime;
         }
     }
     
-    private void PerformJump()
+    private void PerformJump(bool jumpIntent)
     {
         if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
         {
@@ -164,25 +167,12 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpCooldown());
         }
 
-        if (_jumpIntent || !(_rb2d.velocity.y > 0f)) return;
+        if (jumpIntent || !(_rb2d.velocity.y > 0f)) return;
         
         // _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
         _rb2d.AddForce(new Vector2(_rb2d.velocity.x, -_rb2d.velocity.y), ForceMode2D.Impulse);
 
         _coyoteTimer = 0f;
-    }
-
-    public void JumpInput(InputAction.CallbackContext context)
-    {
-        if (context.started || context.performed)
-        {
-            _jumpIntent = true;
-            _jumpBufferTimer = _stats.jumpBufferTime;
-        }
-        else if (context.canceled)
-        {
-            _jumpIntent = false;
-        }
     }
 
     private void JumpTimers()
