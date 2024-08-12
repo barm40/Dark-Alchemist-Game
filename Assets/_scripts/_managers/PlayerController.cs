@@ -11,7 +11,12 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private PlayerInputChannel inputChannel;
+    [Header("Scriptable Object Channels")]
+    [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
+    private PlayerInputChannel inputChannel;
+    [SerializeField, Tooltip("Scriptable Object Channel player HP")] 
+    private PlayerHealthChannel healthChannel;
+    
     private Stats _stats;
     private Rigidbody2D _rb2d;
     private AbilityController _abilityController;
@@ -19,16 +24,12 @@ public class PlayerController : MonoBehaviour
     
     Items _items;
     
-    private TMP_Text _hpText;
-    private TMP_Text _timerText;
-    
-    private float _time;
-
     // for jump
     public Vector2 boxSize;
     public LayerMask groundLayer;
     public float castDistance;
 
+    private bool _jumpIntent;
     private bool _isJumping;
     private float _jumpBufferTimer;
     private float _coyoteTimer;
@@ -52,42 +53,38 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerInLighDetect.UserInTheLighDelegate += RemoveHealth;
+        PlayerInLighDetect.UserInTheLighDelegate += ReduceHealth;
         inputChannel.moveEvent += MoveHorizontal;
         inputChannel.jumpEvent += JumpInputBuffer;
-        inputChannel.jumpEvent += PerformJump;
     }
 
     private void OnDisable()
     {
-        PlayerInLighDetect.UserInTheLighDelegate -= RemoveHealth;
+        PlayerInLighDetect.UserInTheLighDelegate -= ReduceHealth;
         inputChannel.moveEvent -= MoveHorizontal;
         inputChannel.jumpEvent -= JumpInputBuffer;
-        inputChannel.jumpEvent -= PerformJump;
     }
 
     private void Start()
     {
+        healthChannel.QueryHealth();
+        
         _stats = GetComponent<Stats>();
         _rb2d = GetComponent<Rigidbody2D>();
         _abilityController = GetComponent<AbilityController>();
         _animator = GetComponent<Animator>();
-        _hpText = GameObject.FindGameObjectWithTag("hpText").GetComponent<TMP_Text>();
-        _timerText = GameObject.FindGameObjectWithTag("timerText").GetComponent<TMP_Text>();
+
         colorShader = GameObject.FindGameObjectWithTag("levelShader").GetComponent<Volume>();
         colorShader.profile.TryGet(out shaderBloom);
         hitVolume = transform.GetComponentInChildren<Volume>();
         hitVolume.profile.TryGet<Bloom>(out hitBloom);
-        _hpText.text = "HP: " + (int)_stats.Hp;
         ApplyRandomShader();
     }
 
     private void Update()
     {
         JumpTimers();
-        
-        _time += Time.deltaTime;
-        _timerText.text = TimeSpan.FromSeconds(_time).ToString(@"m\:ss\:ff");
+        PerformJump();
     }
 
     private void LateUpdate()
@@ -146,14 +143,16 @@ public class PlayerController : MonoBehaviour
         {
             _jumpBufferTimer = _stats.jumpBufferTime;
         }
+
+        _jumpIntent = jumpIntent;
     }
     
-    private void PerformJump(bool jumpIntent)
+    private void PerformJump()
     {
         if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
         {
-            // _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
-            _rb2d.AddForce(new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce), ForceMode2D.Impulse);
+            _rb2d.velocity = new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce);
+            // _rb2d.AddForce(new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce), ForceMode2D.Impulse);
             
             if (IsBounce)
             {
@@ -167,10 +166,10 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpCooldown());
         }
 
-        if (jumpIntent || !(_rb2d.velocity.y > 0f)) return;
+        if (_jumpIntent || !(_rb2d.velocity.y > 0f)) return;
         
-        // _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
-        _rb2d.AddForce(new Vector2(_rb2d.velocity.x, -_rb2d.velocity.y), ForceMode2D.Impulse);
+        _rb2d.velocity = new Vector2(_rb2d.velocity.x,  -_rb2d.velocity.y * 0.1f);
+        // _rb2d.AddForce(new Vector2(0, -_rb2d.velocity.y), ForceMode2D.Impulse);
 
         _coyoteTimer = 0f;
     }
@@ -202,7 +201,6 @@ public class PlayerController : MonoBehaviour
             _coyoteTimer = _stats.coyoteTime;
             return true;
         }
-
         return false;
     }
     
@@ -222,18 +220,15 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
     }
 
-    void RemoveHealth()
+    void ReduceHealth()
     {
-        if (_stats.Hp > 0)
+        healthChannel.ChangeHealth(_stats.lightDamage);
+        
+        if (!isHitEffectActive)
         {
-            PlayerInLighDetect.LightRemoveHealth(_stats);
-            _hpText.text = $"HP: {(int)_stats.Hp}";
-            if (!isHitEffectActive)
-            {
-                StartCoroutine(GetHitLightEffect());
-            }
+            StartCoroutine(GetHitLightEffect());
         }
-        else
+        if (healthChannel.playerHealth == 0)
         {
             DeathMenuManager.MenuManager.Death();
             Debug.LogWarning($"You are dead, Game Over!!");

@@ -30,7 +30,7 @@ public class Stats : MonoBehaviour
     public float Hp { get; set; } = 100f;
     
     // light damage related
-    public float lightDamage = 20;
+    public float lightDamage = -20;
     public float shieldLightDamage = 0f;
     
     // general ability related stats 

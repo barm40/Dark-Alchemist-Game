@@ -7,9 +7,9 @@ public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
 {
     public Action<float> moveEvent;
     public Action<float> panCameraEvent;
-    public Action<bool> jumpEvent;
     public Action<float> selectAbilityEvent;
-    public Action dashEvent;
+    public Action<bool> jumpEvent;
+    public Action<bool> dashEvent;
     public Action interactEvent;
     public Action performAbilityEvent;
     
@@ -31,11 +31,17 @@ public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
         _input?.Player.Disable();
     }
 
-    public void OnMove(InputAction.CallbackContext context) => moveEvent?.Invoke(context.ReadValue<float>()); 
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            moveEvent?.Invoke(context.ReadValue<float>()); 
+        else if (context.canceled)
+            moveEvent?.Invoke(0);
+    } 
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed) jumpEvent?.Invoke(true);
+        if (context.performed) jumpEvent?.Invoke(true);
         else if (context.canceled) jumpEvent?.Invoke(false);
     }
 
@@ -46,7 +52,14 @@ public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (context.phase is InputActionPhase.Performed) dashEvent?.Invoke();
+        if (context.started || context.performed)
+        {
+            dashEvent?.Invoke(true);
+        }
+        else if (context.canceled)
+        {
+            dashEvent?.Invoke(false);
+        }
     }
     
     public void OnSelectAbility(InputAction.CallbackContext context)

@@ -7,7 +7,9 @@ using UnityEngine.Serialization;
 
 public abstract class AEventChannelListener<TChannel, TEvent> : MonoBehaviour where TChannel : AEventChannel<TEvent>
 {
+    [Header("Listen to Event Channels")]
     [SerializeField] protected TChannel channelType;
+    [Tooltip("Respond to receiving signal from event channel")]
     [SerializeField] protected UnityEvent<TEvent> response;
 
     protected virtual void OnEnable()

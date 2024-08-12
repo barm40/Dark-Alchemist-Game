@@ -19562,6 +19562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
+  healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
   boxSize: {x: 0.41, y: 0.09}
   groundLayer:
     serializedVersion: 2
@@ -19579,6 +19580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d87b181ab1fe2747bb991fc34820b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
 --- !u!114 &1448458569436023067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19611,7 +19613,7 @@ MonoBehaviour:
   baseJumpForce: 350
   coyoteTime: 0.2
   jumpBufferTime: 0.2
-  lightDamage: 20
+  lightDamage: -10
   shieldLightDamage: 0
 --- !u!114 &1039813349379027251
 MonoBehaviour:
@@ -19736,35 +19738,11 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5735511482074749109}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: MoveInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f289a402-003f-4b0d-b26a-6e462ac219a8
     m_ActionName: Player/Move[/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5735511482074749109}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: JumpInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 8531adaa-1745-4034-8a86-8e59b609f9d5
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
@@ -19784,19 +19762,7 @@ MonoBehaviour:
     m_ActionId: b2cf9aff-eed5-41e6-84bb-5353a0be0778
     m_ActionName: Player/Interact[/Keyboard/f]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4489009581255902090}
-        m_TargetAssemblyTypeName: PlayerDash, Assembly-CSharp
-        m_MethodName: DashInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: fb4c3141-cea3-4fd4-80d5-976261c73ec2
     m_ActionName: Player/Dash[/Keyboard/shift]
   - m_PersistentCalls:
@@ -19816,19 +19782,7 @@ MonoBehaviour:
     m_ActionId: 68cbd2f8-65a8-4833-811a-feed2e30e85d
     m_ActionName: Player/Ability[/Keyboard/r,/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
-        m_MethodName: PanInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 2fb4968e-2c7e-456d-b9c7-1134d0e77fd8
     m_ActionName: Player/Pan Camera[/Keyboard/upArrow]
   - m_PersistentCalls:

@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerDash : MonoBehaviour
 {
+    [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
+    private PlayerInputChannel inputChannel;
+    
     private enum DashState
     {
         Ready,
@@ -25,6 +28,16 @@ public class PlayerDash : MonoBehaviour
 
     private bool _dashIntent;
     private bool _hasLanded;
+
+    private void OnEnable()
+    {
+        inputChannel.dashEvent += DashInput;
+    }
+
+    private void OnDisable()
+    {
+        inputChannel.dashEvent -= DashInput;
+    }
     
     private void Awake()
     {
@@ -95,16 +108,9 @@ public class PlayerDash : MonoBehaviour
             _hasLanded = true;
     }
 
-    public void DashInput(InputAction.CallbackContext context)
+    private void DashInput(bool intent)
     {
-        if (context.started || context.performed)
-        {
-            _dashIntent = true;
-        }
-        else if (context.canceled)
-        {
-            _dashIntent = false;
-        }
+        _dashIntent = intent;
     }
     
     private void CalcDash()

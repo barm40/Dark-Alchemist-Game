@@ -1,14 +1,13 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "New Generic Event Channel", menuName = "Event Channel/Generic")]
 public abstract class AEventChannel<TEvent> : ScriptableObject
 {
     // Action to perform
     [Tooltip("The action that will be performed. Event type")]
     public UnityAction<TEvent> OnEventRaised;
-    
-    public void RaiseEvent(TEvent param) => OnEventRaised?.Invoke(param);
+
+    protected void RaiseEvent(TEvent param) => OnEventRaised?.Invoke(param);
 }
 
 public interface IGenericEvent { }
