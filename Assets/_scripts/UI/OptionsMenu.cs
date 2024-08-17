@@ -1,82 +1,83 @@
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
+namespace UI
 {
-    public AudioMixer audioMixer;
-    public TMP_Dropdown fScreenDropdown;
-    public TMP_Dropdown resDropdown;
-
-    private Resolution[] _resolutions;
-    private int _possibleScreenModes;
-    private void Start()
+    public class OptionsMenu : MonoBehaviour
     {
-        // populate possible screen modes
-        _possibleScreenModes = 4;
-        
-        var currentScreenTypeIndex = 0;
-        
-        for (int i = 0; i < _possibleScreenModes; i++)
+        public AudioMixer audioMixer;
+        public TMP_Dropdown fScreenDropdown;
+        public TMP_Dropdown resDropdown;
+
+        private Resolution[] _resolutions;
+        private int _possibleScreenModes;
+        private void Start()
         {
-            if ((FullScreenMode)i == Screen.fullScreenMode)
+            // populate possible screen modes
+            _possibleScreenModes = 4;
+        
+            var currentScreenTypeIndex = 0;
+        
+            for (int i = 0; i < _possibleScreenModes; i++)
             {
-                currentScreenTypeIndex = i;
-                break;
+                if ((FullScreenMode)i == Screen.fullScreenMode)
+                {
+                    currentScreenTypeIndex = i;
+                    break;
+                }
             }
+            fScreenDropdown.value = currentScreenTypeIndex;
+            fScreenDropdown.RefreshShownValue();
+        
+        
+            // populate possible resolutions
+            _resolutions = Screen.resolutions;
+        
+            resDropdown.ClearOptions();
+
+            var currentResolutionIndex = 0;
+
+            var usableResolutions = new List<string>();
+
+            for (int i = 0; i < _resolutions.Length; i++)
+            {
+                usableResolutions.Add(_resolutions[i].width + "x" + 
+                                      _resolutions[i].height + " " + 
+                                      (int)_resolutions[i].refreshRateRatio.value + "Hz");
+
+                if (_resolutions[i].width == Screen.currentResolution.width &&
+                    _resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
+            }
+
+            resDropdown.AddOptions(usableResolutions);
+            resDropdown.value = currentResolutionIndex;
+            resDropdown.RefreshShownValue();
         }
-        fScreenDropdown.value = currentScreenTypeIndex;
-        fScreenDropdown.RefreshShownValue();
-        
-        
-        // populate possible resolutions
-        _resolutions = Screen.resolutions;
-        
-        resDropdown.ClearOptions();
 
-        var currentResolutionIndex = 0;
-
-        var usableResolutions = new List<string>();
-
-        for (int i = 0; i < _resolutions.Length; i++)
+        public void SetVolume(float volume)
         {
-            usableResolutions.Add(_resolutions[i].width + "x" + 
-                                  _resolutions[i].height + " " + 
-                                  (int)_resolutions[i].refreshRateRatio.value + "Hz");
-
-            if (_resolutions[i].width == Screen.currentResolution.width &&
-                _resolutions[i].height == Screen.currentResolution.height)
-            {
-                currentResolutionIndex = i;
-            }
+            audioMixer.SetFloat("volume", volume);
         }
 
-        resDropdown.AddOptions(usableResolutions);
-        resDropdown.value = currentResolutionIndex;
-        resDropdown.RefreshShownValue();
-    }
+        public void SetQuality(int qualityIndex)
+        {
+            QualitySettings.SetQualityLevel(qualityIndex);
+        }
 
-    public void SetVolume(float volume)
-    {
-        audioMixer.SetFloat("volume", volume);
-    }
+        public void SetFullScreen(int screenTypeIndex)
+        {
+            Screen.fullScreenMode = (FullScreenMode)screenTypeIndex;
+        }
 
-    public void SetQuality(int qualityIndex)
-    {
-        QualitySettings.SetQualityLevel(qualityIndex);
-    }
-
-    public void SetFullScreen(int screenTypeIndex)
-    {
-        Screen.fullScreenMode = (FullScreenMode)screenTypeIndex;
-    }
-
-    public void SetResolution(int resIndex)
-    {
-        var res = _resolutions[resIndex];
-        Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
+        public void SetResolution(int resIndex)
+        {
+            var res = _resolutions[resIndex];
+            Screen.SetResolution(res.width, res.height, Screen.fullScreenMode, res.refreshRateRatio);
+        }
     }
 }

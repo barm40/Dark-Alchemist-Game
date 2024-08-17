@@ -19564,6 +19564,7 @@ MonoBehaviour:
   inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
   healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
   playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
+  playerJumpStats: {fileID: 11400000, guid: 83581d34748d0714eb0a0263a5d0b098, type: 2}
   boxSize: {x: 0.41, y: 0.09}
   groundLayer:
     serializedVersion: 2
@@ -19616,8 +19617,6 @@ MonoBehaviour:
   maxMoveSpeed: 10
   baseJumpForce: 350
   maxJumpForce: 15
-  coyoteTime: 0.2
-  jumpBufferTime: 0.2
   lightDamage: -10
   shieldLightDamage: 0
 --- !u!114 &1039813349379027251

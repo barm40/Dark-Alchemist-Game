@@ -1,39 +1,38 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+namespace Infra
 {
-    public static T Instance { get; private set; }
-
-    protected virtual void Awake()
+    public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        Instance = this as T;
+        public static T Instance { get; private set; }
+
+        protected virtual void Awake()
+        {
+            Instance = this as T;
+        }
+
+        protected virtual void OnApplicationQuit()
+        {
+            Instance = null;
+            Destroy(gameObject);
+        }
     }
 
-    protected virtual void OnApplicationQuit()
+    public class TrueSingleton<T> : Singleton<T> where T : MonoBehaviour
     {
-        Instance = null;
-        Destroy(gameObject);
+        protected override void Awake()
+        {
+            if (Instance != null) Destroy(gameObject);
+            base.Awake();
+        }
     }
-}
 
-public class TrueSingleton<T> : Singleton<T> where T : MonoBehaviour
-{
-    protected override void Awake()
+    public class PersistentSingleton<T> : TrueSingleton<T> where T : MonoBehaviour
     {
-        if (Instance != null) Destroy(gameObject);
-        base.Awake();
-    }
-}
-
-public class PersistentSingleton<T> : TrueSingleton<T> where T : MonoBehaviour
-{
-    protected override void Awake()
-    {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        protected override void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }

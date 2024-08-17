@@ -1,17 +1,18 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using Abilities;
 
-
-public class LightImmuneItem : Items
+namespace Items
 {
-    
-    private void Start()
+    public class LightImmuneItem : Items
     {
-        for (int i = 0; i < abilityController.AbilitiesList.Count; i++)
+    
+        private void Start()
         {
-            if (abilityController.AbilitiesList[i].AbilityType == Ability.AbilityTypes.ImmuneType)
+            for (int i = 0; i < abilityController.AbilitiesList.Count; i++)
             {
-                ItemInventoryNumber = abilityController.AbilitiesList[i].AbilityNumber;
+                if (abilityController.AbilitiesList[i].AbilityType == Ability.AbilityTypes.ImmuneType)
+                {
+                    ItemInventoryNumber = abilityController.AbilitiesList[i].AbilityNumber;
+                }
             }
         }
     }

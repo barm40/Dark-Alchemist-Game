@@ -1,4 +1,5 @@
 using System.Collections;
+using _managers;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour

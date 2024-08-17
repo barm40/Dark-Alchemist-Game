@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Abilities;
 
-public class BounceAbilityItems : Items
+namespace Items
 {
-    private void Start()
+    public class BounceAbilityItems : Items
     {
-        for (int i = 0; i < abilityController.AbilitiesList.Count; i++)
+        private void Start()
         {
-            if (abilityController.AbilitiesList[i].AbilityType == Ability.AbilityTypes.BounceType)
+            for (int i = 0; i < abilityController.AbilitiesList.Count; i++)
             {
-                ItemInventoryNumber = abilityController.AbilitiesList[i].AbilityNumber;
+                if (abilityController.AbilitiesList[i].AbilityType == Ability.AbilityTypes.BounceType)
+                {
+                    ItemInventoryNumber = abilityController.AbilitiesList[i].AbilityNumber;
+                }
             }
         }
     }

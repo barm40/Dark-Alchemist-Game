@@ -1,16 +1,18 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class AEventChannel<TEvent> : ScriptableObject
+namespace Infra.SOTypes
 {
-    // Action to perform
-    [Tooltip("The action that will be performed. Event type")]
-    public UnityAction<TEvent> OnEventRaised;
+    public abstract class AEventChannel<TEvent> : ScriptableObject
+    {
+        // Action to perform
+        [Tooltip("The action that will be performed. Event type")]
+        public UnityAction<TEvent> OnEventRaised;
 
-    protected void RaiseEvent(TEvent param) => OnEventRaised?.Invoke(param);
-}
+        protected void RaiseEvent(TEvent param) => OnEventRaised?.Invoke(param);
+    }
 
-public interface IGenericEvent
-{
+    public interface IGenericEvent
+    {
+    }
 }

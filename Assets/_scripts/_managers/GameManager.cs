@@ -1,41 +1,45 @@
 using System;
+using Infra;
 
-public class GameManager : PersistentSingleton<GameManager>
+namespace _managers
 {
-    public GameState state;
+    public class GameManager : PersistentSingleton<GameManager>
+    {
+        public GameState state;
     
-    public void UpdateGameState(GameState newState)
-    {
-        state = newState;
-
-        switch (newState)
+        public void UpdateGameState(GameState newState)
         {
-            case GameState.MainMenu:
-                // HandleMainMenu();
-                break;
-            case GameState.Playing:
-                // HandlePlay()
-                break;
-            case GameState.PauseMenu:
-                // HandlePause();
-                break;
-            case GameState.DeathScreen:
-                // HandleDeath();
-                break;
-            case GameState.NextLevel:
-                // HandleLevel();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
-        }
-    }
+            state = newState;
 
-    public enum GameState
-    {
-        MainMenu,
-        Playing,
-        PauseMenu,
-        DeathScreen,
-        NextLevel
+            switch (newState)
+            {
+                case GameState.MainMenu:
+                    // HandleMainMenu();
+                    break;
+                case GameState.Playing:
+                    // HandlePlay()
+                    break;
+                case GameState.PauseMenu:
+                    // HandlePause();
+                    break;
+                case GameState.DeathScreen:
+                    // HandleDeath();
+                    break;
+                case GameState.NextLevel:
+                    // HandleLevel();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
+            }
+        }
+
+        public enum GameState
+        {
+            MainMenu,
+            Playing,
+            PauseMenu,
+            DeathScreen,
+            NextLevel
+        }
     }
 }

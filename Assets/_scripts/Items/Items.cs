@@ -1,76 +1,80 @@
 using System;
+using _managers;
 using UnityEngine;
 
-public abstract class Items : MonoBehaviour
+namespace Items
 {
-    // create unique ids for items to store which items were collected already
-    [SerializeField] private string id;
-    [ContextMenu("Generate guid")]
-    private void GenerateGuid()
+    public abstract class Items : MonoBehaviour
     {
-        id = Guid.NewGuid().ToString();
-    }
-    
-    protected AbilityController abilityController;
-    
-    protected bool IsUsed;
-    protected bool CanBeTaken;
-    protected bool IsTaken;
-    [SerializeField] public int ItemInventoryNumber { get; protected set;}
-
-    public static event Action<Items> CanBeTakenAction;
-    private void Awake()
-    {
-        abilityController = FindObjectOfType<AbilityController>();
-        Debug.Log("ability controller is: " + abilityController);
-    }
-    
-    public void TakeItem(InventoryManager inventory)
-    {
-        if (!IsTaken)
+        // create unique ids for items to store which items were collected already
+        [SerializeField] private string id;
+        [ContextMenu("Generate guid")]
+        private void GenerateGuid()
         {
-            CanBeTaken = true;
-            inventory.SetNewItemInTheInventory(gameObject);
-            transform.parent = inventory.transform;
-            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            id = Guid.NewGuid().ToString();
         }
-    }
+    
+        protected AbilityController abilityController;
+    
+        protected bool IsUsed;
+        protected bool CanBeTaken;
+        protected bool IsTaken;
+        [SerializeField] public int ItemInventoryNumber { get; protected set;}
 
-    protected  virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        if (!IsTaken)
+        public static event Action<Items> CanBeTakenAction;
+        private void Awake()
         {
-            CanBeTaken = true;
-            CanBeTakenAction?.Invoke(this);
+            abilityController = FindObjectOfType<AbilityController>();
+            Debug.Log("ability controller is: " + abilityController);
         }
-    }
-
-    protected virtual void OnTriggerExit2D(Collider2D other)
-    {
-        if (!IsTaken)
+    
+        public void TakeItem(InventoryManager inventory)
         {
-            CanBeTaken = false;
-            CanBeTakenAction?.Invoke(null);
+            if (!IsTaken)
+            {
+                CanBeTaken = true;
+                inventory.SetNewItemInTheInventory(gameObject);
+                transform.parent = inventory.transform;
+                gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            }
         }
-    }
 
-    //public void LoadData(GameData data)
-    //{
-    //    data.itemsCollected.TryGetValue(id, out IsTaken);
+        protected  virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!IsTaken)
+            {
+                CanBeTaken = true;
+                CanBeTakenAction?.Invoke(this);
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (!IsTaken)
+            {
+                CanBeTaken = false;
+                CanBeTakenAction?.Invoke(null);
+            }
+        }
+
+        //public void LoadData(GameData data)
+        //{
+        //    data.itemsCollected.TryGetValue(id, out IsTaken);
         
-    //    if (IsTaken)
-    //    {
-    //        gameObject.SetActive(false);
-    //    }
-    //}
+        //    if (IsTaken)
+        //    {
+        //        gameObject.SetActive(false);
+        //    }
+        //}
 
-    //public void SaveData(GameData data)
-    //{
-    //    if (data.itemsCollected.ContainsKey(id))
-    //    {
-    //        data.itemsCollected.Remove(id);
-    //    }
+        //public void SaveData(GameData data)
+        //{
+        //    if (data.itemsCollected.ContainsKey(id))
+        //    {
+        //        data.itemsCollected.Remove(id);
+        //    }
 
-    //    data.itemsCollected.Add(id, IsTaken);
-    //}
+        //    data.itemsCollected.Add(id, IsTaken);
+        //}
+    }
 }

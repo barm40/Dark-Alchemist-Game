@@ -32,11 +32,6 @@ public class Stats : MonoBehaviour
     [SerializeField] public float maxJumpForce = 15f;
 
     public float JumpForceMultiplier { get; set; } = 1f;
-    public float CurrentJumpForce { get; private set; }
-    
-    public float coyoteTime = .2f;
-    public float jumpBufferTime = .2f;
-
     
     public float Hp { get; set; } = 100f;
     
@@ -59,15 +54,6 @@ public class Stats : MonoBehaviour
     
     // bounce specific stats
     public float BounceMultiplier { get; set; } = 1.5f;
-
-
-    private void FixedUpdate()
-    {
-        CurrentMoveSpeed = 
-            baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
-        CurrentJumpForce =
-            baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
-    }
 
     // public void LoadData(GameData data)
     // {

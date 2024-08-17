@@ -1,13 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AStatContainer<TStats> : ScriptableObject where TStats : IStats
+namespace Infra.SOTypes
 {
-}
+    public abstract class AStatContainer<TStats> : ScriptableObject where TStats : IStats
+    {
+    }
 
-public interface IStats
-{
+    public interface IStats
+    {
     
+    }
 }

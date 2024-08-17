@@ -2,69 +2,72 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "New Input Channel", menuName = "Input/Player Input")]
-public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
+namespace Infra.Channels
 {
-    public Action<float> moveEvent;
-    public Action<float> panCameraEvent;
-    public Action<float> selectAbilityEvent;
-    public Action<bool> jumpEvent;
-    public Action<bool> dashEvent;
-    public Action interactEvent;
-    public Action performAbilityEvent;
-    
-    private PlayerInput _input;
-
-    private void OnEnable()
+    [CreateAssetMenu(fileName = "New Input Channel", menuName = "Input/Player Input")]
+    public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
     {
-        if (_input is null)
+        public Action<float> moveEvent;
+        public Action<float> panCameraEvent;
+        public Action<float> selectAbilityEvent;
+        public Action<bool> jumpEvent;
+        public Action<bool> dashEvent;
+        public Action interactEvent;
+        public Action performAbilityEvent;
+    
+        private PlayerInput _input;
+
+        private void OnEnable()
         {
-            _input = new PlayerInput();
-            _input.Player.SetCallbacks(this);
-        }
+            if (_input is null)
+            {
+                _input = new PlayerInput();
+                _input.Player.SetCallbacks(this);
+            }
         
-        _input.Player.Enable();
-    }
+            _input.Player.Enable();
+        }
 
-    private void OnDisable()
-    {
-        _input?.Player.Disable();
-    }
+        private void OnDisable()
+        {
+            _input?.Player.Disable();
+        }
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-            moveEvent?.Invoke(context.ReadValue<float>()); 
-        else if (context.canceled)
-            moveEvent?.Invoke(0);
-    } 
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                moveEvent?.Invoke(context.ReadValue<float>()); 
+            else if (context.canceled)
+                moveEvent?.Invoke(0);
+        } 
 
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.performed) jumpEvent?.Invoke(true);
-        else if (context.canceled) jumpEvent?.Invoke(false);
-    }
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if (context.performed) jumpEvent?.Invoke(true);
+            else if (context.canceled) jumpEvent?.Invoke(false);
+        }
 
-    public void OnInteract(InputAction.CallbackContext context)
-    {
-        if (context.phase is InputActionPhase.Performed) interactEvent?.Invoke();
-    }
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            if (context.phase is InputActionPhase.Performed) interactEvent?.Invoke();
+        }
 
-    public void OnDash(InputAction.CallbackContext context)
-    {
-        if (context.performed) dashEvent?.Invoke(true);
-        else if (context.canceled) dashEvent?.Invoke(false);
-    }
+        public void OnDash(InputAction.CallbackContext context)
+        {
+            if (context.performed) dashEvent?.Invoke(true);
+            else if (context.canceled) dashEvent?.Invoke(false);
+        }
     
-    public void OnSelectAbility(InputAction.CallbackContext context)
-    {
-        if (context.phase is InputActionPhase.Performed) selectAbilityEvent?.Invoke(context.ReadValue<float>());
-    }
+        public void OnSelectAbility(InputAction.CallbackContext context)
+        {
+            if (context.phase is InputActionPhase.Performed) selectAbilityEvent?.Invoke(context.ReadValue<float>());
+        }
     
-    public void OnAbility(InputAction.CallbackContext context)
-    {
-        if (context.phase is InputActionPhase.Performed) performAbilityEvent?.Invoke();
-    }
+        public void OnAbility(InputAction.CallbackContext context)
+        {
+            if (context.phase is InputActionPhase.Performed) performAbilityEvent?.Invoke();
+        }
     
-    public void OnPanCamera(InputAction.CallbackContext context) => panCameraEvent?.Invoke(context.ReadValue<float>()); 
+        public void OnPanCamera(InputAction.CallbackContext context) => panCameraEvent?.Invoke(context.ReadValue<float>()); 
+    }
 }

@@ -1,21 +1,22 @@
+using Items;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerItemInteractableManager : MonoBehaviour
 {
     [SerializeField] private InventoryManager inventoryManager;
-    [SerializeField] private Items _itemToTake;
+    [SerializeField] private Items.Items _itemToTake;
 
     private InventoryState _inventoryState = InventoryState.Init;
 
     private void OnEnable()
     {
-        Items.CanBeTakenAction += SetItemToTake;
+        Items.Items.CanBeTakenAction += SetItemToTake;
     }
 
     private void OnDisable()
     {
-        Items.CanBeTakenAction -= SetItemToTake;
+        Items.Items.CanBeTakenAction -= SetItemToTake;
     }
 
     private void Start()
@@ -42,7 +43,7 @@ public class PlayerItemInteractableManager : MonoBehaviour
         _inventoryState = InventoryState.Active;
     }
 
-    private void SetItemToTake(Items itemToTake)
+    private void SetItemToTake(Items.Items itemToTake)
     {
         _itemToTake = itemToTake;
     }
