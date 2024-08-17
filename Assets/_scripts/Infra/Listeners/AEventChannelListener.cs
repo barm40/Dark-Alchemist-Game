@@ -5,6 +5,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
+public abstract class AEventChannelListener<TEvent> : MonoBehaviour
+{
+    [Header("Listen to Event Channels")]
+    [SerializeField] protected PlayerInputChannel inputChannel; 
+    [Tooltip("Respond to receiving signal from event channel")]
+    [SerializeField] protected UnityEvent<TEvent> response;
+    
+    public void OnEventRaised(TEvent evt)
+    {
+        response?.Invoke(evt);
+    }
+}
+
 public abstract class AEventChannelListener<TChannel, TEvent> : MonoBehaviour where TChannel : AEventChannel<TEvent>
 {
     [Header("Listen to Event Channels")]

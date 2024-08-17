@@ -19563,6 +19563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
   healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
+  playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
   boxSize: {x: 0.41, y: 0.09}
   groundLayer:
     serializedVersion: 2
@@ -19581,6 +19582,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
+  dashStats: {fileID: 11400000, guid: 52680d36fe722164c9a650a0c40d5ee0, type: 2}
+  moveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
 --- !u!114 &1448458569436023067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19610,7 +19613,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMoveSpeed: 250
+  maxMoveSpeed: 10
   baseJumpForce: 350
+  maxJumpForce: 15
   coyoteTime: 0.2
   jumpBufferTime: 0.2
   lightDamage: -10

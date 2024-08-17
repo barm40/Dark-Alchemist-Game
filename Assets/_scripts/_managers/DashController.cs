@@ -1,12 +1,19 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerDash : MonoBehaviour
+public class DashController : MonoBehaviour
 {
+    [Header("Input Channel")]
     [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
     private PlayerInputChannel inputChannel;
+    [Header("Stat Container")]
+    [SerializeField, Tooltip("Scriptable Object Stats Container (Dash)")]
+    private DashStatContainer dashStats;
+    [SerializeField, Tooltip("Scriptable Object Stats Container (Move)")]
+    private MoveStatContainerChannel moveStats;
     
     private enum DashState
     {
@@ -17,10 +24,8 @@ public class PlayerDash : MonoBehaviour
     
     private DashState _dashState;
     
-    private Stats _stats;
     private PlayerController _controller;
     
-    private float _dashMultiplier;
     private float _previousMultiplier;
 
     private float _dashTime;
@@ -41,10 +46,7 @@ public class PlayerDash : MonoBehaviour
     
     private void Awake()
     {
-        _stats = GetComponent<Stats>();
         _controller = GetComponent<PlayerController>();
-        _dashMultiplier = _stats.DashMultiplier;
-        _previousMultiplier = _stats.MoveSpeedMultiplier;
         _dashState = DashState.Ready;
     }
 
@@ -60,42 +62,39 @@ public class PlayerDash : MonoBehaviour
         switch (_dashState)
         {
             case DashState.Ready:
-            {
                 if (_dashIntent)
                 {
-                    _dashState = DashState.Active;
-                    _dashTime = _stats.DashActive;
-                    _hasLanded = false;
+                    TransitionToActiveState();
                 }
-            }
                 break;
             case DashState.Active:
-            {
-                // Dash only works while key pressed
-                if (_dashTime <= 0)
+                if (_dashTime <= 0 || !_dashIntent)
                 {
-                    _dashState = DashState.Cooldown;
-                    _dashCooldown = _stats.DashCooldown;
+                    TransitionToCooldownState();
                 }
-                else
-                {
-                    if (!_dashIntent)
-                    {
-                        _dashState = DashState.Cooldown;
-                        _dashCooldown = _stats.DashCooldown;
-                    }
-                }
-            }
                 break;
             case DashState.Cooldown:
-            {
                 if (_dashCooldown <= 0 && _hasLanded)
+                {
                     _dashState = DashState.Ready;
-            }
+                }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void TransitionToActiveState()
+    {
+        _dashState = DashState.Active;
+        _dashTime = dashStats.dashStats.dashActive;
+        _hasLanded = false;
+    }
+
+    private void TransitionToCooldownState()
+    {
+        _dashState = DashState.Cooldown;
+        _dashCooldown = dashStats.dashStats.dashCooldown;
     }
 
     private void DashTimer()
@@ -117,11 +116,11 @@ public class PlayerDash : MonoBehaviour
     {
         if (_dashState == DashState.Active)
         {
-            _stats.MoveSpeedMultiplier = Mathf.Lerp(_stats.MoveSpeedMultiplier, _dashMultiplier, 1f);
+            moveStats.NewSpeed(Mathf.Lerp(moveStats.moveStats.moveSpeedMultiplier,dashStats.dashStats.dashMultiplier,1f));
         }
         else
         {
-            _stats.MoveSpeedMultiplier = Mathf.Lerp(_stats.MoveSpeedMultiplier, _previousMultiplier, 5f * Time.deltaTime);
+            moveStats.ResetSpeed();
         }
     }
 }

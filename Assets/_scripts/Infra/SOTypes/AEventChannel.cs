@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,4 +11,6 @@ public abstract class AEventChannel<TEvent> : ScriptableObject
     protected void RaiseEvent(TEvent param) => OnEventRaised?.Invoke(param);
 }
 
-public interface IGenericEvent { }
+public interface IGenericEvent
+{
+}

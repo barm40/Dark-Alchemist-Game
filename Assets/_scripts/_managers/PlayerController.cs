@@ -11,11 +11,16 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(Stats),typeof(PlayerItemInteractableManager))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Scriptable Object Channels")]
+    [Header("Event Channels")]
     [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
     private PlayerInputChannel inputChannel;
     [SerializeField, Tooltip("Scriptable Object Channel player HP")] 
     private PlayerHealthChannel healthChannel;
+    
+    [Header("Stats Containers")] 
+    [SerializeField, Tooltip("Movement Stats Container SO")] 
+    private MoveStatContainerChannel playerMoveStats;
+
     
     private Stats _stats;
     private Rigidbody2D _rb2d;
@@ -38,6 +43,8 @@ public class PlayerController : MonoBehaviour
     
     // for movement and animation
     private float _horizontal;
+    private bool _moveIntention;
+    private float _moveIntendedAmount;
     private bool _isFacingRight = true;
     
     private float _idleTimer = 3f;
@@ -54,14 +61,14 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         PlayerInLighDetect.UserInTheLighDelegate += ReduceHealth;
-        inputChannel.moveEvent += MoveHorizontal;
+        inputChannel.moveEvent += MoveIntention;
         inputChannel.jumpEvent += JumpInputBuffer;
     }
 
     private void OnDisable()
     {
         PlayerInLighDetect.UserInTheLighDelegate -= ReduceHealth;
-        inputChannel.moveEvent -= MoveHorizontal;
+        inputChannel.moveEvent -= MoveIntention;
         inputChannel.jumpEvent -= JumpInputBuffer;
     }
 
@@ -78,6 +85,7 @@ public class PlayerController : MonoBehaviour
         colorShader.profile.TryGet(out shaderBloom);
         hitVolume = transform.GetComponentInChildren<Volume>();
         hitVolume.profile.TryGet<Bloom>(out hitBloom);
+        
         ApplyRandomShader();
     }
 
@@ -125,16 +133,21 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         IsGrounded();
+        MoveHorizontal();
         Flip();
     }
 
-    private void MoveHorizontal(float amount)
+    private void MoveHorizontal()
     {
-        _horizontal = amount;
-        
-        var moveSpeed = _horizontal * _stats.CurrentMoveSpeed;
+        _horizontal = _moveIntendedAmount * playerMoveStats.CurrentMoveSpeed * Time.deltaTime;
 
-        _rb2d.velocity = new Vector2(moveSpeed, _rb2d.velocity.y);
+        _rb2d.velocity = new Vector2(_horizontal, _rb2d.velocity.y);
+    }
+
+    private void MoveIntention(float amount)
+    {
+        // _moveIntention = amount != 0;
+        _moveIntendedAmount = amount;
     }
 
     private void JumpInputBuffer(bool jumpIntent)
@@ -231,7 +244,6 @@ public class PlayerController : MonoBehaviour
         if (healthChannel.playerHealth == 0)
         {
             DeathMenuManager.MenuManager.Death();
-            Debug.LogWarning($"You are dead, Game Over!!");
         }
     }
 

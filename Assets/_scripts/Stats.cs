@@ -13,16 +13,27 @@ using UnityEngine.Serialization;
 
 public class Stats : MonoBehaviour
 {
+    // [Header("Stats Containers")] 
+    // [SerializeField, Tooltip("Movement Stats Container SO")] 
+    // private MoveStatContainerChannel playerMoveStats;
+
+    
     // player related fields
     // move
     [SerializeField] private float baseMoveSpeed = 100f;
+    [SerializeField] public float maxMoveSpeed = 10f;
+
     public float MoveSpeedMultiplier { get; set; } = 1f;
     public float CurrentMoveSpeed { get; private set; }
+
     
     // jump
     [SerializeField] private float baseJumpForce = 150f;
+    [SerializeField] public float maxJumpForce = 15f;
+
     public float JumpForceMultiplier { get; set; } = 1f;
     public float CurrentJumpForce { get; private set; }
+    
     public float coyoteTime = .2f;
     public float jumpBufferTime = .2f;
 
@@ -38,9 +49,9 @@ public class Stats : MonoBehaviour
     public float CooldownTime { get; private set; } = 15f;
     
     // dash specific stats 
-    public float DashActive { get; private set; } = .3f;
-    [SerializeField] public float DashCooldown { get; private set; } = .7f;
-    [SerializeField] public float DashMultiplier { get; set; } = 3f;
+    // public float DashActive { get; private set; } = .3f;
+    // [SerializeField] public float DashCooldown { get; private set; } = .7f;
+    // [SerializeField] public float DashMultiplier { get; set; } = 3f;
     
     // boost specific stats
     public float BoostMultiplier { get; set; } = 1.2f;
@@ -53,9 +64,9 @@ public class Stats : MonoBehaviour
     private void FixedUpdate()
     {
         CurrentMoveSpeed = 
-            baseMoveSpeed * MoveSpeedMultiplier * Time.fixedDeltaTime;
-        CurrentJumpForce = 
-            baseJumpForce * JumpForceMultiplier * Time.fixedDeltaTime;
+            baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
+        CurrentJumpForce =
+            baseMoveSpeed * MoveSpeedMultiplier * Time.deltaTime;
     }
 
     // public void LoadData(GameData data)

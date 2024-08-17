@@ -52,14 +52,8 @@ public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if (context.started || context.performed)
-        {
-            dashEvent?.Invoke(true);
-        }
-        else if (context.canceled)
-        {
-            dashEvent?.Invoke(false);
-        }
+        if (context.performed) dashEvent?.Invoke(true);
+        else if (context.canceled) dashEvent?.Invoke(false);
     }
     
     public void OnSelectAbility(InputAction.CallbackContext context)
