@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d9c6de154ccfe4791061983cd6d79a, type: 3}
-  m_Name: PlayerMovementStats
+  m_Script: {fileID: 11500000, guid: f5cfc6e9c4d13e5408df8dddefe270ec, type: 3}
+  m_Name: LightDamage
   m_EditorClassIdentifier: 
-  moveStats:
-    baseMoveSpeed: 350
-    moveSpeedMultiplier: 1
+  damage:
+    type: 0
+    amount: 10

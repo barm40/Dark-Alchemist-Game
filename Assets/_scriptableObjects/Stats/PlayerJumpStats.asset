@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerJumpStats
   m_EditorClassIdentifier: 
   jumpStats:
-    baseJumpForce: 150
+    baseJumpForce: 350
     jumpMultiplier: 1
     coyoteTime: 0.2
     jumpBufferTime: 0.4

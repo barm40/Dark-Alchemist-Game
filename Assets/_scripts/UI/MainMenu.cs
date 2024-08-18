@@ -9,13 +9,6 @@ namespace UI
 
     public class MainMenu : MonoBehaviour
     {
-
-        // public void ContinueGame()
-        // {
-        //     // load game with existing data
-        //     SaveDataManager.Instance.LoadGame();
-        // }
-    
         // loads the first level
         public void NewGame()
         {

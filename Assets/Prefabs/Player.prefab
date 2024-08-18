@@ -19460,6 +19460,7 @@ GameObject:
   - component: {fileID: 4270050126552429596}
   - component: {fileID: 2013918810434444175}
   - component: {fileID: 5735511482074749109}
+  - component: {fileID: 9139147941985712348}
   - component: {fileID: 4489009581255902090}
   - component: {fileID: 1448458569436023067}
   - component: {fileID: 162314364743216042}
@@ -19562,7 +19563,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
-  healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
   playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
   playerJumpStats: {fileID: 11400000, guid: 83581d34748d0714eb0a0263a5d0b098, type: 2}
   boxSize: {x: 0.41, y: 0.09}
@@ -19570,6 +19570,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 68
   castDistance: -0.27
+--- !u!114 &9139147941985712348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047744274904066838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29049c2615185664eb71d4f195e2e129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
+  damageContainers:
+  - {fileID: 11400000, guid: d09571fee194939498604d3f66f89c4e, type: 2}
 --- !u!114 &4489009581255902090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19613,10 +19628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bf88d7e1a65ff4fb5e39be653e0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMoveSpeed: 250
-  maxMoveSpeed: 10
-  baseJumpForce: 350
-  maxJumpForce: 15
   lightDamage: -10
   shieldLightDamage: 0
 --- !u!114 &1039813349379027251

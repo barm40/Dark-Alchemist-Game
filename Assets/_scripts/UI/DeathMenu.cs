@@ -5,8 +5,6 @@ namespace UI
 {
     public class DeathMenu : MonoBehaviour
     {
-
-
         // Die when HP reaches 0
         public void DeathSequence()
         {
@@ -17,6 +15,7 @@ namespace UI
         public void Retry()
         {
             Time.timeScale = 1;
+            DeathMenuManager.MenuManager.Revive();
             LevelLoader.Instance.LoadNextLevel(LevelLoader.Instance.CurrSceneIndex);
         }
     
@@ -24,6 +23,7 @@ namespace UI
         public void QuitLevel()
         {
             Time.timeScale = 1;
+            DeathMenuManager.MenuManager.Revive();
             LevelLoader.Instance.LoadNextLevel(0);
         }
     }

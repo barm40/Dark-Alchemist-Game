@@ -22,7 +22,11 @@ namespace Infra
     {
         protected override void Awake()
         {
-            if (Instance != null) Destroy(gameObject);
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             base.Awake();
         }
     }

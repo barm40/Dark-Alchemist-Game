@@ -15,13 +15,18 @@ namespace Infra.Channels
 
         private void OnEnable()
         {
+            ResetHealth();
+        }
+        
+        public void ResetHealth()
+        {
             playerHealth = playerMaxHealth;
             HealthEvent?.Invoke(playerHealth);
         }
 
         public void ChangeHealth(float amount)
         {
-            playerHealth += amount * Time.deltaTime;
+            playerHealth -= amount * Time.deltaTime;
             playerHealth = Mathf.Clamp(playerHealth, 0, playerMaxHealth);
             HealthEvent?.Invoke(playerHealth);
         }

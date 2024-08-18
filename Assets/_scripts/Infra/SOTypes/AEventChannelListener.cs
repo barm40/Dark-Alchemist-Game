@@ -1,9 +1,8 @@
 using Infra.Channels;
-using Infra.SOTypes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Infra.Listeners
+namespace Infra.SOTypes
 {
     public abstract class AEventChannelListener<TEvent> : MonoBehaviour
     {

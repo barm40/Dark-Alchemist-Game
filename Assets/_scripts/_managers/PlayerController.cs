@@ -16,8 +16,7 @@ namespace _managers
         [Header("Event Channels")]
         [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
         private PlayerInputChannel inputChannel;
-        [SerializeField, Tooltip("Scriptable Object Channel player HP")] 
-        private PlayerHealthChannel healthChannel;
+
     
         [Header("Stats Containers")] 
         [SerializeField, Tooltip("Scriptable Object Container for Player Move Speed")] 
@@ -64,22 +63,18 @@ namespace _managers
 
         private void OnEnable()
         {
-            PlayerInLighDetect.UserInTheLighDelegate += ReduceHealth;
             inputChannel.moveEvent += MoveIntention;
             inputChannel.jumpEvent += JumpInputBuffer;
         }
 
         private void OnDisable()
         {
-            PlayerInLighDetect.UserInTheLighDelegate -= ReduceHealth;
             inputChannel.moveEvent -= MoveIntention;
             inputChannel.jumpEvent -= JumpInputBuffer;
         }
 
         private void Start()
         {
-            healthChannel.QueryHealth();
-        
             _stats = GetComponent<Stats>();
             _rb2d = GetComponent<Rigidbody2D>();
             _abilityController = GetComponent<AbilityController>();
@@ -236,22 +231,9 @@ namespace _managers
         {
             Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
         }
-
-        void ReduceHealth()
-        {
-            healthChannel.ChangeHealth(_stats.lightDamage);
         
-            if (!isHitEffectActive)
-            {
-                StartCoroutine(GetHitLightEffect());
-            }
-            if (healthChannel.playerHealth == 0)
-            {
-                DeathMenuManager.MenuManager.Death();
-            }
-        }
 
-        IEnumerator GetHitLightEffect()
+        public IEnumerator GetHitLightEffect()
         {
             isHitEffectActive = true;
             hitVolume.enabled = true;

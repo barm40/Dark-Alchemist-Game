@@ -19,21 +19,8 @@ public class Stats : MonoBehaviour
 
     
     // player related fields
-    // move
-    [SerializeField] private float baseMoveSpeed = 100f;
-    [SerializeField] public float maxMoveSpeed = 10f;
-
     public float MoveSpeedMultiplier { get; set; } = 1f;
-    public float CurrentMoveSpeed { get; private set; }
-
-    
-    // jump
-    [SerializeField] private float baseJumpForce = 150f;
-    [SerializeField] public float maxJumpForce = 15f;
-
     public float JumpForceMultiplier { get; set; } = 1f;
-    
-    public float Hp { get; set; } = 100f;
     
     // light damage related
     public float lightDamage = -20;
@@ -54,14 +41,4 @@ public class Stats : MonoBehaviour
     
     // bounce specific stats
     public float BounceMultiplier { get; set; } = 1.5f;
-
-    // public void LoadData(GameData data)
-    // {
-    //     Hp = data.healthPoints;
-    // }
-    //
-    // public void SaveData(GameData data)
-    // {
-    //     data.healthPoints = Hp;
-    // }
 }

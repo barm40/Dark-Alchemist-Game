@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a4e33ba4f5cdb48a67b9627f1a3242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowDebug: 0
+  allowDebug: 1
   playerTransform: {fileID: 0}
   rayCastPlayerFixPosition: {x: 0, y: 0.09, z: 0}
   PlayerLegFixPosition: {x: 0, y: -0.26, z: 0}
