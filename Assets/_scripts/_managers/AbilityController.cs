@@ -35,7 +35,7 @@ namespace _managers
             {Ability.AbilityTypes.ImmuneType, false }
         };
     
-        public List<Ability> AbilitiesList {  get; private set; } = new();
+        public Dictionary<Ability.AbilityTypes, Ability> Abilities {  get; private set; } = new();
     
         [SerializeField] private ParticleSystem[] abilitiesVFX;
         // private bool _isCombo;
@@ -47,9 +47,9 @@ namespace _managers
             _defaultAbility = new AbilityNone();
             // CurrentAbility = _defaultAbility;
 
-            AbilitiesList.Add(new BounceAbility(_stats));
-            AbilitiesList.Add(new BoostAbility(_stats));
-            AbilitiesList.Add(new LightImmuneAbility(_stats));
+            Abilities.Add(Ability.AbilityTypes.BounceType, new BounceAbility(_stats));
+            Abilities.Add(Ability.AbilityTypes.BoostType, new BoostAbility(_stats));
+            Abilities.Add(Ability.AbilityTypes.ImmuneType, new LightImmuneAbility(_stats));
         }
 
         private void Update()
@@ -69,13 +69,13 @@ namespace _managers
                 {
                     if (_abilityIntent && AbilityChosenCount > 0)
                     {
-                        foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+                        foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
                         {
                             ability.Activate(gameObject);
                             _abilityState = AbilityState.Active;
                             _abilityTime =  ability.ActiveTime;
                             Debug.Log($"the ability {ability.AbilityType} is chosen");
-                            _inventoryManager.UseAbilityItem(ability.AbilityNumber);
+                            _inventoryManager.UseAbilityItem((int)ability.AbilityType - 1);
                             if (ability.AbilityType is Ability.AbilityTypes.BoostType)
                                 PlayerController.IsBounce = true;
                             GetAbilityVFX(ability.AbilityType)?.Play();
@@ -85,7 +85,7 @@ namespace _managers
                         // CurrentAbility.Activate(gameObject);
                         // _abilityState = AbilityState.Active;
                         // _abilityTime = CurrentAbility.ActiveTime;
-                        // _inventoryManager.UseAbilityItem(CurrentAbility.AbilityNumber);
+                        // _inventoryManager.UseAbilityItem(Current(int)ability.AbilityType - 1);
                         // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
                         //     PlayerController.IsBounce = true;
                         // GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
@@ -96,7 +96,7 @@ namespace _managers
                 {
                     if (_abilityTime <= 0)
                     {
-                        foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+                        foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
                         {
                             ability.Deactivate(gameObject);
                             _abilityState = AbilityState.Ready;
@@ -149,7 +149,7 @@ namespace _managers
         {
             if (chosenAbility == 0) return;
 
-            if (_chosenIntent && _inventoryManager.IsTheItemInInventory(AbilitiesList[chosenAbility - 1].AbilityNumber))
+            if (_chosenIntent && _inventoryManager.IsTheItemInInventory((int)Abilities[(Ability.AbilityTypes)chosenAbility].AbilityType - 1))
             {
                 SetCurrentAbility((Ability.AbilityTypes)chosenAbility);
                 _chosenIntent = false;
@@ -164,7 +164,7 @@ namespace _managers
             {
                 _chosenAbilityList[abilityType] = true;
 
-                foreach (var ability in AbilitiesList.Where(ability => abilityType == ability.AbilityType))
+                foreach (var ability in Abilities.Values.Where(ability => abilityType == ability.AbilityType))
                 {
                     // CurrentAbility = CurrentAbility is null or AbilityNone ? ability : _defaultAbility;
                     AbilityChosenCount++;
@@ -193,13 +193,13 @@ namespace _managers
         /// </summary>
         private void UseAbility()
         {
-            foreach (var ability in AbilitiesList.Where(ability => _chosenAbilityList[ability.AbilityType]))
+            foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
             {
                 ability.Activate(gameObject);
                 _abilityState = AbilityState.Active;
                 _abilityTime = ability.ActiveTime > _abilityTime? ability.ActiveTime : _abilityTime;
                 Debug.Log($"the ability {ability.AbilityType} is choosed");
-                _inventoryManager.UseAbilityItem(ability.AbilityNumber);
+                _inventoryManager.UseAbilityItem((int)ability.AbilityType - 1);
                 if (ability.AbilityType is Ability.AbilityTypes.BoostType)
                     PlayerController.IsBounce = true;
                 GetAbilityVFX(ability.AbilityType)?.Play();
@@ -225,7 +225,7 @@ namespace _managers
         {
             AbilityChosenCount = 0;
 
-            foreach (var ability in AbilitiesList)
+            foreach (var ability in Abilities.Values)
             {
                 _chosenAbilityList[ability.AbilityType] = false;
             }

@@ -7,11 +7,11 @@ namespace Abilities
         protected Stats ThisStats;
     
         public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
+        
         public AbilityTypes AbilityType { get; protected set; }
     
         public readonly float ActiveTime;
-        private static int _amountOfAbilities;
-        public int AbilityNumber;
+        public static int AmountOfAbilities;
 
         protected Ability(float activeTime)
         {
@@ -21,10 +21,8 @@ namespace Abilities
         {
             if (AbilityType != AbilityTypes.None)
             {
-                AbilityNumber = _amountOfAbilities;
-                _amountOfAbilities++;
+                AmountOfAbilities++;
             }
-            Debug.Log($"This {AbilityType} is number: {AbilityNumber}");
         }
         public abstract void Activate(GameObject parent);
         public abstract void Deactivate(GameObject parent);

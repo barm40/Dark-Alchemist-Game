@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d77bd48ca743bc54a8c737210d39a3fe, type: 3}
+  m_Name: BounceAbility
+  m_EditorClassIdentifier: 
+  itemAbility:
+    abilityType: 0
+    abilityIcon: {fileID: 6705523061985701245, guid: 6dbe035b42cc5ee46a65f4bf2027555d, type: 3}
+    animator: {fileID: -9164684924465185453, guid: 6dbe035b42cc5ee46a65f4bf2027555d, type: 3}

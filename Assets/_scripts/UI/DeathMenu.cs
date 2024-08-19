@@ -15,7 +15,7 @@ namespace UI
         public void Retry()
         {
             Time.timeScale = 1;
-            DeathMenuManager.MenuManager.Revive();
+            DeathMenuManager.Instance.Revive();
             LevelLoader.Instance.LoadNextLevel(LevelLoader.Instance.CurrSceneIndex);
         }
     
@@ -23,7 +23,7 @@ namespace UI
         public void QuitLevel()
         {
             Time.timeScale = 1;
-            DeathMenuManager.MenuManager.Revive();
+            DeathMenuManager.Instance.Revive();
             LevelLoader.Instance.LoadNextLevel(0);
         }
     }

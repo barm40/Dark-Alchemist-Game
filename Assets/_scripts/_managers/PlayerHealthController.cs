@@ -45,10 +45,10 @@ namespace _managers
         {
             healthChannel.ChangeHealth(_damageStats[damageType]);
 
-            // if (!isHitEffectActive)
-            // {
-            //     StartCoroutine(GetHitLightEffect());
-            // }
+            if (!VFXManager.Instance.IsHitEffectActive)
+            {
+                StartCoroutine(VFXManager.Instance.GetHitLightEffect());
+            }
         }
     }
 }

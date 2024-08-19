@@ -4,9 +4,6 @@ using Infra.Channels;
 using Infra.StatContainers;
 using UI;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
-using Random = UnityEngine.Random;
 
 namespace _managers
 {
@@ -53,13 +50,6 @@ namespace _managers
         private float _idleTimer = 3f;
     
         private Animator _animator;
-    
-        // Hit Effect
-        private Volume colorShader;
-        private Bloom shaderBloom;
-        private Volume hitVolume;
-        private Bloom hitBloom;
-        private bool isHitEffectActive;
 
         private void OnEnable()
         {
@@ -79,13 +69,7 @@ namespace _managers
             _rb2d = GetComponent<Rigidbody2D>();
             _abilityController = GetComponent<AbilityController>();
             _animator = GetComponent<Animator>();
-
-            colorShader = GameObject.FindGameObjectWithTag("levelShader").GetComponent<Volume>();
-            colorShader.profile.TryGet(out shaderBloom);
-            hitVolume = transform.GetComponentInChildren<Volume>();
-            hitVolume.profile.TryGet<Bloom>(out hitBloom);
-        
-            ApplyRandomShader();
+            
         }
 
         private void Update()
@@ -230,29 +214,6 @@ namespace _managers
         private void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
-        }
-        
-
-        public IEnumerator GetHitLightEffect()
-        {
-            isHitEffectActive = true;
-            hitVolume.enabled = true;
-            hitBloom.intensity.value = 8f;
-            hitBloom.scatter.value = 0.400f;
-            yield return new WaitForSeconds(0.2f);
-            hitBloom.scatter.value = 0.125f;
-            hitBloom.intensity.value = 0.05f;
-            yield return new WaitForSeconds(0.2f);
-            isHitEffectActive = false;
-            hitVolume.enabled = false;
-        }
-    
-        private void ApplyRandomShader()
-        {
-            colorShader.enabled = true;
-            colorShader.weight = 0.5f;
-            hitBloom.intensity.value = 2f;
-            shaderBloom.tint.value = Random.ColorHSV();
         }
     }
 }

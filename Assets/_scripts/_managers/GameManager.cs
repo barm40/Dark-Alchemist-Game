@@ -1,10 +1,15 @@
 using System;
 using Infra;
+using Infra.Channels;
+using UnityEngine;
 
 namespace _managers
 {
     public class GameManager : PersistentSingleton<GameManager>
     {
+        // [SerializeField, Tooltip("Scriptable Object Channel player HP")] 
+        // private GameStateChannel stateChannel;
+        
         public GameState state;
     
         public void UpdateGameState(GameState newState)

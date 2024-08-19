@@ -1,29 +1,33 @@
+using Abilities;
+using Infra;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Items
 {
-    public class InventoryManager : MonoBehaviour
+    public class InventoryManager : TrueSingleton<InventoryManager>
     {
         bool[] _isItemReached = new bool[5];
-        [SerializeField] Image[] itemImageList = new Image[5];
+        [SerializeField] Image[] itemImageList;
         Color _defaultColor;
         private static readonly int IsChosen = Animator.StringToHash("isChoosed");
 
         private short _chosenItems;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _defaultColor = itemImageList[0].color;
         
             // In case of load, change image to correct color
-            CorrectItemStatus();
+            // CorrectItemStatus();
         }
 
         public void SetNewItemInTheInventory(GameObject item)
         {
-
             int itemNumber = item.GetComponent<Items>().ItemInventoryNumber;
+            Debug.Log($"Item number in inventory: {itemNumber}");
             if (_isItemReached[itemNumber])
             {
                 Debug.Log($"Not enough place in the inventory for item: {item.name}");
@@ -79,17 +83,17 @@ namespace Items
 
         // used to correct the inventory to match the loaded data
     
-        private void CorrectItemStatus()
-        {
-            var rIndex = 0;
-            foreach (var isReached in _isItemReached)
-            {
-                if (isReached)
-                {
-                    itemImageList[rIndex].color = new Color(255, 255, 255);
-                }
-                rIndex++;
-            }
-        }
+        // private void CorrectItemStatus()
+        // {
+        //     var rIndex = 0;
+        //     foreach (var isReached in _isItemReached)
+        //     {
+        //         if (isReached)
+        //         {
+        //             itemImageList[rIndex].color = new Color(255, 255, 255);
+        //         }
+        //         rIndex++;
+        //     }
+        // }
     }
 }

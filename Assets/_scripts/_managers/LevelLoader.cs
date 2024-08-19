@@ -12,7 +12,7 @@ namespace _managers
     /// It triggers a fade animation when exiting and loading screens
     /// </summary>
 
-    public class LevelLoader : PersistentSingleton<LevelLoader>
+    public class LevelLoader : TrueSingleton<LevelLoader>
     {
         // animation is set to crossfade, but can be changed
         public Animator transition;

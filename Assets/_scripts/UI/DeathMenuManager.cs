@@ -1,11 +1,12 @@
 using System;
+using Infra;
 using Infra.Channels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class DeathMenuManager : MonoBehaviour
+    public class DeathMenuManager : TrueSingleton<DeathMenuManager>
     {
         [SerializeField, Header("UI Death Menu"), Tooltip("Add a UI menu to appear when you die")]
         private DeathMenu deathMenu;
@@ -13,9 +14,6 @@ namespace UI
         private PlayerHealthChannel healthChannel;
 
         private bool IsDead { get; set; }
-    
-        public static DeathMenuManager MenuManager { get; private set; }
-
         private void OnEnable()
         {
             healthChannel.HealthEvent += IsAlive;
@@ -26,24 +24,9 @@ namespace UI
             healthChannel.HealthEvent -= IsAlive;
         }
 
-        private void Awake()
-        {
-            IsDead = false;
-        
-            if (MenuManager != null)
-            {
-                Debug.Log("An instance of the save manager already exists, destroying the newest one");
-                Destroy(gameObject);
-                return;
-            }
-            MenuManager = this;
-        
-            if (SceneManager.GetActiveScene().buildIndex != 0)
-                DontDestroyOnLoad(gameObject);
-        }
-
         private void IsAlive(float hp)
         {
+            if (SceneManager.GetActiveScene().buildIndex == 0) return;
             if (hp <= 0)
             {
                 Death();

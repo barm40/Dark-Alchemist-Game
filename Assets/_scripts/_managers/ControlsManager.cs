@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _managers
 {
-    public class ControlsManager : PersistentSingleton<ControlsManager>
+    public class ControlsManager : TrueSingleton<ControlsManager>
     {
         public Dictionary<string, KeyCode> Controls { get; } = new();
     
