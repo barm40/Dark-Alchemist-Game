@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Infra
+namespace Infra.Patterns
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {

@@ -1,6 +1,7 @@
 using System;
 using Infra;
 using Infra.Channels;
+using Infra.Patterns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

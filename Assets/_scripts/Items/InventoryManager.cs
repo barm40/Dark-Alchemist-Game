@@ -1,6 +1,10 @@
+using System.Collections.Generic;
 using Abilities;
 using Infra;
+using Infra.Patterns;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Items
@@ -9,16 +13,21 @@ namespace Items
     {
         bool[] _isItemReached = new bool[5];
         [SerializeField] Image[] itemImageList;
+        [SerializeField] private SerializableDictionary<Image, bool> itemReachedList;
+        
         Color _defaultColor;
-        private static readonly int IsChosen = Animator.StringToHash("isChoosed");
+        
+        private Items _itemToTake;
 
+        private InventoryState _inventoryState = InventoryState.Init;
+        
         private short _chosenItems;
 
         protected override void Awake()
         {
             base.Awake();
             
-            _defaultColor = itemImageList[0].color;
+            _defaultColor = itemReachedList.keys[0].color;
         
             // In case of load, change image to correct color
             // CorrectItemStatus();
@@ -26,46 +35,94 @@ namespace Items
 
         public void SetNewItemInTheInventory(GameObject item)
         {
-            int itemNumber = item.GetComponent<Items>().ItemInventoryNumber;
+            var itemNumber = item.GetOrAddComponent<Items>().ItemInventoryNumber;
             Debug.Log($"Item number in inventory: {itemNumber}");
-            if (_isItemReached[itemNumber])
+            if (itemReachedList.values[itemNumber])
             {
                 Debug.Log($"Not enough place in the inventory for item: {item.name}");
             }
             else
             {
-                _isItemReached[itemNumber] = true;
-                itemImageList[itemNumber].color = new Color(255, 255, 255);
+                itemReachedList.values[itemNumber] = true;
+                itemReachedList.keys[itemNumber].color = new Color(255, 255, 255);
             }
         }
 
         public bool IsTheItemInInventory(int abilityNumber)
         {
-            if (!_isItemReached[abilityNumber]) return false;
-            if (_chosenItems < 2)
-                ChooseAbility(abilityNumber);
+            if (!itemReachedList.values[abilityNumber]) return false;
+            
+            ChooseAbility(abilityNumber);
             return true;
         }
 
         public void UseAbilityItem(int abilityNumber)
         {
-            _isItemReached[abilityNumber] = false;
-            itemImageList[abilityNumber].color = _defaultColor;
+            itemReachedList.values[abilityNumber] = false;
+            itemReachedList.keys[abilityNumber].color = _defaultColor;
             DisableAbilityItemAnimation(abilityNumber);
         }
 
         private void DisableAbilityItemAnimation(int abilityNumberInInventory)
         {
-            Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+            Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
             itemAnimation.SetBool("isChoosed", false);
             _chosenItems--;
         }
 
         private void ChooseAbility(int abilityNumberInInventory)
         {
-            Animator itemAnimation = itemImageList[abilityNumberInInventory].GetComponent<Animator>();
+            Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
+            if (itemAnimation.GetBool("isChoosed"))
+            {
+                _chosenItems--;
+            }
+            else
+            {
+                if (_chosenItems >= 2) return;
+                _chosenItems++;
+            }
             itemAnimation.SetBool("isChoosed", !itemAnimation.GetBool("isChoosed"));
-            _chosenItems++;
+        }
+        
+        private void OnEnable()
+        {
+            Items.CanBeTakenAction += SetItemToTake;
+        }
+
+        private void OnDisable()
+        {
+            Items.CanBeTakenAction -= SetItemToTake;
+        }
+        
+        
+        // public void TakeItem(InputAction.CallbackContext context)
+        // {
+        //
+        // }
+
+        private void ActivateInventory()
+        {
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+            if (transform.position.x != 0)
+                transform.position = new Vector3(0, 0, 0);
+            _inventoryState = InventoryState.Active;
+        }
+
+        private void SetItemToTake(Items targetItem)
+        {
+            if (targetItem is null || !itemReachedList.values[(int)targetItem.itemAbilityType.itemAbility.abilityType]) return;
+        
+            if (_inventoryState == InventoryState.Init)
+                ActivateInventory();
+            targetItem.TakeItem(this);
+        }
+
+        private enum InventoryState
+        {
+            Init,
+            Active,
         }
 
         // public void LoadData(GameData data)

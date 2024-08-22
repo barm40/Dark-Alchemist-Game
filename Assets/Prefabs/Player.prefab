@@ -19512,6 +19512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc56c53f432cbc54db4b5c259e399a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
   abilitiesVFX:
   - {fileID: 8617733622001161949}
   - {fileID: 4366842955964660067}
@@ -19542,8 +19543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c3a3e345923c9543903efe8f905ecf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryManager: {fileID: 0}
-  _itemToTake: {fileID: 0}
 --- !u!70 &7923490544035686788
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -19662,8 +19661,8 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1039813349379027251}
-        m_TargetAssemblyTypeName: PlayerItemInteractableManager, Assembly-CSharp
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Items.InventoryManager, Assembly-CSharp
         m_MethodName: TakeItem
         m_Mode: 0
         m_Arguments:

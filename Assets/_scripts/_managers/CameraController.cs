@@ -1,3 +1,5 @@
+using System;
+using Infra.Channels;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +12,10 @@ namespace _managers
 
     public class CameraController : MonoBehaviour
     {
+
+        [SerializeField,Header("Event Channels"), Tooltip("Select player input Scriptable Object")]
+        private PlayerInputChannel inputChannel;
+        
         // Select target
         private Transform _target;
     
@@ -24,7 +30,17 @@ namespace _managers
         // Pan up controls
         private bool _panIntent;
         private float _panAmount;
-    
+
+        private void OnEnable()
+        {
+            inputChannel.panCameraEvent += PanInput;
+        }
+
+        private void OnDisable()
+        {
+            inputChannel.panCameraEvent -= PanInput;
+        }
+
         private void Awake()
         {
             _target = GameObject.FindGameObjectWithTag("camTarget").transform;
@@ -37,19 +53,12 @@ namespace _managers
             PanCamera();
         }
 
-        public void PanInput(InputAction.CallbackContext context)
+        public void PanInput(float amount)
         {
-            if (context.started || context.performed)
-            {
-                _panAmount = context.ReadValue<float>(); 
-            }
-            else if (context.canceled)
-            {
-                _panAmount = 0;
-            }
+            _panAmount = amount;
         }
     
-        private void Update()
+        private void LateUpdate()
         {
             // Define target for camera
             var targetPosition = _target.position + offset;

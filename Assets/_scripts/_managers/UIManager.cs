@@ -1,6 +1,7 @@
 using System;
 using Infra;
 using Infra.Channels;
+using Infra.Patterns;
 using TMPro;
 using UnityEngine;
 

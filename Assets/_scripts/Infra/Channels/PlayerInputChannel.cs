@@ -12,8 +12,9 @@ namespace Infra.Channels
         public Action<float> selectAbilityEvent;
         public Action<bool> jumpEvent;
         public Action<bool> dashEvent;
+        public Action<bool> performAbilityEvent;
         public Action interactEvent;
-        public Action performAbilityEvent;
+        
     
         private PlayerInput _input;
 
@@ -65,7 +66,8 @@ namespace Infra.Channels
     
         public void OnAbility(InputAction.CallbackContext context)
         {
-            if (context.phase is InputActionPhase.Performed) performAbilityEvent?.Invoke();
+            if (context.performed) performAbilityEvent?.Invoke(true);
+            else if (context.canceled) performAbilityEvent?.Invoke(false);
         }
     
         public void OnPanCamera(InputAction.CallbackContext context) => panCameraEvent?.Invoke(context.ReadValue<float>()); 

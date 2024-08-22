@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Infra.Channels;
+using Infra.Patterns;
 using Items;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,10 +11,13 @@ using UnityEngine.InputSystem;
 namespace _managers
 {
     [RequireComponent(typeof(Stats))]
-    public class AbilityController : MonoBehaviour
+    public class AbilityController : TrueSingleton<AbilityController>
     {
+        [Header("Input Channel")]
+        [SerializeField, Tooltip("Scriptable Object Channel to control Input")] 
+        private PlayerInputChannel inputChannel;
+        
         private Stats _stats;
-        private InventoryManager _inventoryManager;
 
         private float _abilityTime;
         private float _abilityCooldown;
@@ -27,6 +32,18 @@ namespace _managers
     
         // [SerializeField] public Ability CurrentAbility { get; set; }
 
+        private void OnEnable()
+        {
+            inputChannel.selectAbilityEvent += SelectAbility;
+            inputChannel.performAbilityEvent += AbilityInput;
+        }
+
+        private void OnDisable()
+        {
+            inputChannel.selectAbilityEvent -= SelectAbility;
+            inputChannel.performAbilityEvent -= AbilityInput;
+        }
+
         private short AbilityChosenCount { get; set; }
         private readonly Dictionary<Ability.AbilityTypes, bool> _chosenAbilityList = new()
         {
@@ -40,10 +57,11 @@ namespace _managers
         [SerializeField] private ParticleSystem[] abilitiesVFX;
         // private bool _isCombo;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _stats = GetComponent<Stats>();
-            _inventoryManager = GameObject.FindGameObjectWithTag("inventory").GetComponent<InventoryManager>();
             _defaultAbility = new AbilityNone();
             // CurrentAbility = _defaultAbility;
 
@@ -75,7 +93,7 @@ namespace _managers
                             _abilityState = AbilityState.Active;
                             _abilityTime =  ability.ActiveTime;
                             Debug.Log($"the ability {ability.AbilityType} is chosen");
-                            _inventoryManager.UseAbilityItem((int)ability.AbilityType - 1);
+                            InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
                             if (ability.AbilityType is Ability.AbilityTypes.BoostType)
                                 PlayerController.IsBounce = true;
                             GetAbilityVFX(ability.AbilityType)?.Play();
@@ -124,32 +142,22 @@ namespace _managers
             }
         }
     
-        public void AbilityInput(InputAction.CallbackContext context)
+        public void AbilityInput(bool intent)
         {
-            if (context.started || context.performed)
-            {
-                _abilityIntent = true;
-            }
-            else if (context.canceled)
-            {
-                _abilityIntent = false;
-            }
+            _abilityIntent = intent;
         }
 
-        public void SelectAbility(InputAction.CallbackContext context)
+        public void SelectAbility(float abilityId)
         {
-            if (context.started || context.performed)
-            {
-                _chosenAbility = (short)context.ReadValue<float>();
-                _chosenIntent = true;
-            }
+            _chosenAbility = (short)abilityId;
+            _chosenIntent = true;
         }
 
         private void ChooseAbility(short chosenAbility)
         {
             if (chosenAbility == 0) return;
 
-            if (_chosenIntent && _inventoryManager.IsTheItemInInventory((int)Abilities[(Ability.AbilityTypes)chosenAbility].AbilityType - 1))
+            if (_chosenIntent && InventoryManager.Instance.IsTheItemInInventory((int)Abilities[(Ability.AbilityTypes)chosenAbility].AbilityType - 1))
             {
                 SetCurrentAbility((Ability.AbilityTypes)chosenAbility);
                 _chosenIntent = false;
@@ -199,7 +207,7 @@ namespace _managers
                 _abilityState = AbilityState.Active;
                 _abilityTime = ability.ActiveTime > _abilityTime? ability.ActiveTime : _abilityTime;
                 Debug.Log($"the ability {ability.AbilityType} is choosed");
-                _inventoryManager.UseAbilityItem((int)ability.AbilityType - 1);
+                InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
                 if (ability.AbilityType is Ability.AbilityTypes.BoostType)
                     PlayerController.IsBounce = true;
                 GetAbilityVFX(ability.AbilityType)?.Play();

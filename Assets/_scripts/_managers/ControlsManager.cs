@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Infra;
+using Infra.Patterns;
 using UnityEngine;
 
 namespace _managers
