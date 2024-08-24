@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Abilities
@@ -14,18 +15,21 @@ namespace Abilities
             _bounceMultiplier = ThisStats.BounceMultiplier;
             _previousMultiplier = ThisStats.JumpForceMultiplier;
             AbilityType = AbilityTypes.BounceType;
-        
-            SetAbilityNumber();
         }
 
-        public override void Activate(GameObject parent)
+        public override void Activate()
         {
             ThisStats.JumpForceMultiplier *= _bounceMultiplier;
         }
 
-        public override void Deactivate(GameObject parent)
+        public override void Deactivate()
         {
             ThisStats.JumpForceMultiplier = _previousMultiplier;
+        }
+        
+        public override IEnumerator Perform()
+        {
+            yield return base.Perform();
         }
     }
 }

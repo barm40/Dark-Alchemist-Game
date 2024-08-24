@@ -37,12 +37,12 @@ namespace _managers
 
         private void OnEnable()
         {
-            inputChannel.dashEvent += DashInput;
+            inputChannel.DashEvent += DashInput;
         }
 
         private void OnDisable()
         {
-            inputChannel.dashEvent -= DashInput;
+            inputChannel.DashEvent -= DashInput;
         }
     
         private void Awake()

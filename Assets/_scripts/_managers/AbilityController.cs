@@ -32,17 +32,17 @@ namespace _managers
     
         // [SerializeField] public Ability CurrentAbility { get; set; }
 
-        private void OnEnable()
-        {
-            inputChannel.selectAbilityEvent += SelectAbility;
-            inputChannel.performAbilityEvent += AbilityInput;
-        }
-
-        private void OnDisable()
-        {
-            inputChannel.selectAbilityEvent -= SelectAbility;
-            inputChannel.performAbilityEvent -= AbilityInput;
-        }
+        // private void OnEnable()
+        // {
+        //     inputChannel.SelectAbilityEvent += SelectAbility;
+        //     inputChannel.PerformAbilityEvent += AbilityInput;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     inputChannel.SelectAbilityEvent -= SelectAbility;
+        //     inputChannel.PerformAbilityEvent -= AbilityInput;
+        // }
 
         private short AbilityChosenCount { get; set; }
         private readonly Dictionary<Ability.AbilityTypes, bool> _chosenAbilityList = new()
@@ -70,99 +70,99 @@ namespace _managers
             Abilities.Add(Ability.AbilityTypes.ImmuneType, new LightImmuneAbility(_stats));
         }
 
-        private void Update()
-        {
-            if (_abilityState != AbilityState.Active)
-            {
-                ChooseAbility(_chosenAbility);
-            }
-            DoAbility();
-        }
+        // private void Update()
+        // {
+        //     if (_abilityState != AbilityState.Active)
+        //     {
+        //         ChooseAbility(_chosenAbility);
+        //     }
+        //     DoAbility();
+        // }
+        //
+        // private void DoAbility()
+        // {
+        //     switch (_abilityState)
+        //     {
+        //         case AbilityState.Ready:
+        //         {
+        //             if (_abilityIntent && AbilityChosenCount > 0)
+        //             {
+        //                 foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
+        //                 {
+        //                     ability.Activate();
+        //                     _abilityState = AbilityState.Active;
+        //                     _abilityTime =  ability.ActiveTime;
+        //                     Debug.Log($"the ability {ability.AbilityType} is chosen");
+        //                     InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
+        //                     if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+        //                         PlayerController.IsBounce = true;
+        //                     GetAbilityVFX(ability.AbilityType)?.Play();
+        //                 }
+        //                 // _isCombo = false;
+        //                 
+        //                 // CurrentAbility.Activate(gameObject);
+        //                 // _abilityState = AbilityState.Active;
+        //                 // _abilityTime = CurrentAbility.ActiveTime;
+        //                 // _inventoryManager.UseAbilityItem(Current(int)ability.AbilityType - 1);
+        //                 // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+        //                 //     PlayerController.IsBounce = true;
+        //                 // GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
+        //             }
+        //         }
+        //             break;
+        //         case AbilityState.Active:
+        //         {
+        //             if (_abilityTime <= 0)
+        //             {
+        //                 foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
+        //                 {
+        //                     ability.Deactivate();
+        //                     _abilityState = AbilityState.Ready;
+        //                     if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+        //                         PlayerController.IsBounce = false;
+        //                     GetAbilityVFX(ability.AbilityType)?.Stop();
+        //                 }
+        //                 
+        //                 // CurrentAbility.Deactivate(gameObject);
+        //                 // _abilityState = AbilityState.Ready;
+        //                 // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
+        //                 //     PlayerController.IsBounce = false;
+        //                 // GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
+        //                 
+        //                 ClearAbility();
+        //             }
+        //             else
+        //             {
+        //                 _abilityTime -= Time.deltaTime;
+        //             }
+        //         }
+        //             break;
+        //         default:
+        //             throw new ArgumentOutOfRangeException();
+        //     }
+        // }
+        //
+        // public void AbilityInput(bool intent)
+        // {
+        //     _abilityIntent = intent;
+        // }
+        //
+        // public void SelectAbility(int abilityId)
+        // {
+        //     _chosenAbility = (short)abilityId;
+        //     _chosenIntent = true;
+        // }
 
-        private void DoAbility()
-        {
-            switch (_abilityState)
-            {
-                case AbilityState.Ready:
-                {
-                    if (_abilityIntent && AbilityChosenCount > 0)
-                    {
-                        foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
-                        {
-                            ability.Activate(gameObject);
-                            _abilityState = AbilityState.Active;
-                            _abilityTime =  ability.ActiveTime;
-                            Debug.Log($"the ability {ability.AbilityType} is chosen");
-                            InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
-                            if (ability.AbilityType is Ability.AbilityTypes.BoostType)
-                                PlayerController.IsBounce = true;
-                            GetAbilityVFX(ability.AbilityType)?.Play();
-                        }
-                        // _isCombo = false;
-                        
-                        // CurrentAbility.Activate(gameObject);
-                        // _abilityState = AbilityState.Active;
-                        // _abilityTime = CurrentAbility.ActiveTime;
-                        // _inventoryManager.UseAbilityItem(Current(int)ability.AbilityType - 1);
-                        // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
-                        //     PlayerController.IsBounce = true;
-                        // GetAbilityVFX(CurrentAbility.AbilityType)?.Play();
-                    }
-                }
-                    break;
-                case AbilityState.Active:
-                {
-                    if (_abilityTime <= 0)
-                    {
-                        foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
-                        {
-                            ability.Deactivate(gameObject);
-                            _abilityState = AbilityState.Ready;
-                            if (ability.AbilityType is Ability.AbilityTypes.BoostType)
-                                PlayerController.IsBounce = false;
-                            GetAbilityVFX(ability.AbilityType)?.Stop();
-                        }
-                        
-                        // CurrentAbility.Deactivate(gameObject);
-                        // _abilityState = AbilityState.Ready;
-                        // if(CurrentAbility.AbilityType == Ability.AbilityTypes.BounceType)
-                        //     PlayerController.IsBounce = false;
-                        // GetAbilityVFX(CurrentAbility.AbilityType)?.Stop();
-                        
-                        ClearAbility();
-                    }
-                    else
-                    {
-                        _abilityTime -= Time.deltaTime;
-                    }
-                }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    
-        public void AbilityInput(bool intent)
-        {
-            _abilityIntent = intent;
-        }
-
-        public void SelectAbility(float abilityId)
-        {
-            _chosenAbility = (short)abilityId;
-            _chosenIntent = true;
-        }
-
-        private void ChooseAbility(short chosenAbility)
-        {
-            if (chosenAbility == 0) return;
-
-            if (_chosenIntent && InventoryManager.Instance.IsTheItemInInventory((int)Abilities[(Ability.AbilityTypes)chosenAbility].AbilityType - 1))
-            {
-                SetCurrentAbility((Ability.AbilityTypes)chosenAbility);
-                _chosenIntent = false;
-            }
-        }
+        // private void ChooseAbility(short chosenAbility)
+        // {
+        //     if (chosenAbility == 0) return;
+        //
+        //     if (_chosenIntent && InventoryManager.Instance.IsTheItemInInventory((int)Abilities[(Ability.AbilityTypes)chosenAbility].AbilityType - 1))
+        //     {
+        //         SetCurrentAbility((Ability.AbilityTypes)chosenAbility);
+        //         _chosenIntent = false;
+        //     }
+        // }
 
         private void SetCurrentAbility(Ability.AbilityTypes abilityType)
         {
@@ -199,23 +199,23 @@ namespace _managers
         /// This function for use when have combo mode element,
         /// actually when we will have more abilities we need to use it to set the combo ability and from here call to 'Do ability' 
         /// </summary>
-        private void UseAbility()
-        {
-            foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
-            {
-                ability.Activate(gameObject);
-                _abilityState = AbilityState.Active;
-                _abilityTime = ability.ActiveTime > _abilityTime? ability.ActiveTime : _abilityTime;
-                Debug.Log($"the ability {ability.AbilityType} is choosed");
-                InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
-                if (ability.AbilityType is Ability.AbilityTypes.BoostType)
-                    PlayerController.IsBounce = true;
-                GetAbilityVFX(ability.AbilityType)?.Play();
-            }
-            // _isCombo = false;
-            ClearAbility();
-            // To Do - remove it after have the combo abilities
-        }
+        // private void UseAbility()
+        // {
+        //     foreach (var ability in Abilities.Values.Where(ability => _chosenAbilityList[ability.AbilityType]))
+        //     {
+        //         ability.Activate();
+        //         _abilityState = AbilityState.Active;
+        //         _abilityTime = ability.ActiveTime > _abilityTime? ability.ActiveTime : _abilityTime;
+        //         Debug.Log($"the ability {ability.AbilityType} is choosed");
+        //         InventoryManager.Instance.UseAbilityItem((int)ability.AbilityType - 1);
+        //         if (ability.AbilityType is Ability.AbilityTypes.BoostType)
+        //             PlayerController.IsBounce = true;
+        //         GetAbilityVFX(ability.AbilityType)?.Play();
+        //     }
+        //     // _isCombo = false;
+        //     ClearAbility();
+        //     // To Do - remove it after have the combo abilities
+        // }
 
         public ParticleSystem GetAbilityVFX(Ability.AbilityTypes abilityTypes)
         {

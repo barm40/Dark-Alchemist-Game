@@ -17,7 +17,7 @@ namespace Items
         
         Color _defaultColor;
         
-        private Items _itemToTake;
+        private Item _itemManagerToTake;
 
         private InventoryState _inventoryState = InventoryState.Init;
         
@@ -33,91 +33,91 @@ namespace Items
             // CorrectItemStatus();
         }
 
-        public void SetNewItemInTheInventory(GameObject item)
-        {
-            var itemNumber = item.GetOrAddComponent<Items>().ItemInventoryNumber;
-            Debug.Log($"Item number in inventory: {itemNumber}");
-            if (itemReachedList.values[itemNumber])
-            {
-                Debug.Log($"Not enough place in the inventory for item: {item.name}");
-            }
-            else
-            {
-                itemReachedList.values[itemNumber] = true;
-                itemReachedList.keys[itemNumber].color = new Color(255, 255, 255);
-            }
-        }
-
-        public bool IsTheItemInInventory(int abilityNumber)
-        {
-            if (!itemReachedList.values[abilityNumber]) return false;
-            
-            ChooseAbility(abilityNumber);
-            return true;
-        }
-
-        public void UseAbilityItem(int abilityNumber)
-        {
-            itemReachedList.values[abilityNumber] = false;
-            itemReachedList.keys[abilityNumber].color = _defaultColor;
-            DisableAbilityItemAnimation(abilityNumber);
-        }
-
-        private void DisableAbilityItemAnimation(int abilityNumberInInventory)
-        {
-            Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
-            itemAnimation.SetBool("isChoosed", false);
-            _chosenItems--;
-        }
-
-        private void ChooseAbility(int abilityNumberInInventory)
-        {
-            Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
-            if (itemAnimation.GetBool("isChoosed"))
-            {
-                _chosenItems--;
-            }
-            else
-            {
-                if (_chosenItems >= 2) return;
-                _chosenItems++;
-            }
-            itemAnimation.SetBool("isChoosed", !itemAnimation.GetBool("isChoosed"));
-        }
-        
-        private void OnEnable()
-        {
-            Items.CanBeTakenAction += SetItemToTake;
-        }
-
-        private void OnDisable()
-        {
-            Items.CanBeTakenAction -= SetItemToTake;
-        }
-        
-        
-        // public void TakeItem(InputAction.CallbackContext context)
+        // public void SetNewItemInTheInventory(GameObject item)
         // {
-        //
+        //     var itemNumber = item.GetOrAddComponent<Item>().ItemInventoryNumber;
+        //     Debug.Log($"Item number in inventory: {itemNumber}");
+        //     if (itemReachedList.values[itemNumber])
+        //     {
+        //         Debug.Log($"Not enough place in the inventory for item: {item.name}");
+        //     }
+        //     else
+        //     {
+        //         itemReachedList.values[itemNumber] = true;
+        //         itemReachedList.keys[itemNumber].color = new Color(255, 255, 255);
+        //     }
         // }
-
-        private void ActivateInventory()
-        {
-            if (!gameObject.activeSelf)
-                gameObject.SetActive(true);
-            if (transform.position.x != 0)
-                transform.position = new Vector3(0, 0, 0);
-            _inventoryState = InventoryState.Active;
-        }
-
-        private void SetItemToTake(Items targetItem)
-        {
-            if (targetItem is null || !itemReachedList.values[(int)targetItem.itemAbilityType.itemAbility.abilityType]) return;
-        
-            if (_inventoryState == InventoryState.Init)
-                ActivateInventory();
-            targetItem.TakeItem(this);
-        }
+        //
+        // public bool IsTheItemInInventory(int abilityNumber)
+        // {
+        //     if (!itemReachedList.values[abilityNumber]) return false;
+        //     
+        //     ChooseAbility(abilityNumber);
+        //     return true;
+        // }
+        //
+        // public void UseAbilityItem(int abilityNumber)
+        // {
+        //     itemReachedList.values[abilityNumber] = false;
+        //     itemReachedList.keys[abilityNumber].color = _defaultColor;
+        //     DisableAbilityItemAnimation(abilityNumber);
+        // }
+        //
+        // private void DisableAbilityItemAnimation(int abilityNumberInInventory)
+        // {
+        //     Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
+        //     itemAnimation.SetBool("isChoosed", false);
+        //     _chosenItems--;
+        // }
+        //
+        // private void ChooseAbility(int abilityNumberInInventory)
+        // {
+        //     Animator itemAnimation = itemReachedList.keys[abilityNumberInInventory].GetComponent<Animator>();
+        //     if (itemAnimation.GetBool("isChoosed"))
+        //     {
+        //         _chosenItems--;
+        //     }
+        //     else
+        //     {
+        //         if (_chosenItems >= 2) return;
+        //         _chosenItems++;
+        //     }
+        //     itemAnimation.SetBool("isChoosed", !itemAnimation.GetBool("isChoosed"));
+        // }
+        //
+        // private void OnEnable()
+        // {
+        //     Item.CanBeTakenAction += SetItemToTake;
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     Item.CanBeTakenAction -= SetItemToTake;
+        // }
+        //
+        //
+        // // public void TakeItem(InputAction.CallbackContext context)
+        // // {
+        // //
+        // // }
+        //
+        // private void ActivateInventory()
+        // {
+        //     if (!gameObject.activeSelf)
+        //         gameObject.SetActive(true);
+        //     if (transform.position.x != 0)
+        //         transform.position = new Vector3(0, 0, 0);
+        //     _inventoryState = InventoryState.Active;
+        // }
+        //
+        // private void SetItemToTake(Item targetItemManager)
+        // {
+        //     if (targetItemManager is null || !itemReachedList.values[(int)targetItemManager.itemAbilityType.itemAbility.abilityType]) return;
+        //
+        //     if (_inventoryState == InventoryState.Init)
+        //         ActivateInventory();
+        //     // targetItemManager.PickUp(this);
+        // }
 
         private enum InventoryState
         {

@@ -7,13 +7,13 @@ namespace Infra.Channels
     [CreateAssetMenu(fileName = "New Input Channel", menuName = "Input/Player Input")]
     public class PlayerInputChannel : ScriptableObject, PlayerInput.IPlayerActions
     {
-        public Action<float> moveEvent;
-        public Action<float> panCameraEvent;
-        public Action<float> selectAbilityEvent;
-        public Action<bool> jumpEvent;
-        public Action<bool> dashEvent;
-        public Action<bool> performAbilityEvent;
-        public Action interactEvent;
+        public event Action<float> MoveEvent;
+        public event Action<float> PanCameraEvent;
+        public event Action<int> SelectAbilityEvent;
+        public event Action<bool> JumpEvent;
+        public event Action<bool> DashEvent;
+        public event Action<bool> PerformAbilityEvent;
+        public event Action InteractEvent;
         
     
         private PlayerInput _input;
@@ -37,39 +37,39 @@ namespace Infra.Channels
         public void OnMove(InputAction.CallbackContext context)
         {
             if (context.performed)
-                moveEvent?.Invoke(context.ReadValue<float>()); 
+                MoveEvent?.Invoke(context.ReadValue<float>()); 
             else if (context.canceled)
-                moveEvent?.Invoke(0);
+                MoveEvent?.Invoke(0);
         } 
 
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (context.performed) jumpEvent?.Invoke(true);
-            else if (context.canceled) jumpEvent?.Invoke(false);
+            if (context.performed) JumpEvent?.Invoke(true);
+            else if (context.canceled) JumpEvent?.Invoke(false);
         }
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.phase is InputActionPhase.Performed) interactEvent?.Invoke();
+            if (context.phase is InputActionPhase.Performed) InteractEvent?.Invoke();
         }
 
         public void OnDash(InputAction.CallbackContext context)
         {
-            if (context.performed) dashEvent?.Invoke(true);
-            else if (context.canceled) dashEvent?.Invoke(false);
+            if (context.performed) DashEvent?.Invoke(true);
+            else if (context.canceled) DashEvent?.Invoke(false);
         }
     
         public void OnSelectAbility(InputAction.CallbackContext context)
         {
-            if (context.phase is InputActionPhase.Performed) selectAbilityEvent?.Invoke(context.ReadValue<float>());
+            if (context.phase is InputActionPhase.Performed) SelectAbilityEvent?.Invoke((int)context.ReadValue<float>());
         }
     
         public void OnAbility(InputAction.CallbackContext context)
         {
-            if (context.performed) performAbilityEvent?.Invoke(true);
-            else if (context.canceled) performAbilityEvent?.Invoke(false);
+            if (context.performed) PerformAbilityEvent?.Invoke(true);
+            else if (context.canceled) PerformAbilityEvent?.Invoke(false);
         }
     
-        public void OnPanCamera(InputAction.CallbackContext context) => panCameraEvent?.Invoke(context.ReadValue<float>()); 
+        public void OnPanCamera(InputAction.CallbackContext context) => PanCameraEvent?.Invoke(context.ReadValue<float>()); 
     }
 }

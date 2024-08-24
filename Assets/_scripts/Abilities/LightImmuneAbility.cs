@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Abilities
@@ -13,18 +14,21 @@ namespace Abilities
             _prevLightDamage = ThisStats.lightDamage;
             _shieldLightDamage = ThisStats.shieldLightDamage;
             AbilityType = AbilityTypes.ImmuneType;
-
-            SetAbilityNumber();
         }
 
-        public override void Activate(GameObject parent)
+        public override void Activate()
         {
             ThisStats.lightDamage = _shieldLightDamage;
         }
 
-        public override void Deactivate(GameObject parent)
+        public override void Deactivate()
         {
             ThisStats.lightDamage = _prevLightDamage;
+        }
+        
+        public override IEnumerator Perform()
+        {
+            yield return base.Perform();
         }
     }
 }

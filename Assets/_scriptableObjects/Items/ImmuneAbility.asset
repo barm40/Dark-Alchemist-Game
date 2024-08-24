@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ImmuneAbility
   m_EditorClassIdentifier: 
   itemAbility:
-    abilityType: 0
+    abilityType: 3
     abilityIcon: {fileID: -2754490150024657886, guid: 45c7793815bb3a84aa6d379228cfe3af, type: 3}
     animator: {fileID: 6834587034888392019, guid: 45c7793815bb3a84aa6d379228cfe3af, type: 3}

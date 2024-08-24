@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Abilities
@@ -14,8 +15,8 @@ namespace Abilities
             //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
         }
 
-        public override void Activate(GameObject parent) {}
+        public override void Activate() {}
 
-        public override void Deactivate(GameObject parent) {}
+        public override void Deactivate() {}
     }
 }

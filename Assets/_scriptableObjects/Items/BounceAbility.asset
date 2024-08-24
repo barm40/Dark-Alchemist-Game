@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: BounceAbility
   m_EditorClassIdentifier: 
   itemAbility:
-    abilityType: 0
+    abilityType: 1
     abilityIcon: {fileID: 6705523061985701245, guid: 6dbe035b42cc5ee46a65f4bf2027555d, type: 3}
     animator: {fileID: -9164684924465185453, guid: 6dbe035b42cc5ee46a65f4bf2027555d, type: 3}

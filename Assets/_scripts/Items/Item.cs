@@ -9,7 +9,7 @@ using Infra.Patterns;
 namespace Items
 {
     [RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
-    public abstract class Items : Singleton<Items>
+    public abstract class Item : Singleton<Item>
     {
         [SerializeField, Header("Item Type"), Tooltip("Item Type Scriptable Object")]
         public ItemAbilityTypeContainer itemAbilityType;
@@ -23,7 +23,7 @@ namespace Items
             id = Guid.NewGuid().ToString();
         }
         
-        private SpriteRenderer _itemSprite;
+        public SpriteRenderer ItemSprite { get; private set; }
         private Animator _animator;
         
         // private void OnEnable()
@@ -38,17 +38,16 @@ namespace Items
         
         protected bool IsUsed;
         protected bool CanBeTaken;
-        public int ItemInventoryNumber { get; protected set;}
-        private static int _amountOfAbilities;
 
-        public static event Action<Items> CanBeTakenAction;
+        public int ItemInventoryNumber { get; protected set;}
+        public static event Action<Item> CanBeTakenAction;
 
         protected override void Awake()
         {
             base.Awake();
             
-            _itemSprite = gameObject.GetOrAddComponent<SpriteRenderer>();
-            _itemSprite.sprite = itemAbilityType.itemAbility.abilityIcon;
+            ItemSprite = gameObject.GetOrAddComponent<SpriteRenderer>();
+            ItemSprite.sprite = itemAbilityType.itemAbility.abilityIcon;
 
             _animator = gameObject.GetOrAddComponent<Animator>();
             _animator.runtimeAnimatorController = itemAbilityType.itemAbility.animator;
@@ -60,19 +59,18 @@ namespace Items
             {
                 if (ability.AbilityType != itemAbilityType.itemAbility.abilityType) continue;
                 
-                ItemInventoryNumber = _amountOfAbilities;
-                _amountOfAbilities++;
+                // ItemInventoryNumber = ability.AbilityNumber;
                 Debug.Log($"Set Ability Type {ability.AbilityType} with number {ItemInventoryNumber}");
             }
         }
     
-        public void TakeItem(InventoryManager inventory)
+        public void PickUp(/*InventoryManager inventory*/)
         {
             if (!CanBeTaken) return;
             Debug.Log($"Item {gameObject.name} is taken");
             
-            inventory.SetNewItemInTheInventory(gameObject);
-            transform.parent = inventory.transform;
+            // inventory.SetNewItemInTheInventory(gameObject);
+            // transform.parent = inventory.transform;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.SetActive(false);
         }
@@ -108,6 +106,14 @@ namespace Items
 
         //    data.itemsCollected.Add(id, IsTaken);
         //}
+        
+        public enum ItemState
+        {
+            NoItem,
+            Available,
+            Selected,
+            Active
+        }
     }
 
 }

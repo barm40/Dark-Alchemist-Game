@@ -33,12 +33,12 @@ namespace _managers
 
         private void OnEnable()
         {
-            inputChannel.panCameraEvent += PanInput;
+            inputChannel.PanCameraEvent += PanInput;
         }
 
         private void OnDisable()
         {
-            inputChannel.panCameraEvent -= PanInput;
+            inputChannel.PanCameraEvent -= PanInput;
         }
 
         private void Awake()

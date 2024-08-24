@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemAbility:
     abilityType: 2
-    abilityIcon: {fileID: -7032601338626903022, guid: 6fa1d004bda8b34488fa46a09ec66f23, type: 3}
+    abilityIcon: {fileID: 1962171900731165849, guid: 6fa1d004bda8b34488fa46a09ec66f23, type: 3}
     animator: {fileID: 78681168400621052, guid: 6fa1d004bda8b34488fa46a09ec66f23, type: 3}

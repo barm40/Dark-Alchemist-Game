@@ -2,7 +2,7 @@ using Abilities;
 
 namespace Items
 {
-    public class BounceAbilityItems : Items
+    public class BounceAbilityItem : Item
     {
         // private void Start()
         // {

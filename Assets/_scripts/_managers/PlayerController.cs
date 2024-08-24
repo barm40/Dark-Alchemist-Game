@@ -27,7 +27,7 @@ namespace _managers
         private AbilityController _abilityController;
         private DeathMenu _deathMenu;
     
-        Items.Items _items;
+        Items.Item _item;
     
         // for jump
         public Vector2 boxSize;
@@ -53,14 +53,14 @@ namespace _managers
 
         private void OnEnable()
         {
-            inputChannel.moveEvent += MoveIntention;
-            inputChannel.jumpEvent += JumpInputBuffer;
+            inputChannel.MoveEvent += MoveIntention;
+            inputChannel.JumpEvent += JumpInputBuffer;
         }
 
         private void OnDisable()
         {
-            inputChannel.moveEvent -= MoveIntention;
-            inputChannel.jumpEvent -= JumpInputBuffer;
+            inputChannel.MoveEvent -= MoveIntention;
+            inputChannel.JumpEvent -= JumpInputBuffer;
         }
 
         private void Start()
