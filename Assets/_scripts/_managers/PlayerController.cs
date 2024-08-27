@@ -22,9 +22,7 @@ namespace _managers
         private JumpStatContainer playerJumpStats;
 
     
-        private Stats _stats;
         private Rigidbody2D _rb2d;
-        private AbilityController _abilityController;
         private DeathMenu _deathMenu;
     
         Items.Item _item;
@@ -65,9 +63,7 @@ namespace _managers
 
         private void Start()
         {
-            _stats = GetComponent<Stats>();
             _rb2d = GetComponent<Rigidbody2D>();
-            _abilityController = GetComponent<AbilityController>();
             _animator = GetComponent<Animator>();
             
         }
@@ -75,7 +71,6 @@ namespace _managers
         private void Update()
         {
             JumpTimers();
-            PerformJump();
         }
 
         private void LateUpdate()
@@ -118,6 +113,8 @@ namespace _managers
             IsGrounded();
             MoveHorizontal();
             Flip();
+
+            PerformJump();
         }
 
         private void MoveHorizontal()
@@ -147,12 +144,12 @@ namespace _managers
         {
             if (_coyoteTimer > 0f && _jumpBufferTimer > 0f && !_isJumping)
             {
-                _rb2d.velocity = new Vector2(_rb2d.velocity.x, playerJumpStats.CurrentJumpForce);
-                // _rb2d.AddForce(new Vector2(_rb2d.velocity.x, _stats.CurrentJumpForce), ForceMode2D.Impulse);
+                // _rb2d.velocity = new Vector2(_rb2d.velocity.x, playerJumpStats.CurrentJumpForce * Time.fixedDeltaTime);
+                _rb2d.AddForce(new Vector2(_rb2d.velocity.x, playerJumpStats.CurrentJumpForce), ForceMode2D.Impulse);
             
                 if (IsBounce)
                 {
-                    _abilityController.GetAbilityVFX(Ability.AbilityTypes.BounceType).Play();
+                    AbilityController.Instance.GetAbilityVFX(Ability.AbilityTypes.BounceType).Play();
                 }
             
                 _animator.SetTrigger("Jump");

@@ -5,26 +5,23 @@ namespace Abilities
 {
     public class BounceAbility : Ability
     {
-        private readonly float _bounceMultiplier;
-        private readonly float _previousMultiplier;
+        // jump multiplier
+        private float JumpMultiplier { get; set; } = 1.5f;
 
         // get stats object and extract values from it
-        public BounceAbility(Stats stats) : base(stats.ActiveTime)
+        public BounceAbility()
         {
-            ThisStats = stats;
-            _bounceMultiplier = ThisStats.BounceMultiplier;
-            _previousMultiplier = ThisStats.JumpForceMultiplier;
             AbilityType = AbilityTypes.BounceType;
         }
 
-        public override void Activate()
+        protected override void Activate()
         {
-            ThisStats.JumpForceMultiplier *= _bounceMultiplier;
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
         }
 
-        public override void Deactivate()
+        protected override void Deactivate()
         {
-            ThisStats.JumpForceMultiplier = _previousMultiplier;
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
         }
         
         public override IEnumerator Perform()

@@ -32,7 +32,7 @@ namespace _managers
             _damageStats = new Dictionary<DamageType, float>();
             foreach (var damageContainer in damageContainers)
             {
-                _damageStats.Add(damageContainer.damage.type, damageContainer.damage.amount);
+                _damageStats.Add(damageContainer.damage.type, damageContainer.damage.baseDamage);
             }
         }
 

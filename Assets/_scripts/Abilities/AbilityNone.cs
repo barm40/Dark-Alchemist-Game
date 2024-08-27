@@ -9,14 +9,13 @@ namespace Abilities
 
     public class AbilityNone : Ability
     {
-        public AbilityNone() : base(0f)
+        public AbilityNone() : base()
         {
             AbilityType = AbilityTypes.None;
-            //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
         }
 
-        public override void Activate() {}
+        protected override void Activate() {}
 
-        public override void Deactivate() {}
+        protected override void Deactivate() {}
     }
 }

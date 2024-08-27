@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage:
     type: 0
-    amount: 10
+    baseDamage: 10
+    damageMultiplier: 1

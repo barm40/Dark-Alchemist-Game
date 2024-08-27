@@ -117,11 +117,11 @@ namespace _managers
         {
             if (_dashState == DashState.Active)
             {
-                moveStats.NewSpeed(Mathf.Lerp(moveStats.moveStats.moveSpeedMultiplier,dashStats.dashStats.dashMultiplier,1f));
+                moveStats.SetMoveMultiplier("Dash",Mathf.Lerp(moveStats.moveStats.moveSpeedMultiplier,dashStats.dashStats.dashMultiplier,1f));
             }
             else
             {
-                moveStats.ResetSpeed();
+                moveStats.ResetMultiplier("Dash");
             }
         }
     }

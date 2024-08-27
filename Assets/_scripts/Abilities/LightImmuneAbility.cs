@@ -5,25 +5,22 @@ namespace Abilities
 {
     public class LightImmuneAbility : Ability
     {
-        private readonly float _prevLightDamage;
-        private readonly float _shieldLightDamage;
+        // speed multiplier
+        private float LightDamageMultiplier { get; set; } = 0f;
     
-        public LightImmuneAbility(Stats stats) : base(stats.ActiveTime)
+        public LightImmuneAbility()
         {
-            ThisStats = stats;
-            _prevLightDamage = ThisStats.lightDamage;
-            _shieldLightDamage = ThisStats.shieldLightDamage;
             AbilityType = AbilityTypes.ImmuneType;
         }
 
-        public override void Activate()
+        protected override void Activate()
         {
-            ThisStats.lightDamage = _shieldLightDamage;
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
         }
 
-        public override void Deactivate()
+        protected override void Deactivate()
         {
-            ThisStats.lightDamage = _prevLightDamage;
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
         }
         
         public override IEnumerator Perform()

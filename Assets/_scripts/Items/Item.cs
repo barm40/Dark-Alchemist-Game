@@ -9,7 +9,7 @@ using Infra.Patterns;
 namespace Items
 {
     [RequireComponent(typeof(SpriteRenderer), typeof(Animator))]
-    public abstract class Item : Singleton<Item>
+    public class Item : MonoBehaviour
     {
         [SerializeField, Header("Item Type"), Tooltip("Item Type Scriptable Object")]
         public ItemAbilityTypeContainer itemAbilityType;
@@ -22,8 +22,8 @@ namespace Items
         {
             id = Guid.NewGuid().ToString();
         }
-        
-        public SpriteRenderer ItemSprite { get; private set; }
+
+        private SpriteRenderer _itemSprite;
         private Animator _animator;
         
         // private void OnEnable()
@@ -36,54 +36,38 @@ namespace Items
         //     // Unsubscribe from ability events
         // }
         
-        protected bool IsUsed;
-        protected bool CanBeTaken;
+        private bool _canBeTaken;
 
         public int ItemInventoryNumber { get; protected set;}
         public static event Action<Item> CanBeTakenAction;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-            
-            ItemSprite = gameObject.GetOrAddComponent<SpriteRenderer>();
-            ItemSprite.sprite = itemAbilityType.itemAbility.abilityIcon;
+            _itemSprite = gameObject.GetOrAddComponent<SpriteRenderer>();
+            _itemSprite.sprite = itemAbilityType.itemAbility.abilityIcon;
 
             _animator = gameObject.GetOrAddComponent<Animator>();
             _animator.runtimeAnimatorController = itemAbilityType.itemAbility.animator;
         }
-        
-        private void Start()
-        {
-            foreach (var ability in AbilityController.Instance.Abilities.Values)
-            {
-                if (ability.AbilityType != itemAbilityType.itemAbility.abilityType) continue;
-                
-                // ItemInventoryNumber = ability.AbilityNumber;
-                Debug.Log($"Set Ability Type {ability.AbilityType} with number {ItemInventoryNumber}");
-            }
-        }
     
-        public void PickUp(/*InventoryManager inventory*/)
+        public void PickUp()
         {
-            if (!CanBeTaken) return;
+            if (!_canBeTaken) return;
             Debug.Log($"Item {gameObject.name} is taken");
             
-            // inventory.SetNewItemInTheInventory(gameObject);
-            // transform.parent = inventory.transform;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.SetActive(false);
         }
 
         protected virtual void OnTriggerStay2D(Collider2D other)
         {
-            CanBeTaken = true;
+            _canBeTaken = true;
             CanBeTakenAction?.Invoke(this);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D other)
         {
-            CanBeTaken = false;
+            _canBeTaken = false;
             CanBeTakenAction?.Invoke(null);
         }
 

@@ -1,34 +1,34 @@
 using System;
 using System.Collections;
+using _managers;
 using UnityEngine;
 
 namespace Abilities
 {
     public abstract class Ability
     {
-        protected Stats ThisStats;
-        
         public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
-        public AbilityTypes AbilityType { get; protected set; }
-        
-        public readonly float ActiveTime;
+
+        protected AbilityTypes AbilityType { get; set; }
+
+        private readonly float _activeTime = Stats.Instance.abilityActiveTime;
 
         public static event Action<AbilityTypes> AbilityEnded;
 
-        protected Ability(float activeTime)
-        {
-            ActiveTime = activeTime;
-        }
-
-        public abstract void Activate();
-        public abstract void Deactivate();
+        protected abstract void Activate();
+        protected abstract void Deactivate();
 
         public virtual IEnumerator Perform()
         {
             Debug.Log($"Ability {AbilityType} has started");
+            
             Activate();
-            yield return new WaitForSeconds(ActiveTime);
+            AbilityController.Instance.GetAbilityVFX(AbilityType).Play();
+            
+            yield return new WaitForSeconds(_activeTime);
+            
             Deactivate();
+            AbilityController.Instance.GetAbilityVFX(AbilityType).Stop();
             AbilityEnded?.Invoke(AbilityType);
         }
     }

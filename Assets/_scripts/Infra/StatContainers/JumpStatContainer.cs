@@ -13,7 +13,7 @@ namespace Infra.StatContainers
 
         [Header("Jump Stat Values")]
         [SerializeField] 
-        public JumpStats jumpStats = new (150f, 1f, .2f, .4f);
+        public JumpStats jumpStats = new (7.5f, 1f, .2f, .4f);
 
         private void OnEnable()
         {
@@ -23,13 +23,12 @@ namespace Infra.StatContainers
 
         public void NewJump(float multiplier)
         {
-            CurrentJumpForce = 
-                jumpStats.baseJumpForce * multiplier * Time.deltaTime;
+            CurrentJumpForce *= multiplier;
         }
 
         public void ResetJump()
         { 
-            NewJump(_originalJumpMulti);
+            CurrentJumpForce = jumpStats.baseJumpForce * _originalJumpMulti;
         }
     }
 

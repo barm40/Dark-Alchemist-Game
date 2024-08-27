@@ -1,37 +1,38 @@
 using System.Collections;
+using _managers;
 using UnityEngine;
 
 namespace Abilities
 {
     public class BoostAbility : Ability
     {
-        private readonly float _previousSpeedMultiplier;
-        private readonly float _previousJumpMultiplier;
-        private readonly float _previousLightMultiplier;
+        // speed multiplier
+        private float SpeedMultiplier { get; set; } = 1.2f;
+        // jump multiplier
+        private float JumpMultiplier{ get; set; } = 1.2f;
+        // light damage multiplier
+        private float LightDamageMultiplier { get; set; } = 0.5f;
     
         // times from stats
-        public BoostAbility(Stats stats) : base(stats.ActiveTime)
+        public BoostAbility()
         {
-            ThisStats = stats;
             AbilityType = AbilityTypes.BoostType;
-        
-            _previousSpeedMultiplier = ThisStats.MoveSpeedMultiplier;
-            _previousJumpMultiplier = ThisStats.JumpForceMultiplier;
-            _previousLightMultiplier = ThisStats.lightDamage;
         }
 
-        public override void Activate()
+        protected override void Activate()
         {
-            ThisStats.MoveSpeedMultiplier *= ThisStats.BoostMultiplier;
-            ThisStats.JumpForceMultiplier *= ThisStats.BoostMultiplier;
-            ThisStats.lightDamage *= ThisStats.BoostNegativeMultiplier;
+            Stats.Instance.playerMoveStats.SetMoveMultiplier("Boost",SpeedMultiplier);
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
+            PlayerController.IsBounce = true;
         }
 
-        public override void Deactivate()
+        protected override void Deactivate()
         {
-            ThisStats.MoveSpeedMultiplier = _previousSpeedMultiplier;
-            ThisStats.JumpForceMultiplier = _previousJumpMultiplier;
-            ThisStats.lightDamage = _previousLightMultiplier;
+            Stats.Instance.playerMoveStats.ResetMultiplier("Boost");
+            Stats.Instance.playerJumpStats.ResetJump();
+            Stats.Instance.playerLightDamageContainer.ResetDamage();
+            PlayerController.IsBounce = false;
         }
 
         public override IEnumerator Perform()

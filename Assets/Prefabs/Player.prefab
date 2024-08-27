@@ -19529,8 +19529,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bf88d7e1a65ff4fb5e39be653e0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightDamage: -10
-  shieldLightDamage: 0
+  playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
+  playerJumpStats: {fileID: 11400000, guid: 83581d34748d0714eb0a0263a5d0b098, type: 2}
+  playerDashStats: {fileID: 11400000, guid: 52680d36fe722164c9a650a0c40d5ee0, type: 2}
+  playerLightDamageContainer: {fileID: 11400000, guid: d09571fee194939498604d3f66f89c4e, type: 2}
+  abilityActiveTime: 15
 --- !u!114 &1039813349379027251
 MonoBehaviour:
   m_ObjectHideFlags: 0

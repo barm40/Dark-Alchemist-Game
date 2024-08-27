@@ -1,25 +1,48 @@
 using System;
 using Infra.SOTypes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Infra.StatContainers
 {
     [CreateAssetMenu(fileName = "New Damage Container", menuName = "Stats/Damage")]
     public class DamageContainer : AStatContainer<Damage>
     {
-        [SerializeField] public Damage damage = new Damage(20f, DamageType.Light);
+        public float CurrentDamage { get; private set; }
+        
+        [SerializeField] public Damage damage = new (DamageType.Light, 20f, 1f);
+        
+        private float _originalDamageMulti;
+        
+        private void OnEnable()
+        {
+            _originalDamageMulti = damage.damageMultiplier;
+            ResetDamage();
+        }
+        
+        public void NewDamage(float multiplier)
+        {
+            CurrentDamage = damage.baseDamage * multiplier;
+        }
+    
+        public void ResetDamage()
+        {
+            NewDamage(_originalDamageMulti);
+        }
     }
 
     [Serializable]
     public struct Damage : IStats
     {
         public DamageType type;
-        public float amount;
+        public float baseDamage;
+        public float damageMultiplier;
     
-        public Damage (float amount, DamageType type)
+        public Damage (DamageType type, float baseDamage, float damageMultiplier)
         {
-            this.amount = amount;
+            this.baseDamage = baseDamage;
             this.type = type;
+            this.damageMultiplier = damageMultiplier;
         }
     }
 

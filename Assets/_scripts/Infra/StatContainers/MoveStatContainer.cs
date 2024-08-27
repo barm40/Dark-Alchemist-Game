@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Infra.SOTypes;
 using UnityEngine;
 
@@ -8,27 +9,48 @@ namespace Infra.StatContainers
     public class MoveStatContainer : AStatContainer<MoveStats>
     {
         public float CurrentMoveSpeed { get; private set; }
-
-        private float _originalMulti;
-
+        
         [SerializeField] 
         public MoveStats moveStats = new (350f, 10f, 1f);
 
+        private readonly Dictionary<string, float> _multipliers = new();
+
         private void OnEnable()
         {
-            _originalMulti = moveStats.moveSpeedMultiplier;
-            NewSpeed(moveStats.moveSpeedMultiplier);
+            InitSpeed();
         }
 
-        public void NewSpeed(float multiplier)
+        private void InitSpeed()
         {
-            CurrentMoveSpeed = moveStats.baseMoveSpeed * multiplier;
+            CurrentMoveSpeed = moveStats.baseMoveSpeed * moveStats.moveSpeedMultiplier;
+        }
+
+        public void SetMoveMultiplier(string key, float value)
+        {
+            _multipliers[key] = value;
+            CurrentMoveSpeed = CalcTargetSpeed();
         }
     
-        public void ResetSpeed()
+        public void ResetMultiplier(string key)
         {
-            CurrentMoveSpeed = 
-                Mathf.Lerp(CurrentMoveSpeed, moveStats.baseMoveSpeed * _originalMulti, 5f * Time.deltaTime);
+            _multipliers[key] = 1;
+            var targetSpeed = CalcTargetSpeed();
+            
+            CurrentMoveSpeed =
+                Mathf.Lerp(CurrentMoveSpeed, targetSpeed, 5f * Time.deltaTime);
+        }
+
+        private float CalcTargetSpeed()
+        {
+            var targetSpeed = moveStats.baseMoveSpeed;
+            foreach (var multiplier in _multipliers)
+            {
+                if (multiplier.Value <= 0)
+                    continue;
+                targetSpeed *= multiplier.Value;
+            }
+
+            return targetSpeed;
         }
     }
 
