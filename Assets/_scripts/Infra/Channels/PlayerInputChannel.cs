@@ -13,7 +13,7 @@ namespace Infra.Channels
         public event Action<bool> JumpEvent;
         public event Action<bool> DashEvent;
         public event Action<bool> PerformAbilityEvent;
-        public event Action InteractEvent;
+        public event Action<bool> InteractEvent;
         
     
         private PlayerInput _input;
@@ -50,7 +50,8 @@ namespace Infra.Channels
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            if (context.phase is InputActionPhase.Performed) InteractEvent?.Invoke();
+            if (context.performed) InteractEvent?.Invoke(true);
+            else if (context.canceled) InteractEvent?.Invoke(false);
         }
 
         public void OnDash(InputAction.CallbackContext context)

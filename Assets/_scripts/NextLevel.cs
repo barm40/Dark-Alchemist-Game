@@ -1,10 +1,22 @@
+using System;
 using _managers;
+using Infra.Channels;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class NextLevel : MonoBehaviour
 {
-    private bool _interactIntent; 
+    [Header("Input Channel")] [SerializeField, Tooltip("Add Player Input Channel Scriptable Object")]
+    private PlayerInputChannel input;
+    
+    private bool _interactIntent;
+
+    private void OnEnable()
+    {
+        input.InteractEvent += InteractIntent;
+    }
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (!_interactIntent) return;
@@ -14,17 +26,9 @@ public class NextLevel : MonoBehaviour
         LevelLoader.Instance.LoadNextLevel(++LevelLoader.Instance.CurrSceneIndex);
     }
 
-    public void InteractIntent(InputAction.CallbackContext context)
+    public void InteractIntent(bool intent)
     {
-        if (context.started || context.performed)
-        {
-            _interactIntent = true;
-        }
-
-        if (context.canceled)
-        {
-            _interactIntent = false;
-        }
+        _interactIntent = intent;
     }
     
     
