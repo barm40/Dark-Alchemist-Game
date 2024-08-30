@@ -1,38 +1,43 @@
 using System.Collections;
-using System.Collections.Generic;
+using _managers;
 using UnityEngine;
 
-public class BoostAbility : Ability
+namespace Abilities
 {
-    private readonly float _previousSpeedMultiplier;
-    private readonly float _previousJumpMultiplier;
-    private readonly float _previousLightMultiplier;
+    public class BoostAbility : Ability
+    {
+        // speed multiplier
+        private float SpeedMultiplier { get; set; } = 1.2f;
+        // jump multiplier
+        private float JumpMultiplier{ get; set; } = 1.2f;
+        // light damage multiplier
+        private float LightDamageMultiplier { get; set; } = 0.5f;
     
-    // times from stats
-    public BoostAbility(Stats stats) : base(stats.ActiveTime)
-    {
-        ThisStats = stats;
-        AbilityType = AbilityTypes.BoostType;
-        
-        _previousSpeedMultiplier = ThisStats.MoveSpeedMultiplier;
-        _previousJumpMultiplier = ThisStats.JumpForceMultiplier;
-        _previousLightMultiplier = ThisStats.lightDamage;
-        
-        SetAbilityNumber();
-    }
+        // times from stats
+        public BoostAbility()
+        {
+            AbilityType = AbilityTypes.BoostType;
+        }
 
+        protected override void Activate()
+        {
+            Stats.Instance.playerMoveStats.SetMoveMultiplier("Boost",SpeedMultiplier);
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
+            PlayerController.IsBounce = true;
+        }
 
-    public override void Activate(GameObject parent)
-    {
-        ThisStats.MoveSpeedMultiplier *= ThisStats.BoostMultiplier;
-        ThisStats.JumpForceMultiplier *= ThisStats.BoostMultiplier;
-        ThisStats.lightDamage *= ThisStats.BoostNegativeMultiplier;
-    }
+        protected override void Deactivate()
+        {
+            Stats.Instance.playerMoveStats.ResetMultiplier("Boost");
+            Stats.Instance.playerJumpStats.ResetJump();
+            Stats.Instance.playerLightDamageContainer.ResetDamage();
+            PlayerController.IsBounce = false;
+        }
 
-    public override void Deactivate(GameObject parent)
-    {
-        ThisStats.MoveSpeedMultiplier = _previousSpeedMultiplier;
-        ThisStats.JumpForceMultiplier = _previousJumpMultiplier;
-        ThisStats.lightDamage = _previousLightMultiplier;
+        public override IEnumerator Perform()
+        {
+            yield return base.Perform();
+        }
     }
 }

@@ -4861,55 +4861,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!1 &6386485477431318671
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8697856334628773371}
-  - component: {fileID: 2218948777538388254}
-  m_Layer: 0
-  m_Name: HitEffect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8697856334628773371
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6386485477431318671}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7111105, y: 9.155556, z: 0}
-  m_LocalScale: {x: 7.2805924, y: 7.2805924, z: 3.2762663}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4270050126552429596}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2218948777538388254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6386485477431318671}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 4702f31494172054bbdd61b00c953a2c, type: 2}
 --- !u!1 &6403903874714793663
 GameObject:
   m_ObjectHideFlags: 0
@@ -9740,55 +9691,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!1 &7217814189247872561
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2658769739201960158}
-  - component: {fileID: 447740105020572289}
-  m_Layer: 0
-  m_Name: LevelShader
-  m_TagString: levelShader
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2658769739201960158
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7217814189247872561}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7111105, y: 9.155556, z: 0}
-  m_LocalScale: {x: 7.2805924, y: 7.2805924, z: 3.2762663}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4270050126552429596}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &447740105020572289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7217814189247872561}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 4702f31494172054bbdd61b00c953a2c, type: 2}
 --- !u!1 &7685791582957909519
 GameObject:
   m_ObjectHideFlags: 0
@@ -19460,6 +19362,7 @@ GameObject:
   - component: {fileID: 4270050126552429596}
   - component: {fileID: 2013918810434444175}
   - component: {fileID: 5735511482074749109}
+  - component: {fileID: 9139147941985712348}
   - component: {fileID: 4489009581255902090}
   - component: {fileID: 1448458569436023067}
   - component: {fileID: 162314364743216042}
@@ -19493,8 +19396,6 @@ Transform:
   - {fileID: 8324788899480574284}
   - {fileID: 2768522512274024119}
   - {fileID: 5360194088634804571}
-  - {fileID: 8697856334628773371}
-  - {fileID: 2658769739201960158}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2013918810434444175
@@ -19561,11 +19462,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb758a8fb9be3641b57bb23f0e4c352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
+  playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
+  playerJumpStats: {fileID: 11400000, guid: 83581d34748d0714eb0a0263a5d0b098, type: 2}
   boxSize: {x: 0.41, y: 0.09}
   groundLayer:
     serializedVersion: 2
     m_Bits: 68
   castDistance: -0.27
+--- !u!114 &9139147941985712348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047744274904066838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29049c2615185664eb71d4f195e2e129, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthChannel: {fileID: 11400000, guid: 7688b52001baba1489e70d80867622da, type: 2}
+  damageContainers:
+  - {fileID: 11400000, guid: d09571fee194939498604d3f66f89c4e, type: 2}
 --- !u!114 &4489009581255902090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19578,6 +19497,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d87b181ab1fe2747bb991fc34820b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
+  dashStats: {fileID: 11400000, guid: 52680d36fe722164c9a650a0c40d5ee0, type: 2}
+  moveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
 --- !u!114 &1448458569436023067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19590,6 +19512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc56c53f432cbc54db4b5c259e399a67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputChannel: {fileID: 11400000, guid: 0d020d515b392a240ada79633c209ce2, type: 2}
   abilitiesVFX:
   - {fileID: 8617733622001161949}
   - {fileID: 4366842955964660067}
@@ -19606,12 +19529,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bf88d7e1a65ff4fb5e39be653e0659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMoveSpeed: 250
-  baseJumpForce: 350
-  coyoteTime: 0.2
-  jumpBufferTime: 0.2
-  lightDamage: 20
-  shieldLightDamage: 0
+  playerMoveStats: {fileID: 11400000, guid: 4488e5db1a224894fa6f77cd262db0b4, type: 2}
+  playerJumpStats: {fileID: 11400000, guid: 83581d34748d0714eb0a0263a5d0b098, type: 2}
+  playerDashStats: {fileID: 11400000, guid: 52680d36fe722164c9a650a0c40d5ee0, type: 2}
+  playerLightDamageContainer: {fileID: 11400000, guid: d09571fee194939498604d3f66f89c4e, type: 2}
+  abilityActiveTime: 15
 --- !u!114 &1039813349379027251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19624,8 +19546,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c3a3e345923c9543903efe8f905ecf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryManager: {fileID: 0}
-  _itemToTake: {fileID: 0}
 --- !u!70 &7923490544035686788
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -19735,41 +19655,17 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5735511482074749109}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: MoveInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f289a402-003f-4b0d-b26a-6e462ac219a8
     m_ActionName: Player/Move[/Keyboard/leftArrow,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5735511482074749109}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: JumpInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 8531adaa-1745-4034-8a86-8e59b609f9d5
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1039813349379027251}
-        m_TargetAssemblyTypeName: PlayerItemInteractableManager, Assembly-CSharp
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Items.InventoryManager, Assembly-CSharp
         m_MethodName: TakeItem
         m_Mode: 0
         m_Arguments:
@@ -19783,19 +19679,7 @@ MonoBehaviour:
     m_ActionId: b2cf9aff-eed5-41e6-84bb-5353a0be0778
     m_ActionName: Player/Interact[/Keyboard/f]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4489009581255902090}
-        m_TargetAssemblyTypeName: PlayerDash, Assembly-CSharp
-        m_MethodName: DashInput
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: fb4c3141-cea3-4fd4-80d5-976261c73ec2
     m_ActionName: Player/Dash[/Keyboard/shift]
   - m_PersistentCalls:

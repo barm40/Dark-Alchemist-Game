@@ -1,4 +1,6 @@
 using System;
+using _managers;
+using Infra.StatContainers;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -12,7 +14,7 @@ public class PlayerInLighDetect : MonoBehaviour
 
     Light2D _light;
 
-    public static event Action UserInTheLighDelegate;
+    public static event Action<DamageType> UserInTheLightDelegate;
     /// <summary>
     /// This script detect if the player is in the light view,
     /// Set the script as component under the light object
@@ -63,7 +65,7 @@ public class PlayerInLighDetect : MonoBehaviour
             
             if (hit.collider != null && hit.collider.name == "Player")
             {
-                UserInTheLighDelegate?.Invoke();
+                UserInTheLightDelegate?.Invoke(DamageType.Light);
                 if (allowDebug)
                 {
                     Debug.Log(hit.collider.gameObject.name);
@@ -71,10 +73,5 @@ public class PlayerInLighDetect : MonoBehaviour
                 }
             }
         }
-    }
-    
-    public static void LightRemoveHealth(Stats stats)
-    {
-        stats.Hp -= (stats.lightDamage * Time.deltaTime);
     }
 }

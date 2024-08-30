@@ -1,48 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using Infra;
+using Infra.Channels;
+using Infra.Patterns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
-public class DeathMenuManager : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private DeathMenu deathMenu;
-
-    private static bool IsDead { get; set; }
-    
-    public static DeathMenuManager MenuManager { get; private set; }
-
-    private void Awake()
+    public class DeathMenuManager : TrueSingleton<DeathMenuManager>
     {
-        IsDead = false;
-        
-        if (MenuManager != null)
+        [SerializeField, Header("UI Death Menu"), Tooltip("Add a UI menu to appear when you die")]
+        private DeathMenu deathMenu;
+        [SerializeField, Header("Health Channel"), Tooltip("Add a Health Channel to listen to")]
+        private PlayerHealthChannel healthChannel;
+
+        private bool IsDead { get; set; }
+        private void OnEnable()
         {
-            Debug.Log("An instance of the save manager already exists, destroying the newest one");
-            Destroy(gameObject);
-            return;
+            healthChannel.HealthEvent += IsAlive;
         }
-        MenuManager = this;
-        
-        if (SceneManager.GetActiveScene().buildIndex != 0)
-            DontDestroyOnLoad(gameObject);
 
-    }
-
-    // Update is called once per frame
-    public void Death()
-    {
-        if (IsDead) return;
-
-        IsDead = true;
-        
-        for (int i = 0; i < gameObject.transform.childCount; i++)
+        private void OnDisable()
         {
-            transform.GetChild(i).gameObject.SetActive(transform.GetChild(i).gameObject);
+            healthChannel.HealthEvent -= IsAlive;
+        }
+
+        private void IsAlive(float hp)
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 0) return;
+            if (hp <= 0)
+            {
+                Death();
+            }
         }
         
-        deathMenu.DeathSequence();
+        public void Death()
+        {
+            if (IsDead) return;
+
+            IsDead = true;
+        
+            for (int i = 0; i < gameObject.transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(true);
+            }
+        
+            deathMenu.DeathSequence();
+        }
+        
+        public void Revive()
+        {
+            if (!IsDead) return;
+
+            IsDead = false;
+        
+            for (int i = 0; i < gameObject.transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+
+            healthChannel.ResetHealth();
+        }
     }
-    
-    
 }

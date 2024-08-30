@@ -1,38 +1,26 @@
+using Infra;
+using Infra.Patterns;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Manages activation of pause menu, since it's disabled by default we can't use its own scripts 
-/// </summary>
-
-public class PauseMenuManager : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private PauseMenu pauseMenu;
-    
-    public static PauseMenuManager MenuManager { get; private set; }
+    /// <summary>
+    /// Manages activation of pause menu, since it's disabled by default we can't use its own scripts 
+    /// </summary>
 
-    private void Awake()
+    public class PauseMenuManager : TrueSingleton<PauseMenuManager>
     {
-        if (MenuManager != null)
+        [SerializeField] private PauseMenu pauseMenu;
+        
+        // Update is called once per frame
+        private void Update()
         {
-            Debug.Log("An instance of the Pause Menu manager already exists, destroying the newest one");
-            Destroy(gameObject);
-            return;
+            if (!Input.GetKeyDown(KeyCode.Escape) || pauseMenu.IsActive || SceneManager.GetActiveScene().buildIndex == 0) return;
+        
+            gameObject.SetActive(gameObject.transform.GetChild(0));
+        
+            pauseMenu.Pause();
         }
-        MenuManager = this;
-        
-        if (SceneManager.GetActiveScene().buildIndex != 0)
-            DontDestroyOnLoad(gameObject);
-
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        if (!Input.GetKeyDown(KeyCode.Escape) || pauseMenu.IsActive) return;
-        
-        gameObject.SetActive(gameObject.transform.GetChild(0));
-        
-        pauseMenu.Pause();
     }
 }

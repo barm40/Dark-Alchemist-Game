@@ -12,7 +12,6 @@
 //     [Header("Save Data Storage")] [SerializeField]
 //     private string saveFileName;
 //     
-//     private LevelLoader _levelLoader;
 //     
 //     private GameData _gameData;
 //     private List<ISaveData> _saveDataObjects = new();
@@ -34,7 +33,6 @@
 //         
 //         // create a save data handler with the application data path
 //         _saveDataHandler = new SaveDataHandler(Application.persistentDataPath, saveFileName);
-//         _levelLoader = FindObjectOfType<LevelLoader>();
 //     }
 //
 //     private void OnEnable()

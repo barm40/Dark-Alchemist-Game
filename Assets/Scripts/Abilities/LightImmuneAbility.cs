@@ -1,27 +1,31 @@
+using System.Collections;
 using UnityEngine;
 
-public class LightImmuneAbility : Ability
+namespace Abilities
 {
-    private readonly float _prevLightDamage;
-    private readonly float _shieldLightDamage;
+    public class LightImmuneAbility : Ability
+    {
+        // speed multiplier
+        private float LightDamageMultiplier { get; set; } = 0f;
     
-    public LightImmuneAbility(Stats stats) : base(stats.ActiveTime)
-    {
-        ThisStats = stats;
-        _prevLightDamage = ThisStats.lightDamage;
-        _shieldLightDamage = ThisStats.shieldLightDamage;
-        AbilityType = AbilityTypes.ImmuneType;
+        public LightImmuneAbility()
+        {
+            AbilityType = AbilityTypes.ImmuneType;
+        }
 
-        SetAbilityNumber();
-    }
+        protected override void Activate()
+        {
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
+        }
 
-    public override void Activate(GameObject parent)
-    {
-        ThisStats.lightDamage = _shieldLightDamage;
-    }
-
-    public override void Deactivate(GameObject parent)
-    {
-        ThisStats.lightDamage = _prevLightDamage;
+        protected override void Deactivate()
+        {
+            Stats.Instance.playerLightDamageContainer.NewDamage(LightDamageMultiplier);
+        }
+        
+        public override IEnumerator Perform()
+        {
+            yield return base.Perform();
+        }
     }
 }

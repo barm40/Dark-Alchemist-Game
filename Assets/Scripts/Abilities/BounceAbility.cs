@@ -1,29 +1,32 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Animations;
 
-public class BounceAbility : Ability
+namespace Abilities
 {
-    private readonly float _bounceMultiplier;
-    private readonly float _previousMultiplier;
-
-    // get stats object and extract values from it
-    public BounceAbility(Stats stats) : base(stats.ActiveTime)
+    public class BounceAbility : Ability
     {
-        ThisStats = stats;
-        _bounceMultiplier = ThisStats.BounceMultiplier;
-        _previousMultiplier = ThisStats.JumpForceMultiplier;
-        AbilityType = AbilityTypes.BounceType;
+        // jump multiplier
+        private float JumpMultiplier { get; set; } = 1.5f;
+
+        // get stats object and extract values from it
+        public BounceAbility()
+        {
+            AbilityType = AbilityTypes.BounceType;
+        }
+
+        protected override void Activate()
+        {
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
+        }
+
+        protected override void Deactivate()
+        {
+            Stats.Instance.playerJumpStats.NewJump(JumpMultiplier);
+        }
         
-        SetAbilityNumber();
-    }
-
-    public override void Activate(GameObject parent)
-    {
-        ThisStats.JumpForceMultiplier *= _bounceMultiplier;
-    }
-
-    public override void Deactivate(GameObject parent)
-    {
-        ThisStats.JumpForceMultiplier = _previousMultiplier;
+        public override IEnumerator Perform()
+        {
+            yield return base.Perform();
+        }
     }
 }

@@ -1,50 +1,53 @@
-using System;
+using _managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ControlsMenu : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private Button[] buttons;
-    private bool _listening = false;
-    private string _controlName = "";
-
-    private void Update()
+    public class ControlsMenu : MonoBehaviour
     {
-        if (_listening)
-        {
-            SetControls(_controlName);
-        }
-    }
+        [SerializeField] private Button[] buttons;
+        private bool _listening = false;
+        private string _controlName = "";
 
-    public void Awake()
-    {
-        foreach (var control in ControlsManager.Instance.Controls)
+        private void Update()
         {
-            foreach (var button in buttons)
+            if (_listening)
             {
-                if (button.name == control.Key + "Button")
+                SetControls(_controlName);
+            }
+        }
+
+        public void Awake()
+        {
+            foreach (var control in ControlsManager.Instance.Controls)
+            {
+                foreach (var button in buttons)
                 {
-                    button.GetComponentsInChildren<TMP_Text>()[0].text = control.Value.ToString();
+                    if (button.name == control.Key + "Button")
+                    {
+                        button.GetComponentsInChildren<TMP_Text>()[0].text = control.Value.ToString();
+                    }
                 }
             }
         }
-    }
 
-    public void SetControls(string control)
-    {
-        _listening = true;
-        _controlName = control;
-        foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
+        public void SetControls(string control)
         {
-            if (!Input.GetKeyDown(key)) continue;
-            ControlsManager.Instance.Controls[control] = key;
-            _listening = false;
-            foreach (var button in buttons)
+            _listening = true;
+            _controlName = control;
+            foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
             {
-                if (button.name == control + "Button")
+                if (!Input.GetKeyDown(key)) continue;
+                ControlsManager.Instance.Controls[control] = key;
+                _listening = false;
+                foreach (var button in buttons)
                 {
-                    button.GetComponentsInChildren<TMP_Text>()[0].text = key.ToString();
+                    if (button.name == control + "Button")
+                    {
+                        button.GetComponentsInChildren<TMP_Text>()[0].text = key.ToString();
+                    }
                 }
             }
         }

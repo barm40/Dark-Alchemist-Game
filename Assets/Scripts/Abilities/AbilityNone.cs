@@ -1,20 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// None ability to avoid null pointer
-/// </summary>
-
-public class AbilityNone : Ability
+namespace Abilities
 {
-    public AbilityNone() : base(0f)
+    /// <summary>
+    /// None ability to avoid null pointer
+    /// </summary>
+
+    public class AbilityNone : Ability
     {
-        AbilityType = AbilityTypes.None;
-        //Debug.Log($"This {AbilityType} is number: {abilityNumber}");
+        public AbilityNone() : base()
+        {
+            AbilityType = AbilityTypes.None;
+        }
+
+        protected override void Activate() {}
+
+        protected override void Deactivate() {}
     }
-
-    public override void Activate(GameObject parent) {}
-
-    public override void Deactivate(GameObject parent) {}
 }

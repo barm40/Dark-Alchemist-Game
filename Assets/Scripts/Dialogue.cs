@@ -1,4 +1,5 @@
 using System.Collections;
+using _managers;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour
@@ -28,7 +29,7 @@ public class Dialogue : MonoBehaviour
 
     private IEnumerator LoadDialogue()
     {
-        _canvasGroup = LevelLoader.Loader
+        _canvasGroup = LevelLoader.Instance
             .transform.GetChild(0)
             .transform.GetChild(0).GetComponent<CanvasGroup>();
         yield return new WaitUntil(() => _canvasGroup.alpha == 0);

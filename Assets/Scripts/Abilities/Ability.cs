@@ -1,31 +1,36 @@
+using System;
+using System.Collections;
+using _managers;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Serialization;
 
-public abstract class Ability
+namespace Abilities
 {
-    public Stats ThisStats;
-    
-    public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
-    public AbilityTypes AbilityType { get; protected set; }
-    
-    public readonly float ActiveTime;
-    private static int _amountOfAbilities;
-    public int AbilityNumber;
+    public abstract class Ability
+    {
+        public enum AbilityTypes { None, BounceType, BoostType, ImmuneType }
 
-    protected Ability(float activeTime)
-    {
-        ActiveTime = activeTime;
-    }
-    protected void SetAbilityNumber()
-    {
-        if (AbilityType != AbilityTypes.None)
+        protected AbilityTypes AbilityType { get; set; }
+
+        private readonly float _activeTime = Stats.Instance.abilityActiveTime;
+
+        public static event Action<AbilityTypes> AbilityEnded;
+
+        protected abstract void Activate();
+        protected abstract void Deactivate();
+
+        public virtual IEnumerator Perform()
         {
-            AbilityNumber = _amountOfAbilities;
-            _amountOfAbilities++;
+            Debug.Log($"Ability {AbilityType} has started");
+            
+            Activate();
+            AbilityController.Instance.GetAbilityVFX(AbilityType).Play();
+            
+            yield return new WaitForSeconds(_activeTime);
+            
+            Deactivate();
+            AbilityController.Instance.GetAbilityVFX(AbilityType).Stop();
+            AbilityEnded?.Invoke(AbilityType);
         }
-        Debug.Log($"This {AbilityType} is number: {AbilityNumber}");
     }
-    public abstract void Activate(GameObject parent);
-    public abstract void Deactivate(GameObject parent);
 }
+
